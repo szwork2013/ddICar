@@ -21,13 +21,13 @@ router.post('/checkUserVersion', function(req, res){
 
     User.getByTime(user, function(err, todo){
         if(err){
-            return res.json(400,err);
+            return res.json({success:"need to upload device data",error:err});
         }
 
         if(todo == "upload"){
-            res.json(201,{"info":'need to upload device data'});
+            res.json({success:"need to upload device data",error:null});
         }else if(todo == "download"){
-            res.json(202,{"info":'need to download the newest data'});
+            res.json({success:"need to download the newest data",error:null});
         }
     });
 });
@@ -44,13 +44,13 @@ router.post('/putUser', function(req, res){
     if(checkKey == newCheckKey){
         User.update(user, function(err){
             if(err){
-                return res.json(200,err);
+                return res.json({success:null,error:err});
             }
 
-            res.json(200, {info:"putUser success!"});
+            res.json({success:"putUser success",error:null});
         });
     }else{
-        return res.json(333,{err:"年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰！"});
+        return res.json({success:null,error:"年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰！"});
     }
 });
 
@@ -61,25 +61,25 @@ router.post('/postPic', multipartMiddleware, function(req, res){
 
     User.getOne(phone,function(err, user){
         if(err){
-            return res.json(400,err);
+            return res.json({success:null,error:err});
         }
 
         if(!req.files){
-            return res.json(301,{"error":"没有图片文件！"});
+            return res.json({success:null,error:"没有图片文件"});
         }
 
         user.info.pic = req.files["file1"].name;
 
         User.update(user, function(err){
             if(err){
-                return res.json(400,err);
+                return res.json({success:null,error:err});
             }
 
             var target_path = './public/images/' + req.files["file1"].name;
             // 使用同步方式重命名一个文件
             fs.renameSync(req.files["file1"].path, target_path);
 
-            res.json(200,"上传成功！");
+            res.json({success:"上传成功",error:null});
         });
     });
 });
@@ -88,9 +88,9 @@ router.get('/getUser', checkLogin);
 router.get('/getUser', function(req, res){
     User.getOne(req.session.user, function(err,user){
         if(err){
-            return res.json(400, err);
+            return res.json({success:null,error:err});
         }
-        return res.json(200, user);
+        return res.json({success:user,error:null});
     });
 });
 
@@ -98,9 +98,9 @@ router.post('/logout', checkLogin);
 router.post('/logout', function(req, res){
 	req.session.destroy(function(err){
         if(err){
-            return res.json(400,{'error':'登出失败！'});
+            return res.json({success:null,error:"登出失败"});
         }
-        return res.json(200,{'info':'登出成功！'});
+        return res.json({success:"登出成功",error:err});
     });
 });
 
@@ -112,7 +112,7 @@ router.post('/reg', function(req, res) {
 
 	//  校验密码是否一致
 	if(password != password_re){
-		return res.json(200,{error: '密码不一致！'});
+		return res.json({success:null,error:"密码不一致"});
 	}
 
 	var md5 = crypto.createHash('sha256');
@@ -126,12 +126,12 @@ router.post('/reg', function(req, res) {
 
 	User.getOne(phone, function(err, user){
 		if(user){
-			return res.json(401,{error: "用户已存在！"});
+			return res.json({success:null,error:"用户已存在"});
 		}
 
 		newUser.save(function(err, user){
 			if(err){
-				return res.json(300,err);
+				return res.json({success:null,error:err});
 			}
 
 			req.session.user = user;
@@ -142,9 +142,9 @@ router.post('/reg', function(req, res) {
 
 			newUserLogin.save(function(err) {
 				if(err){
-					return res.json(400,err);
+					return res.json({success:null,error:err});
 				}else{
-					return res.json(200,user);
+					return res.json({success:user,error:null});
 				}
 			});
 		});
@@ -160,16 +160,16 @@ router.post('/login', function(req, res){
 	User.getOne(req.body.phone, function(err, user){
 
 		if(!user){
-			return res.json(401, {error:"用户不存在！"});
+			return res.json({success:null,error:"用户不存在！"});
 		}
 
 		// 检查密码是否一致
 		if(user.info.password != password){
-			return res.json(402, {error:"密码错误！"});
+			return res.json({success:null,error:"密码错误！"});
 		}
 
 		req.session.user = user;
-		return res.json(200, user);
+		return res.json({success:user,error:null});
 	});
 });
 
@@ -181,7 +181,7 @@ router.post('/resetPassword', function(req, res){
 	var phone = req.body.phone;
 
     if(newPassword != newPassword_re){
-        return res.json(400, {error:"新密码不一致！"})
+        return res.json({success:null,error:"新密码不一致"})
     }
 
 	var md5 = crypto.createHash('sha256'),
@@ -190,11 +190,11 @@ router.post('/resetPassword', function(req, res){
 	User.getOne(phone, function(err, user){
 		if(err){ return res.json(400,err) }
 		if(!user){
-			return res.json(400, {error:"用户不存在！"});
+			return res.json({success:null,error:"用户不存在"});
 		}
 
 		if(user.info.password != oldPassword){
-			return res.json(400, {error:"旧密码输入错误！"})
+			return res.json({success:null,error:"旧密码输入错误"})
 		}
 
         var _md5 = crypto.createHash('sha256');
@@ -204,10 +204,10 @@ router.post('/resetPassword', function(req, res){
 
 		User.update(user, function(err){
             if(err){
-                return res.json(400,err);
+                return res.json({success:null,error:err});
             }
 
-            return res.json(200,{"info":"修改成功！"});
+            return res.json({success:"修改成功",error:null});
 		});
 	});
 });
@@ -223,13 +223,13 @@ router.post('/setDaliyPaperSettings', function(req, res){
     if(checkKey == newCheckKey){
         User.update(user, function(err){
             if(err){
-                return res.json(200,err);
+                return res.json({success:null,error:err});
             }
 
-            res.json(200, {info:"putUser success!"});
+            res.json({success:"putUser success",error:null});
         });
     }else{
-        return res.json(333,{err:"年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰！"});
+        return res.json({success:null,error:"年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰"});
     }
 });
 
