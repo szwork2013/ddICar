@@ -12,6 +12,7 @@ SingleLogin.prototype.save = function(callback){
 		userID: this.userID,
 		sessionID: this.sessionID
 	}
+    
 	mongodbPool.acquire(function(err,db){
         if(err){
             return callback(err);
@@ -27,7 +28,7 @@ SingleLogin.prototype.save = function(callback){
                 if(err){
                     return callback(err);
                 }
-                
+
                 return callback(null);
             });
 

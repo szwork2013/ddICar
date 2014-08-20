@@ -1,21 +1,21 @@
 var mongodbPool = require('./db');
 
 function User(user){
-	this.user = {
-		info:{
-			phone: user.phone,
-			password: user.password,
-			name: "None"
-		},
-		like:[]
+	this.info = {
+		phone: user.phone,
+		email: user.email,
+		password: user.password,
+		name: "None"
 	}
+	this.like = {};
 };
 
 module.exports = User;
 
 User.prototype.save = function(callback){
 	var user = {
-		user: this.user
+		info: this.info,
+		like: this.like
 	};
 
 	mongodbPool.acquire(function(err, db){
@@ -29,20 +29,25 @@ User.prototype.save = function(callback){
 				return callback(err);
 			}
 
-			collection.ensureIndex('user.info.phone',function(err, user) {});
-			collection.insert(user,{w:1},function(err, user){
+			collection.ensureIndex('info.phone', function(err, user) {});
+			collection.ensureIndex('info.email', function(err, user) {})
+			collection.insert(user,{w:1},function(err, doc){
 				mongodbPool.release(db);
 				if(err){
 					return callback(err);
 				}
 
-				callback(null,user[0]);
+				callback(null,doc[0]);
 			})
 		});
 	});
 }
 
-User.get = function(phone, callback){
+User.update = function(user, callback){
+	
+}
+
+User.getOne = function(phone, callback){
 	mongodbPool.acquire(function(err, db){
 		if(err){
 			return callback(err);
@@ -53,13 +58,13 @@ User.get = function(phone, callback){
 				mongodbPool.release(db);
 				return callback(err);
 			}
-			collection.findOne({'user.info.phone': phone},function(err,user){
+			collection.findOne({'info.phone': phone},function(err,doc){
 				mongodbPool.release(db);
 				if(err){
 					return callback(err);
 				}
 
-				return callback(null, user);
+				return callback(null, doc);
 			});
 		});
 	});
