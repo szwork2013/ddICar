@@ -1,0 +1,135 @@
+/**
+ * Created by amberglasses on 14-8-7.
+ */
+var mongodbPool = require('./db');
+var ObjectId = require('mongodb').ObjectID;
+
+function DaliyPaperType(daliyPaperType){
+    this.name = daliyPaperType.name;
+}
+
+module.exports = DaliyPaperType;
+
+DaliyPaperType.prototype.save = function(callback){
+    var DaliyPaperType = {
+        name:this.name
+    };
+
+    mongodbPool.acquire(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaperType', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.insert(DaliyPaperType,function(err,doc){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(null, doc);
+            });
+        });
+    });
+};
+
+DaliyPaperType.getAll = function(callback){
+    mongodbPool.acquire(function(err, db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaperType', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.find().sort().toArray(function(err, daliyPaperTypes){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(null, daliyPaperTypes);
+            });
+        });
+    });
+};
+
+DaliyPaperType.getOne = function(id, callback){
+    mongodbPool.acquire(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaperType',function(err,collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.findOne({_id:ObjectId(id)}, function(err,doc){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(null, doc);
+            });
+        });
+    });
+};
+
+DaliyPaperType.delete = function(id, callback){
+    mongodbPool.acquire(function(err, db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaperType', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.remove({_id:ObjectId(id)}, function(err){
+                mongodbPool.release(db);
+                if(err){
+                    callback(err);
+                }
+
+                callback(null);
+            });
+        });
+    });
+};
+
+DaliyPaperType.update = function(DaliyPaperType, callback){
+    mongodbPool.acquire(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaperType',function(err,collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.update({_id:ObjectId(DaliyPaperType._id)},{$set:DaliyPaperType},{safe:true}, function(err){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(null);
+            });
+        });
+    });
+};

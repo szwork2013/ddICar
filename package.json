@@ -19,6 +19,9 @@
     "connect-mongo": "*",
     "node-uuid": "*",
     "nodeunit":"*",
-    "request":"*"
+    "request":"*",
+    "connect-flash":"*",
+    "connect-multiparty":"1.1.0",
+    "gridform":"*"
   }
 }
