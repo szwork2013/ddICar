@@ -1,4 +1,5 @@
 var mongodbPool = require('./db');
+var ObjectId = require('mongodb').ObjectID;
 
 function User(user){
 	this.info = {
@@ -70,7 +71,7 @@ User.update = function(user, callback){
     });
 };
 
-User.getOne = function(phone, callback){
+User.getOne = function(id, callback){
 	mongodbPool.acquire(function(err, db){
 		if(err){
 			return callback(err);
@@ -81,7 +82,7 @@ User.getOne = function(phone, callback){
 				mongodbPool.release(db);
 				return callback(err);
 			}
-			collection.findOne({'info.phone': phone},function(err,doc){
+			collection.findOne({'_id': ObjectId(id)},function(err,doc){
 				mongodbPool.release(db);
 				if(err){
 					return callback(err);

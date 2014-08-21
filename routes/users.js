@@ -85,7 +85,8 @@ router.post('/postPic', multipartMiddleware, function(req, res){
 });
 
 router.get('/getUser', checkLogin);
-router.get('/getUser', function(req, res){
+router.get('/getUser/:id', function(req, res){
+    var userId = req.params["id"];
     User.getOne(req.session.user, function(err,user){
         if(err){
             return res.json({flag:"fail",content:1001});
