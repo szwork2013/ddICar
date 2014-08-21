@@ -21,13 +21,13 @@ router.post('/checkUserVersion', function(req, res){
 
     User.getByTime(user, function(err, todo){
         if(err){
-            return res.json({success:"need to upload device data",error:err});
+            return res.json({flag:"fail",content:1001});
         }
 
         if(todo == "upload"){
-            res.json({success:"need to upload device data",error:null});
+            res.json({flag:"success",content:todo});
         }else if(todo == "download"){
-            res.json({success:"need to download the newest data",error:null});
+            res.json({flag:"success",content:todo});
         }
     });
 });
@@ -44,13 +44,13 @@ router.post('/putUser', function(req, res){
     if(checkKey == newCheckKey){
         User.update(user, function(err){
             if(err){
-                return res.json({success:null,error:err});
+                return res.json({flag:"fail",content:1001});
             }
 
-            res.json({success:"putUser success",error:null});
+            res.json({flag:"success",content:"修改成功"});
         });
     }else{
-        return res.json({success:null,error:"年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰！"});
+        return res.json({flag:"fail",content:2007});
     }
 });
 
@@ -61,25 +61,25 @@ router.post('/postPic', multipartMiddleware, function(req, res){
 
     User.getOne(phone,function(err, user){
         if(err){
-            return res.json({success:null,error:err});
+            return res.json({flag:"fail",content:1001});
         }
 
         if(!req.files){
-            return res.json({success:null,error:"没有图片文件"});
+            return res.json({flag:"fail",content:2010});//没有图片文件
         }
 
         user.info.pic = req.files["file1"].name;
 
         User.update(user, function(err){
             if(err){
-                return res.json({success:null,error:err});
+                return res.json({flag:"fail",content:1001});
             }
 
             var target_path = './public/images/' + req.files["file1"].name;
             // 使用同步方式重命名一个文件
             fs.renameSync(req.files["file1"].path, target_path);
 
-            res.json({success:"上传成功",error:null});
+            res.json({flag:"success",content:"上传成功"});
         });
     });
 });
@@ -88,9 +88,9 @@ router.get('/getUser', checkLogin);
 router.get('/getUser', function(req, res){
     User.getOne(req.session.user, function(err,user){
         if(err){
-            return res.json({success:null,error:err});
+            return res.json({flag:"fail",content:1001});
         }
-        return res.json({success:user,error:null});
+        return res.json({flag:"success",content:user});
     });
 });
 
@@ -98,21 +98,20 @@ router.post('/logout', checkLogin);
 router.post('/logout', function(req, res){
 	req.session.destroy(function(err){
         if(err){
-            return res.json({success:null,error:"登出失败"});
+            return res.json({flag:"fail",content:2004});//登出失败
         }
-        return res.json({success:"登出成功",error:err});
+        return res.json({flag:"fail",content:2003});//登出成功
     });
 });
 
 router.post('/reg', function(req, res) {
 	var phone = req.body.phone,
-		email = req.body.email,
 		password = req.body.password,
 		password_re = req.body.password_repeat;
 
 	//  校验密码是否一致
 	if(password != password_re){
-		return res.json({success:null,error:"密码不一致"});
+		return res.json({flag:"fail",content:2002});//密码不一致
 	}
 
 	var md5 = crypto.createHash('sha256');
@@ -120,18 +119,17 @@ router.post('/reg', function(req, res) {
 
 	var newUser = new User({
 		phone: phone,
-		email: email,
 		password: password
 	});
 
 	User.getOne(phone, function(err, user){
 		if(user){
-			return res.json({success:null,error:"用户已存在"});
+			return res.json({flag:"fail",content:2001});//用户已存在
 		}
 
 		newUser.save(function(err, user){
 			if(err){
-				return res.json({success:null,error:err});
+				return res.json({flag:"fail",content:1001}); //sysErr
 			}
 
 			req.session.user = user;
@@ -142,9 +140,9 @@ router.post('/reg', function(req, res) {
 
 			newUserLogin.save(function(err) {
 				if(err){
-					return res.json({success:null,error:err});
+					return res.json({flag:"fail",content:1001}); //sysErr
 				}else{
-					return res.json({success:user,error:null});
+					return res.json({flag:"success",content:user});
 				}
 			});
 		});
@@ -160,16 +158,16 @@ router.post('/login', function(req, res){
 	User.getOne(req.body.phone, function(err, user){
 
 		if(!user){
-			return res.json({success:null,error:"用户不存在！"});
+			return res.json({flag:"fail",content:2000});//用户不存在
 		}
 
 		// 检查密码是否一致
 		if(user.info.password != password){
-			return res.json({success:null,error:"密码错误！"});
+			return res.json({flag:"fail",content:2008});//密码错误
 		}
 
 		req.session.user = user;
-		return res.json({success:user,error:null});
+		return res.json({flag:"success",content:user});
 	});
 });
 
@@ -181,20 +179,20 @@ router.post('/resetPassword', function(req, res){
 	var phone = req.body.phone;
 
     if(newPassword != newPassword_re){
-        return res.json({success:null,error:"新密码不一致"})
+        return res.json({flag:"fail",content:2009});//新密码不一致
     }
 
 	var md5 = crypto.createHash('sha256'),
 	oldPassword = md5.update(oldPassword).digest('hex');
 
 	User.getOne(phone, function(err, user){
-		if(err){ return res.json(400,err) }
+		if(err){ return res.json({flag:"fail",content:1001}) }
 		if(!user){
-			return res.json({success:null,error:"用户不存在"});
+			return res.json({flag:"fail",content:2000});//用户不存在
 		}
 
 		if(user.info.password != oldPassword){
-			return res.json({success:null,error:"旧密码输入错误"})
+			return res.json({flag:"fail",content:2008})//旧密码输入错误
 		}
 
         var _md5 = crypto.createHash('sha256');
@@ -204,10 +202,10 @@ router.post('/resetPassword', function(req, res){
 
 		User.update(user, function(err){
             if(err){
-                return res.json({success:null,error:err});
+                return res.json({flag:"fail",content:1001});
             }
 
-            return res.json({success:"修改成功",error:null});
+            return res.json({flag:"success",content:3001});//修改成功
 		});
 	});
 });
@@ -223,13 +221,13 @@ router.post('/setDaliyPaperSettings', function(req, res){
     if(checkKey == newCheckKey){
         User.update(user, function(err){
             if(err){
-                return res.json({success:null,error:err});
+                return res.json({flag:"fail",content:1001});
             }
 
-            res.json({success:"putUser success",error:null});
+            res.json({flag:"success",content:"修改成功"});//修改成功
         });
     }else{
-        return res.json({success:null,error:"年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰"});
+        return res.json({flag:"fail",content:2007});//年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰
     }
 });
 
@@ -241,7 +239,7 @@ router.get('/daliyPaper/showAll', DaliyPaper.getAll);
 
 function checkLogin(req, res, next){
     if(!req.session.user){
-        return res.json(302, {error:"您已登录！"});
+        return res.json({flag:"fail",content:2006});//您已登录
     }
 
     next();
@@ -249,7 +247,7 @@ function checkLogin(req, res, next){
 
 function checkNotLogin(req, res, next){
     if(req.session.user){
-        return res.json(302, {error:"您未登录！"});
+        return res.json({flag:"fail",content:2005});//您未登录
     }
 
     next();

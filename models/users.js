@@ -3,7 +3,6 @@ var mongodbPool = require('./db');
 function User(user){
 	this.info = {
 		phone: user.phone,
-		email: user.email,
 		password: user.password,
 		name: "None",
         pic:"None",
@@ -35,7 +34,6 @@ User.prototype.save = function(callback){
 			}
 
 			collection.ensureIndex('info.phone', function(err, user) {});
-			collection.ensureIndex('info.email', function(err, user) {});
 			collection.insert(user,{w:1},function(err, doc){
 				mongodbPool.release(db);
 				if(err){
@@ -109,7 +107,6 @@ User.getByTime = function(user,callback){
             var date = new Date(user.info.lastUpDateTime);
             var query = {
                 "info.phone":user.info.phone,
-                "info.email":user.info.email,
                 "info.lastUpDateTime":date
             };
             collection.findOne(query,function(err,doc){
