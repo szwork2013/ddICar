@@ -100,7 +100,7 @@ router.get('/logout', function(req, res){
         if(err){
             return res.json({flag:"fail",content:2004});//登出失败
         }
-        return res.json({flag:"fail",content:2003});//登出成功
+        return res.json({flag:"success",content:3002});//登出成功
     });
 });
 
