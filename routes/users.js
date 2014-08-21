@@ -94,8 +94,8 @@ router.get('/getUser', function(req, res){
     });
 });
 
-router.post('/logout', checkLogin);
-router.post('/logout', function(req, res){
+router.get('/logout', checkLogin);
+router.get('/logout', function(req, res){
 	req.session.destroy(function(err){
         if(err){
             return res.json({flag:"fail",content:2004});//登出失败
@@ -169,12 +169,7 @@ router.post('/resetPassword', checkLogin);
 router.post('/resetPassword', function(req, res){
 	var oldPassword = req.body.oldpassword;
 	var newPassword = req.body.newpassword;
-	var newPassword_re = req.body.newpassword_repeat;
 	var phone = req.body.phone;
-
-    if(newPassword != newPassword_re){
-        return res.json({flag:"fail",content:2009});//新密码不一致
-    }
 
 	var md5 = crypto.createHash('sha256'),
 	oldPassword = md5.update(oldPassword).digest('hex');
