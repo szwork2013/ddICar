@@ -106,13 +106,7 @@ router.post('/logout', function(req, res){
 
 router.post('/reg', function(req, res) {
 	var phone = req.body.phone,
-		password = req.body.password,
-		password_re = req.body.password_repeat;
-
-	//  校验密码是否一致
-	if(password != password_re){
-		return res.json({flag:"fail",content:2002});//密码不一致
-	}
+		password = req.body.password
 
 	var md5 = crypto.createHash('sha256');
 	password = md5.update(password).digest('hex');
