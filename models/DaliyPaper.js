@@ -10,6 +10,7 @@ function DaliyPaper(daliyPaper){
     this.pic = daliyPaper.pic;
     this.type = daliyPaper.type;
     this.audio = daliyPaper.audio;
+    this.favorites = 0;
 }
 
 module.exports = DaliyPaper;
@@ -154,6 +155,58 @@ DaliyPaper.update = function(daliyPaper, callback){
             }
 
             collection.update({'_id':ObjectId(daliyPaper._id)},{$set:daliyPaper},{safe:true}, function(err){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(null);
+            });
+        });
+    });
+};
+
+DaliyPaper.setFavorite = function(id, callback){
+    mongodbPool.acquire(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaper',function(err,collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.update({'_id':ObjectId(id)},{
+                $inc: {"favorites": 1}
+            }, function(err){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(null);
+            });
+        });
+    });
+};
+
+DaliyPaper.setUnFavorite = function(id, callback){
+    mongodbPool.acquire(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaper',function(err,collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.update({'_id':ObjectId(id)},{
+                $inc: {"favorites": -1}
+            }, function(err){
                 mongodbPool.release(db);
                 if(err){
                     return callback(err);

@@ -38,7 +38,6 @@ app.use(session({
 app.use(flash());
 
 app.use('/', routes);
-app.use('/users', users);
 app.use('/admins', admins);
 
 /// catch 404 and forward to error handler

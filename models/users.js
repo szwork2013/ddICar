@@ -94,6 +94,29 @@ User.getOne = function(id, callback){
 	});
 };
 
+User.getByPhone = function(phone, callback){
+    mongodbPool.acquire(function(err, db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('users', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+            collection.findOne({'info.phone':phone},function(err,doc){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                return callback(null, doc);
+            });
+        });
+    });
+};
+
 User.getByTime = function(user,callback){
     mongodbPool.acquire(function(err,db){
         if(err){

@@ -8,7 +8,7 @@ var ObjectId = require('mongodb').ObjectID;
 exports.getAll = function(req, res){
     Favorite.getAll(req.body.user_id, function(err, favorites){
         if(err){
-            return res.json(400, err);
+            return res.json({flag:"fail",content:1001});
         }
 
         var post_ids = [];
@@ -19,9 +19,9 @@ exports.getAll = function(req, res){
         DaliyPaper.getSome(post_ids, function(err, daliyPapers){
 
             if(err){
-                return res.json(400, err);
+                return res.json({flag:"fail",content:1001});
             }
-            return res.json(200, user);
+            return res.json({flag:"success",content:daliyPapers});
         });
     });
 };
@@ -37,10 +37,16 @@ exports.favorite = function(req, res){
 
     newFavorite.save(function(err, favorite){
         if(err){
-            return res.json(400, err);
+            return res.json({flag:"fail",content:1001});
         }
 
-        res.json(200, favorite);
+        DaliyPaper.setFavorite(post_id, function(err){
+            if(err){
+                return res.json({flag:"fail",content:1001});
+            }
+
+            res.json({flag:"success",content:"收藏成功"});
+        });
     });
 };
 
@@ -50,10 +56,16 @@ exports.unfavorite = function(req, res){
 
     Favorite.delete(user_id,post_id,function(err){
         if(err){
-            return res.json(400, err);
+            return res.json({flag:"fail",content:1001});
         }
 
-        res.json(200,{info:"cancel success!"})
+        DaliyPaper.setUnFavorite(post_id, function(err){
+            if(err){
+                return res.json({flag:"fail",content:1001});
+            }
+
+            res.json({flag:"success",content:"取消收藏"});
+        });
     });
 };
 
