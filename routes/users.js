@@ -139,7 +139,7 @@ exports.resetPassword = function(req, res){
     var md5 = crypto.createHash('sha256'),
         oldPassword = md5.update(oldPassword).digest('hex');
 
-    User.getOne(phone, function(err, user){
+    User.getByPhone(phone, function(err, user){
         if(err){ return res.json({flag:"fail",content:1001}) }
         if(!user){
             return res.json({flag:"fail",content:2000});//用户不存在
@@ -161,6 +161,104 @@ exports.resetPassword = function(req, res){
 
             return res.json({flag:"success",content:3001});//修改成功
         });
+    });
+};
+
+
+exports.setDaliyPaperSettings = function(req, res){
+    var user_id = req.body.id;
+    var DaliyPaperSettings = req.body.DaliyPaperSettings;
+    var checkKey = req.body.checkKey;
+    var salt = "ce23dc8d7a345337836211f829f0c05d";
+    var daliyPaperSettingsStr = JSON.stringify(DaliyPaperSettings);
+    var md5 = crypto.createHash('sha256');
+    var newCheckKey = md5.update(daliyPaperSettingsStr+salt).digest('hex');
+
+    if(checkKey == newCheckKey){
+        User.getOne(user_id, function(err, user){
+            if(err){
+                return res.json({flag:"fail",content:1001});
+            }
+
+            user.daliy_paper = DaliyPaperSettings;
+
+            User.update(user, function(err){
+                if(err){
+                    return res.json({flag:"fail",content:1001});
+                }
+
+                res.json({flag:"success",content:"修改成功"});//修改成功
+            });
+        });
+    }else{
+        return res.json({flag:"fail",content:2007});//年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰
+    }
+};
+
+exports.getDaliyPaperSettings = function(req, res){
+    var user_id = req.body.id;
+
+    User.getOne(user_id, function(err, user){
+        if(err){
+            return res.json({flag:"fail",content:1001});
+        }
+
+        res.json({flag:"success",content:user.daliy_paper});
+    });
+};
+
+exports.setAppSettings = function(req, res){
+    var user_id = req.body.id;
+    var AppSettings = req.body.AppSettings;
+    var checkKey = req.body.checkKey;
+    var salt = "ce23dc8d7a345337836211f829f0c05d";
+    var appSettingsStr = JSON.stringify(AppSettings);
+    var md5 = crypto.createHash('sha256');
+    var newCheckKey = md5.update(appSettingsStr+salt).digest('hex');
+
+    if(checkKey == newCheckKey){
+        User.getOne(user_id, function(err, user){
+            if(err){
+                return res.json({flag:"fail",content:1001});
+            }
+
+            user.settings = appSettingsStr;
+
+            User.update(user, function(err){
+                if(err){
+                    return res.json({flag:"fail",content:1001});
+                }
+
+                res.json({flag:"success",content:"修改成功"});//修改成功
+            });
+        });
+    }else{
+        return res.json({flag:"fail",content:2007});//年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰
+    }
+};
+
+exports.getAppSettings = function(req, res){
+    var user_id = req.body.id;
+
+    User.getOne(user_id, function(err, user){
+        if(err){
+            return res.json({flag:"fail",content:1001});
+        }
+
+        res.json({flag:"success",content:user.settings});
+    });
+};
+
+exports.getYourVoice = function(req, res){
+    var user_id = req.body.id;
+    var type = req.body.type;
+
+    User.getOne(user_id, function(err, user){
+        if(err){
+            return res.json({flag:"fail",content:1001});
+        }
+
+        res.json({flag:"success",content:user.settings});
     });
 };
 

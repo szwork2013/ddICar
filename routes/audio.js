@@ -127,3 +127,6 @@ YourVoiceType.getAll(function(err, yourVoiceTypes){
     });
 })
 };
+
+///////////////// iOS /////////////////
+

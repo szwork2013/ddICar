@@ -65,6 +65,34 @@ Audio.getAll = function(callback){
     });
 };
 
+Audio.getByType = function(type,callback){
+    mongodbPool.acquire(function(err, db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('audio', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            var query = {
+                type:type
+            };
+
+            collection.find(query).sort().toArray(function(err, docs){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(null, docs);
+            });
+        });
+    });
+};
+
 Audio.getOne = function(id, callback){
     mongodbPool.acquire(function(err, db){
         if(err){

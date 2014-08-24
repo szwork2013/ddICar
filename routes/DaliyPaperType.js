@@ -150,3 +150,26 @@ exports.level2_showAll = function(req, res){
         });
     });
 };
+
+
+
+////////////// iOS ///////////////
+
+exports.level1_type = function(req, res){
+    DaliyPaperType.getAll(function(err, daliyPaperTypes){
+        if(err){
+            return res.json({flag:"fail",content:err});
+        }
+        res.json({flag:"success",content:daliyPaperTypes});
+    });
+};
+
+exports.level2_type = function(req, res){
+    var level1_type = req.params["type"];
+    DaliyPaperSubType.getByType(level1_type, function(err, daliyPaperSubTypes){
+        if(err){
+            return res.json({flag:"fail",content:err});
+        }
+        res.json({flag:"success",content:daliyPaperSubTypes});
+    });
+};
