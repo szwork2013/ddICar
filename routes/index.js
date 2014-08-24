@@ -6,7 +6,7 @@ var User = require('./users');
 var Favorite = require('./favorite');
 var DaliyPaper = require('./DaliyPaper');
 var DaliyPaperType = require('./DaliyPaperType');
-var YourVoice = require('./audio');
+var YourVoice = require('./YourVoice');
 
 /* GET home page. */
 
@@ -30,4 +30,5 @@ router.get('/daliyPaper/getLevel1Type', DaliyPaperType.level1_type);  // 获取�
 router.get('/daliyPaper/getLevel2Type', DaliyPaperType.level2_type);  // 获取日报二级类型
 
 router.get('/yourVoice/getByType', YourVoice.getByType);  // 获取你的声音列表
+
 module.exports = router;
