@@ -115,7 +115,7 @@ exports.login = function(req, res){
         password = md5.update(req.body.password).digest('hex');
 
     // 查询是否有此用户
-    User.getOne(req.body.phone, function(err, user){
+    User.getByPhone(req.body.phone, function(err, user){
 
         if(!user){
             return res.json({flag:"fail",content:2000});//用户不存在
