@@ -16,6 +16,8 @@ exports.getAll = function(req, res){
             post_ids.push(ObjectId(e.post_id));
         });
 
+        console.log(post_ids);
+
         DaliyPaper.getSome(post_ids, function(err, daliyPapers){
 
             if(err){
