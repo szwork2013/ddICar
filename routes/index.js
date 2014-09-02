@@ -14,7 +14,7 @@ router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
 router.get('/users/logout', User.logout);// 用户登出
 
-router.get('/users/getUser', User.getUser);// 获取用户信息
+router.get('/users/getUser/:id', User.getUser);// 获取用户信息
 router.post('/users/putUser', User.putUser);// 保存用户信息
 router.post('/users/postPic', multipartMiddleware, User.postPic);// 保存用户头像
 router.post('/users/resetPassword', User.resetPassword);// 用户重置密码
