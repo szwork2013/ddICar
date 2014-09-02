@@ -68,6 +68,15 @@
                         <label for=“type” class="col-sm-4 control-label">类型</label>
                         <div class="col-sm-7">
                             <input name="type" type="text" class="form-control" id="type" placeholder="类型">
+                            <select name="daliyPaperType" id="daliyPaperType">
+                                <% daliyPaperTypes.forEach(function(e){ %>
+                                <option value="<%=e.name%>"><%=e.name%></option>
+                                <% }) %>
+                            </select>
+
+                            <select name="daliyPaperSubType" id="daliyPaperSubType">
+
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -138,3 +147,19 @@
 <%}%>
 
 <%- include footer %>
+
+<script>
+    $(document).ready(function(){
+        $('#daliyPaperType').change(function(){
+            var subTypes = $('#daliyPaperSubType');
+            subTypes.empty();
+            <%daliyPaperSubTypes.forEach(function(e){%>
+
+                if($(this).children('option:selected').val()=='<%=e.daliyPaperType%>'){
+                    var option = $('<option value="<%=e.name%>"><%=e.name%></option>');
+                    subTypes.append(option);
+                }
+            <%})%>
+        })
+    });
+</script>

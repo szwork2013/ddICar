@@ -88,6 +88,30 @@ DaliyPaperSubType.getOne = function(id, callback){
     });
 };
 
+DaliyPaperSubType.getIdByType = function(name,daliyPaperType, callback){
+    mongodbPool.acquire(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaperSubType',function(err,collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.findOne({name:name,daliyPaperType:daliyPaperType}, function(err,doc){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(null, doc);
+            });
+        });
+    });
+};
+
 DaliyPaperSubType.delete = function(id, callback){
     mongodbPool.acquire(function(err, db){
         if(err){
