@@ -83,7 +83,7 @@ DaliyPaper.getSome = function(ids, callback){
                 return callback(err);
             }
 
-            collection.find({id:{'$in':ids}}).sort().toArray(function(err,docs){
+            collection.find({_id:{'$in':ids}}).sort().toArray(function(err,docs){
                 mongodbPool.release(db);
                 if(err){
                     return callback(err);
