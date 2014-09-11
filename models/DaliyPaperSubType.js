@@ -6,7 +6,9 @@ var ObjectId = require('mongodb').ObjectID;
 
 function DaliyPaperSubType(daliyPaperSubType){
     this.name = daliyPaperSubType.name;
-    this.daliyPaperType = daliyPaperSubType.daliyPaperType;
+    this.parentTypeId = daliyPaperSubType.parentTypeId;
+    this.pic = daliyPaperSubType.pic;
+    this.picSelected = daliyPaperSubType.picSelected;
 }
 
 module.exports = DaliyPaperSubType;
@@ -14,7 +16,9 @@ module.exports = DaliyPaperSubType;
 DaliyPaperSubType.prototype.save = function(callback){
     var DaliyPaperSubType = {
         name:this.name,
-        daliyPaperType:this.daliyPaperType
+        parentTypeId:this.parentTypeId,
+        pic:this.pic,
+        picSelected:this.picSelected
     };
 
     mongodbPool.acquire(function(err,db){

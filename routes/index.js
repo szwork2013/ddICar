@@ -11,25 +11,25 @@ var YourVoice = require('./YourVoice');
 /* GET home page. */
 
 router.post('/users/reg', User.reg); // 用户注册
-router.post('/users/login', User.login);// 用户登录
-router.get('/users/logout', User.logout);// 用户登出
+router.post('/users/login',User.checkNotLogin, User.login);// 用户登录
+router.get('/users/logout',User.checkLogin, User.logout);// 用户登出
 
-router.get('/users/getUser/:id', User.getUser);// 获取用户信息
-router.post('/users/putUser', User.putUser);// 保存用户信息
-router.post('/users/postPic', multipartMiddleware, User.postPic);// 保存用户头像
-router.post('/users/resetPassword', User.resetPassword);// 用户重置密码
-router.post('/users/setDaliyPaperSettings', User.setDaliyPaperSettings); // 设置日报设置
-router.post('/users/getDaliyPaperSettings', User.setDaliyPaperSettings); // 获取日报设置
-router.post('/users/setAppSettings', User.setAppSettings); // 设置app设置
-router.post('/users/getAppSettings', User.setDaliyPaperSettings); // 获取日报设置
-router.post('/users/favorite/showAll', Favorite.getAll);// 我的收藏
-router.post('/users/favorite', Favorite.favorite); // 收藏
-router.post('/users/unfavorite', Favorite.unfavorite);// 取消收藏
-router.get('/users/daliyPaper/showAll', DaliyPaper.getAll);// 获取日报
+router.get('/users/getUser/:id',User.checkLogin, User.getUser);// 获取用户信息
+router.post('/users/putUser',User.checkLogin, User.putUser);// 保存用户信息
+router.post('/users/postPic',User.checkLogin, multipartMiddleware, User.postPic);// 保存用户头像
+router.post('/users/resetPassword',User.checkLogin, User.resetPassword);// 用户重置密码
+router.post('/users/setDaliyPaperSettings',User.checkLogin, User.setDaliyPaperSettings); // 设置日报设置
+router.post('/users/getDaliyPaperSettings',User.checkLogin, User.setDaliyPaperSettings); // 获取日报设置
+router.post('/users/setAppSettings',User.checkLogin, User.setAppSettings); // 设置app设置
+router.post('/users/getAppSettings',User.checkLogin, User.setDaliyPaperSettings); // 获取日报设置
+router.post('/users/favorite/showAll',User.checkLogin, Favorite.getAll);// 我的收藏
+router.post('/users/favorite',User.checkLogin, Favorite.favorite); // 收藏
+router.post('/users/unfavorite',User.checkLogin, Favorite.unfavorite);// 取消收藏
+router.get('/users/daliyPaper/showAll',User.checkLogin, DaliyPaper.getAll);// 获取日报
 
-router.get('/daliyPaper/getLevel1Type', DaliyPaperType.level1_type);  // 获取日报一级类型
-router.get('/daliyPaper/getLevel2Type', DaliyPaperType.level2_type);  // 获取日报二级类型
+router.get('/daliyPaper/getLevel1Type',User.checkLogin, DaliyPaperType.level1_type);  // 获取日报一级类型
+router.get('/daliyPaper/getLevel2Type',User.checkLogin, DaliyPaperType.level2_type);  // 获取日报二级类型
 
-router.get('/yourVoice/getByType', YourVoice.getByType);  // 获取你的声音列表
+router.get('/yourVoice/getByType',User.checkLogin, YourVoice.getByType);  // 获取你的声音列表
 
 module.exports = router;

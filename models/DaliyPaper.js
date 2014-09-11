@@ -8,7 +8,7 @@ function DaliyPaper(daliyPaper){
     this.title = daliyPaper.title;
     this.author = daliyPaper.author;
     this.pic = daliyPaper.pic;
-    this.type = daliyPaper.type;
+    this.typeId = daliyPaper.typeId;
     this.audio = daliyPaper.audio;
     this.favorites = 0;
 }
@@ -20,7 +20,7 @@ DaliyPaper.prototype.save = function(callback){
         title:this.title,
         author:this.author,
         pic:this.pic,
-        type:this.type,
+        typeId:this.typeId,
         audio:this.audio
     };
 

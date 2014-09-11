@@ -14,6 +14,7 @@
         <table class="table table-hover">
             <tr>
                 <td>#No.</td>
+                <td>#封图</td>
                 <td>#定制日报一级栏目名称</td>
                 <td>#操作</td>
             </tr>
@@ -23,6 +24,7 @@
             <%n++;%>
             <tr>
                 <td><%=n%></td>
+                <td><img src="/images/<%=e.pic%>" alt="<%=e.name%>"/></td>
                 <td><%=e.name%></td>
                 <td><a href="/admins/daliyPaper/type/level1/delete/<%=e._id%>">删除</a> <a data-toggle="modal" data-target="#<%=e._id%>">修改</a></td>
             </tr>
@@ -42,11 +44,17 @@
             </div>
             <div class="modal-body">
                 <p class="lead">信息录入</p>
-                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level1/add">
+                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level1/add" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="daliyPaperType" class="col-sm-4 control-label">定制日报一级栏目</label>
                         <div class="col-sm-7">
                             <input type="text" name="name" id="name" class="form-control" placeholder="一级栏目名称"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for=“pic” class="col-sm-4 control-label">封图</label>
+                        <div class="col-sm-7">
+                            <input name="pic" type="file" class="form-control" id="pic">
                         </div>
                     </div>
                     <div class="form-group">
@@ -70,14 +78,20 @@
                 <h4 class="modal-title" id="myModalLabel">日报子栏目类型</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level1/update">
+                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level1/update" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="daliyPaperType" class="col-sm-4 control-label">定制日报一级栏目</label>
                         <div class="col-sm-7">
                             <input type="text" name="name" id="name" class="form-control" value="<%=e.name%>"/>
                         </div>
                     </div>
-
+                    <div class="form-group">
+                        <label for=“pic” class="col-sm-4 control-label">封图</label>
+                        <div class="col-sm-7">
+                            <img src="/images/<%=e.pic%>" alt="<%=e.name%>"/>
+                            <input name="pic" type="file" class="form-control" id="pic">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-3">
                             <input type="hidden" name="id" value="<%=e._id%>"/>

@@ -3,15 +3,24 @@
  */
 var DaliyPaperType = require('../models/DaliyPaperType');
 var DaliyPaperSubType = require('../models/DaliyPaperSubType');
+var uuid = require('node-uuid');
+var fs = require('fs');
 
 var level1_backpage = '/admins/daliyPaper/type/level1/showAll';
 var level2_backpage = '/admins/daliyPaper/type/level2/showAll';
 
 exports.level1_add = function(req, res){
     var name = req.body.name;
+    var pic = req.files["pic"].name;
+
+    switch(req.files["pic"].type){
+        case "image/png":
+            pic = uuid.v1() + ".png";
+    }
 
     var newDaliyPaperType = new DaliyPaperType({
-        name:name
+        name:name,
+        pic:pic
     });
 
     newDaliyPaperType.save(function(err, daliyPaperType){
@@ -19,6 +28,10 @@ exports.level1_add = function(req, res){
             req.flash('error', "添加该类型失败！");
             return res.redirect(level1_backpage);
         }
+
+        var pic_target_path = './public/images/' + pic;
+        // 使用同步方式重命名一个文件
+        fs.renameSync(req.files["pic"].path, pic_target_path);
 
         req.flash('success', "添加该类型成功！");
         res.redirect(level1_backpage);
@@ -42,6 +55,12 @@ exports.level1_delete = function(req, res){
 exports.level1_update = function(req, res){
     var id = req.body.id;
     var name = req.body.name;
+    var pic = req.files["pic"].name;
+
+    switch(req.files["pic"].type){
+        case "image/png":
+            pic = uuid.v1() + ".png";
+    }
 
     DaliyPaperType.getOne(id, function(err, daliyPaperType){
         if(err){
@@ -50,12 +69,17 @@ exports.level1_update = function(req, res){
         }
 
         daliyPaperType.name = name;
+        daliyPaperType.pic = pic;
 
         DaliyPaperType.update(daliyPaperType, function(err){
             if(err){
                 req.flash('error', "修改失败！");
                 return res.redirect(level1_backpage);
             }
+
+            var pic_target_path = './public/images/' + pic;
+            // 使用同步方式重命名一个文件
+            fs.renameSync(req.files["pic"].path, pic_target_path);
 
             req.flash('success', "修改成功！");
             res.redirect(level1_backpage);
@@ -76,12 +100,26 @@ exports.level1_showAll = function(req, res){
 };
 
 exports.level2_add = function(req, res){
-    var daliyPaperType = req.body.daliyPaperType;
-    var daliyPaperSubType = req.body.daliyPaperSubType;
+    var parentTypeId = req.body.parentTypeId;
+    var name = req.body.name;
+    var pic = req.files["pic"].name;
+    var picSelected = req.files["picSelected"].name;
+
+    switch(req.files["pic"].type){
+        case "image/png":
+            pic = uuid.v1() + ".png";
+    }
+
+    switch(req.files["picSelected"].type){
+        case "image/png":
+            picSelected = uuid.v1() + ".png";
+    }
 
     var newDaliyPaperSubType = new DaliyPaperSubType({
-        name:daliyPaperSubType,
-        daliyPaperType:daliyPaperType
+        name:name,
+        parentTypeId:parentTypeId,
+        pic:pic,
+        picSelected:picSelected
     });
 
     newDaliyPaperSubType.save(function(err, daliyPaperSubType){
@@ -89,6 +127,14 @@ exports.level2_add = function(req, res){
             req.flash('error', "添加该类型失败！");
             return res.redirect(level2_backpage);
         }
+
+        var pic_target_path = './public/images/' + pic;
+        // 使用同步方式重命名一个文件
+        fs.renameSync(req.files["pic"].path, pic_target_path);
+
+        var picSelected_target_path = './public/images/' + picSelected;
+        // 使用同步方式重命名一个文件
+        fs.renameSync(req.files["picSelected"].path, picSelected_target_path);
 
         req.flash('success', "添加该类型成功！");
         res.redirect(level2_backpage);
@@ -111,8 +157,20 @@ exports.level2_delete = function(req, res){
 
 exports.level2_update = function(req, res){
     var id = req.body.id;
-    var daliyPaperType = req.body.daliyPaperType;
-    var daliyPaperSubType_name = req.body.daliyPaperSubType_name;
+    var name = req.body.name;
+    var parentTypeId = req.body.parentTypeId;
+    var pic = req.files["pic"].name;
+    var picSelected = req.files["picSelected"].name;
+
+    switch(req.files["pic"].type){
+        case "image/png":
+            pic = uuid.v1() + ".png";
+    }
+
+    switch(req.files["picSelected"].type){
+        case "image/png":
+            picSelected = uuid.v1() + ".png";
+    }
 
     DaliyPaperSubType.getOne(id, function(err, daliyPaperSubType){
         if(err){
@@ -120,14 +178,24 @@ exports.level2_update = function(req, res){
             return res.redirect(level2_backpage);
         }
 
-        daliyPaperSubType.name = daliyPaperSubType_name;
-        daliyPaperSubType.daliyPaperType = daliyPaperType;
+        daliyPaperSubType.name = name;
+        daliyPaperSubType.parentTypeId = parentTypeId;
+        daliyPaperSubType.pic = pic;
+        daliyPaperSubType.picSelected = picSelected;
 
         DaliyPaperSubType.update(daliyPaperSubType, function(err){
             if(err){
                 req.flash('error', "修改失败！");
                 return res.redirect(level2_backpage);
             }
+
+            var pic_target_path = './public/images/' + pic;
+            // 使用同步方式重命名一个文件
+            fs.renameSync(req.files["pic"].path, pic_target_path);
+
+            var picSelected_target_path = './public/images/' + picSelected;
+            // 使用同步方式重命名一个文件
+            fs.renameSync(req.files["pic"].path, picSelected_target_path);
 
             req.flash('success', "修改成功！");
             res.redirect(level2_backpage);

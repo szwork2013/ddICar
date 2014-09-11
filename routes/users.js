@@ -79,6 +79,7 @@ exports.reg = function(req, res) {
     password = md5.update(password).digest('hex');
 
     var newUser = new User({
+        name: phone.replace(new RegExp(phone.substr(3, 4)), '****'),
         phone: phone,
         password: password
     });
@@ -94,6 +95,8 @@ exports.reg = function(req, res) {
             }
 
             req.session.user = user;
+            req.session.user_id = user._id;
+
             var newUserLogin = new SingleLogin({
                 userID: user._id,
                 sessionID: req.sessionID
@@ -262,9 +265,10 @@ exports.getYourVoice = function(req, res){
     });
 };
 
+
 exports.checkLogin = function(req, res, next){
     if(!req.session.user){
-        return res.json({flag:"fail",content:2006});//您已登录
+        return res.json({flag:"fail",content:2006});//您未登录
     }
 
     next();
@@ -272,7 +276,7 @@ exports.checkLogin = function(req, res, next){
 
 exports.checkNotLogin = function(req, res, next){
     if(req.session.user){
-        return res.json({flag:"fail",content:2005});//您未登录
+        return res.json({flag:"fail",content:2005});//您已登录
     }
 
     next();

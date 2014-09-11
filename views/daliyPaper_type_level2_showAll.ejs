@@ -14,6 +14,8 @@
         <table class="table table-hover">
             <tr>
                 <td>#No.</td>
+                <td>#封图</td>
+                <td>#选中状态</td>
                 <td>#定制日报一级栏目名称</td>
                 <td>#定制日报二级栏目名称</td>
                 <td>#操作</td>
@@ -24,7 +26,17 @@
             <%n++;%>
             <tr>
                 <td><%=n%></td>
-                <td><%=e.daliyPaperType%></td>
+                <td><img src="/images/<%=e.pic%>" alt="<%=e.name%>"/></td>
+                <td><img src="/images/<%=e.picSelected%>" alt="<%=e.name%>"/></td>
+                <td>
+                    <% if(daliyPaperTypes){ %>
+                    <% daliyPaperTypes.forEach(function(t){ %>
+                    <% if(e.parentTypeId == t._id){ %>
+                    <%=t.name%>
+                    <% } %>
+                    <% }) %>
+                    <% } %>
+                    </td>
                 <td><%=e.name%></td>
                 <td><a href="/admins/daliyPaper/type/level2/delete/<%=e._id%>">删除</a> <a data-toggle="modal" data-target="#<%=e._id%>">修改</a></td>
             </tr>
@@ -44,23 +56,35 @@
             </div>
             <div class="modal-body">
                 <p class="lead">信息录入</p>
-                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level2/add">
+                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level2/add" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="daliyPaperType" class="col-sm-4 control-label">定制日报一级栏目</label>
+                        <label for="parentTypeId" class="col-sm-4 control-label">定制日报一级栏目</label>
                         <div class="col-sm-7">
-                            <select class="form-control" name="daliyPaperType" id="daliyPaperType">
+                            <select class="form-control" name="parentTypeId">
                                 <% if(daliyPaperTypes){ %>
                                     <% daliyPaperTypes.forEach(function(e){ %>
-                                        <option><%= e.name %></option>
+                                        <option value="<%=e._id%>"><%=e.name%></option>
                                     <% }) %>
                                 <% } %>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="daliyPaperSubType" class="col-sm-4 control-label">定制日报二级栏目</label>
+                        <label for="name" class="col-sm-4 control-label">定制日报二级栏目</label>
                         <div class="col-sm-7">
-                            <input name="daliyPaperSubType" type="text" class="form-control" id="daliyPaperSubType" placeholder="定制日报二级栏目">
+                            <input name="name" type="text" class="form-control" placeholder="定制日报二级栏目">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for=“pic” class="col-sm-4 control-label">封图</label>
+                        <div class="col-sm-7">
+                            <input name="pic" type="file" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for=“picSelected” class="col-sm-4 control-label">选中状态</label>
+                        <div class="col-sm-7">
+                            <input name="picSelected" type="file" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
@@ -84,17 +108,17 @@
                 <h4 class="modal-title" id="myModalLabel">日报子栏目类型</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level2/update">
+                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level2/update" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="daliyPaperType" class="col-sm-4 control-label">定制日报一级栏目</label>
+                        <label for="parentTypeId" class="col-sm-4 control-label">定制日报一级栏目</label>
                         <div class="col-sm-7">
-                            <select class="form-control" name="daliyPaperType" id="daliyPaperType">
+                            <select class="form-control" name="parentTypeId">
                                 <% if(daliyPaperTypes){ %>
                                 <% daliyPaperTypes.forEach(function(t){ %>
                                 <% if(e.daliyPaperType == t.name){ %>
-                                    <option selected><%= t.name %></option>
+                                    <option value="<%=t._id%>" selected><%= t.name %></option>
                                 <% }else{ %>
-                                    <option><%= t.name %></option>
+                                    <option value="<%=t._id%>><%= t.name %></option>
                                 <% } %>
                                 <% }) %>
                                 <% } %>
@@ -102,9 +126,23 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="daliyPaperSubType" class="col-sm-4 control-label">定制日报二级栏目</label>
+                        <label for="name" class="col-sm-4 control-label">定制日报二级栏目</label>
                         <div class="col-sm-7">
-                            <input name="daliyPaperSubType_name" type="text" class="form-control" id="daliyPaperSubType_name" value="<%=e.name%>">
+                            <input name="name" type="text" class="form-control" value="<%=e.name%>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for=“pic” class="col-sm-4 control-label">封图</label>
+                        <div class="col-sm-7">
+                            <img src="/images/<%=e.pic%>" alt="<%=e.name%>"/>
+                            <input name="pic" type="file" class="form-control" id="pic">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for=“picSelected” class="col-sm-4 control-label">选中状态</label>
+                        <div class="col-sm-7">
+                            <img src="/images/<%=e.picSelected%>" alt="<%=e.name%>"/>
+                            <input name="picSelected" type="file" class="form-control" id="picSelected">
                         </div>
                     </div>
                     <div class="form-group">

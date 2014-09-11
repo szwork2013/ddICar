@@ -201,19 +201,19 @@ router.post('/logout', function(req, res){
 
 router.get('/daliyPaper/type/level1/showAll', DaliyPaperType.level1_showAll);
 
-router.post('/daliyPaper/type/level1/add', DaliyPaperType.level1_add);
+router.post('/daliyPaper/type/level1/add', multipartMiddleware, DaliyPaperType.level1_add);
 
 router.get('/daliyPaper/type/level1/delete/:id', DaliyPaperType.level1_delete);
 
-router.post('/daliyPaper/type/level1/update', DaliyPaperType.level1_update);
+router.post('/daliyPaper/type/level1/update', multipartMiddleware, DaliyPaperType.level1_update);
 
 router.get('/daliyPaper/type/level2/showAll', DaliyPaperType.level2_showAll);
 
-router.post('/daliyPaper/type/level2/add', DaliyPaperType.level2_add);
+router.post('/daliyPaper/type/level2/add', multipartMiddleware, DaliyPaperType.level2_add);
 
 router.get('/daliyPaper/type/level2/delete/:id', DaliyPaperType.level2_delete);
 
-router.post('/daliyPaper/type/level2/update', DaliyPaperType.level2_update);
+router.post('/daliyPaper/type/level2/update', multipartMiddleware, DaliyPaperType.level2_update);
 
 router.get('/daliyPaper/content/showAll', DaliyPaper.showAll);
 

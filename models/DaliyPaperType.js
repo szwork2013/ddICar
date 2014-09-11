@@ -6,13 +6,15 @@ var ObjectId = require('mongodb').ObjectID;
 
 function DaliyPaperType(daliyPaperType){
     this.name = daliyPaperType.name;
+    this.pic = daliyPaperType.pic;
 }
 
 module.exports = DaliyPaperType;
 
 DaliyPaperType.prototype.save = function(callback){
     var DaliyPaperType = {
-        name:this.name
+        name:this.name,
+        pic:this.pic
     };
 
     mongodbPool.acquire(function(err,db){
