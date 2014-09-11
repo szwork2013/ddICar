@@ -40,15 +40,18 @@ exports.level1_add = function(req, res){
 
 exports.level1_delete = function(req, res){
     var id = req.params["id"];
+    DaliyPaperType.getOne(id,function(err, daliyPaperType){
+        DaliyPaperType.delete(id, function(err){
+            if(err){
+                req.flash('error', "删除该类型失败！");
+                return res.redirect(level1_backpage);
+            }
 
-    DaliyPaperType.delete(id, function(err){
-        if(err){
-            req.flash('error', "删除该类型失败！");
-            return res.redirect(level1_backpage);
-        }
-
-        req.flash('success', "删除该类型成功！");
-        res.redirect(level1_backpage);
+            fs.unlink('./public/images/'+daliyPaperType.pic,function(err){
+                req.flash('success', "删除该类型成功！");
+                res.redirect(level1_backpage);
+            });
+        });
     });
 };
 
@@ -67,6 +70,8 @@ exports.level1_update = function(req, res){
             req.flash('error', "此类型不存在！");
             return res.redirect(level1_backpage);
         }
+
+        fs.unlink('./public/images/'+daliyPaperType.pic,function(err){});
 
         daliyPaperType.name = name;
         daliyPaperType.pic = pic;
@@ -144,14 +149,19 @@ exports.level2_add = function(req, res){
 exports.level2_delete = function(req, res){
     var id = req.params["id"];
 
-    DaliyPaperSubType.delete(id, function(err){
-        if(err){
-            req.flash('error', "删除该类型失败！");
-            return res.redirect(level2_backpage);
-        }
+    DaliyPaperSubType.getOne(id,function(err,daliyPaperSubType){
+        DaliyPaperSubType.delete(id, function(err){
+            if(err){
+                req.flash('error', "删除该类型失败！");
+                return res.redirect(level2_backpage);
+            }
 
-        req.flash('success', "删除该类型成功！");
-        res.redirect(level2_backpage);
+            fs.unlink('./public/images/'+daliyPaperSubType.pic,function(err){});
+            fs.unlink('./public/images/'+daliyPaperSubType.picSelected,function(err){});
+
+            req.flash('success', "删除该类型成功！");
+            res.redirect(level2_backpage);
+        });
     });
 };
 
@@ -177,6 +187,9 @@ exports.level2_update = function(req, res){
             req.flash('error', "此类型不存在！");
             return res.redirect(level2_backpage);
         }
+
+        fs.unlink('./public/images/'+daliyPaperSubType.pic,function(err){});
+        fs.unlink('./public/images/'+daliyPaperSubType.picSelected,function(err){});
 
         daliyPaperSubType.name = name;
         daliyPaperSubType.parentTypeId = parentTypeId;
