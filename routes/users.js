@@ -4,23 +4,29 @@ var User = require('../models/users.js');
 var SingleLogin = require('../models/SingleLogin.js');
 
 exports.putUser = function(req, res){
-    var user = req.body.user;
-    var checkKey = req.body.checkKey;
-    var salt = "ce23dc8d7a345337836211f829f0c05d";
-    var userStr = JSON.stringify(user);
-    var md5 = crypto.createHash('sha256');
-    var newCheckKey = md5.update(userStr+salt).digest('hex');
+    var user_id = req.body.user_id;
+    var sex = req.body.sex;
+    var intro = req.body.intro;
+    var name = req.body.name;
 
-    if(checkKey == newCheckKey){
-        User.update(user, function(err){
+    if(req.session.user_id == user_id){
+        User.getOne(user_id, function(err, user){
             if(err){
                 return res.json({flag:"fail",content:1001});
             }
 
-            res.json({flag:"success",content:"修改成功"});
+            user.name = name;
+            user.sex = sex;
+            user.intro = intro;
+
+            User.update(user, function(err){
+                if(err){
+                    return res.json({flag:"fail",content:1001});
+                }
+
+                res.json({flag:"success",content:"修改成功"});
+            });
         });
-    }else{
-        return res.json({flag:"fail",content:2007});
     }
 };
 

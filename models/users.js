@@ -8,8 +8,7 @@ function User(user){
 		name: "None",
         pic:"None",
         sex:"None",
-        intro:"",
-        lastUpDateTime:new Date()
+        intro:"这个人还没有写简介，懒死了"
 	};
 	this.daliy_paper = {};
     this.you_voice = {};
