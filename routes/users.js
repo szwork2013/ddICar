@@ -31,9 +31,9 @@ exports.putUser = function(req, res){
 };
 
 exports.postPic = function(req, res){
-    var phone = req.body.phone;
+    var user_id = req.body.user_id;
 
-    User.getOne(phone,function(err, user){
+    User.getOne(user_id,function(err, user){
         if(err){
             return res.json({flag:"fail",content:1001});
         }
@@ -42,16 +42,18 @@ exports.postPic = function(req, res){
             return res.json({flag:"fail",content:2010});//没有图片文件
         }
 
-        user.info.pic = req.files["file1"].name;
+        console.log(user);
+
+        user.info.pic = req.files["pic"].name;
 
         User.update(user, function(err){
             if(err){
                 return res.json({flag:"fail",content:1001});
             }
 
-            var target_path = './public/images/' + req.files["file1"].name;
+            var target_path = './public/images/' + req.files["pic"].name;
             // 使用同步方式重命名一个文件
-            fs.renameSync(req.files["file1"].path, target_path);
+            fs.renameSync(req.files["pic"].path, target_path);
 
             res.json({flag:"success",content:"上传成功"});
         });
@@ -177,13 +179,14 @@ exports.resetPassword = function(req, res){
 exports.setDaliyPaperSettings = function(req, res){
     var user_id = req.body.id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
+
     var checkKey = req.body.checkKey;
     var salt = "ce23dc8d7a345337836211f829f0c05d";
     var daliyPaperSettingsStr = JSON.stringify(DaliyPaperSettings);
     var md5 = crypto.createHash('sha256');
     var newCheckKey = md5.update(daliyPaperSettingsStr+salt).digest('hex');
 
-    if(checkKey == newCheckKey){
+    if(req.session.user_id == user_id){
         User.getOne(user_id, function(err, user){
             if(err){
                 return res.json({flag:"fail",content:1001});
@@ -205,7 +208,7 @@ exports.setDaliyPaperSettings = function(req, res){
 };
 
 exports.getDaliyPaperSettings = function(req, res){
-    var user_id = req.body.id;
+    var user_id = req.params["id"];
 
     User.getOne(user_id, function(err, user){
         if(err){
@@ -217,21 +220,22 @@ exports.getDaliyPaperSettings = function(req, res){
 };
 
 exports.setAppSettings = function(req, res){
-    var user_id = req.body.id;
+    var user_id = req.body.user_id;
     var AppSettings = req.body.AppSettings;
+
     var checkKey = req.body.checkKey;
     var salt = "ce23dc8d7a345337836211f829f0c05d";
     var appSettingsStr = JSON.stringify(AppSettings);
     var md5 = crypto.createHash('sha256');
     var newCheckKey = md5.update(appSettingsStr+salt).digest('hex');
 
-    if(checkKey == newCheckKey){
+    if(req.session.user_id == user_id){
         User.getOne(user_id, function(err, user){
             if(err){
                 return res.json({flag:"fail",content:1001});
             }
 
-            user.settings = appSettingsStr;
+            user.settings = AppSettings;
 
             User.update(user, function(err){
                 if(err){
@@ -247,7 +251,7 @@ exports.setAppSettings = function(req, res){
 };
 
 exports.getAppSettings = function(req, res){
-    var user_id = req.body.id;
+    var user_id = req.params["id"];
 
     User.getOne(user_id, function(err, user){
         if(err){

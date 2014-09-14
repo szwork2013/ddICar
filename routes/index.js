@@ -19,9 +19,9 @@ router.post('/users/putUser',User.checkLogin, User.putUser);// 保存用户信�
 router.post('/users/postPic',User.checkLogin, multipartMiddleware, User.postPic);// 保存用户头像
 router.post('/users/resetPassword',User.checkLogin, User.resetPassword);// 用户重置密码
 router.post('/users/setDaliyPaperSettings',User.checkLogin, User.setDaliyPaperSettings); // 设置日报设置
-router.post('/users/getDaliyPaperSettings',User.checkLogin, User.setDaliyPaperSettings); // 获取日报设置
+router.get('/users/getDaliyPaperSettings/:id',User.checkLogin, User.getDaliyPaperSettings); // 获取日报设置
 router.post('/users/setAppSettings',User.checkLogin, User.setAppSettings); // 设置app设置
-router.post('/users/getAppSettings',User.checkLogin, User.setDaliyPaperSettings); // 获取日报设置
+router.get('/users/getAppSettings/:id',User.checkLogin, User.getAppSettings); // 获取日报设置
 router.post('/users/favorite/showAll',User.checkLogin, Favorite.getAll);// 我的收藏
 router.post('/users/favorite',User.checkLogin, Favorite.favorite); // 收藏
 router.post('/users/unfavorite',User.checkLogin, Favorite.unfavorite);// 取消收藏
