@@ -192,6 +192,9 @@ exports.setDaliyPaperSettings = function(req, res){
     var md5 = crypto.createHash('sha256');
     var newCheckKey = md5.update(daliyPaperSettingsStr+salt).digest('hex');
 
+    console.log(user_id);
+    console.log(req.sessions.user_id);
+
     if(req.session.user_id == user_id){
         User.getOne(user_id, function(err, user){
             if(err){
