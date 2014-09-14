@@ -92,7 +92,7 @@ DaliyPaperSubType.getOne = function(id, callback){
     });
 };
 
-DaliyPaperSubType.getIdByType = function(name,daliyPaperType, callback){
+DaliyPaperSubType.getIdByParentTypeId = function(parentTypeId, callback){
     mongodbPool.acquire(function(err,db){
         if(err){
             return callback(err);
@@ -104,7 +104,7 @@ DaliyPaperSubType.getIdByType = function(name,daliyPaperType, callback){
                 return callback(err);
             }
 
-            collection.findOne({name:name,daliyPaperType:daliyPaperType}, function(err,doc){
+            collection.findOne({parentTypeId:parentTypeId}, function(err,doc){
                 mongodbPool.release(db);
                 if(err){
                     return callback(err);
