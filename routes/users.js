@@ -50,7 +50,7 @@ exports.postPic = function(req, res){
             return res.json({flag:"fail",content:2010});//没有图片文件
         }
 
-        user.info.pic = req.files["pic"].name;
+        user.info.pic = pic;
 
         User.update(user, function(err){
             if(err){
