@@ -247,7 +247,7 @@ exports.level1_type = function(req, res){
 
 exports.level2_type = function(req, res){
     var level1_type = req.params["type"];
-    DaliyPaperSubType.getByType(level1_type, function(err, daliyPaperSubTypes){
+    DaliyPaperSubType.getOne(level1_type, function(err, daliyPaperSubTypes){
         if(err){
             return res.json({flag:"fail",content:err});
         }
