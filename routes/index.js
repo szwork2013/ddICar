@@ -28,7 +28,7 @@ router.post('/users/unfavorite',User.checkLogin, Favorite.unfavorite);// 取消�
 router.get('/users/daliyPaper/showAll',User.checkLogin, DaliyPaper.getAll);// 获取日报
 
 router.get('/daliyPaper/getLevel1Type',User.checkLogin, DaliyPaperType.level1_type);  // 获取日报一级类型
-router.get('/daliyPaper/getLevel2Type',User.checkLogin, DaliyPaperType.level2_type);  // 获取日报二级类型
+router.get('/daliyPaper/getLevel2Type/:type',User.checkLogin, DaliyPaperType.level2_type);  // 获取日报二级类型
 
 router.get('/yourVoice/getByType',User.checkLogin, YourVoice.getByType);  // 获取你的声音列表
 
