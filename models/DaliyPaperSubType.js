@@ -104,13 +104,13 @@ DaliyPaperSubType.getIdByParentTypeId = function(parentTypeId, callback){
                 return callback(err);
             }
 
-            collection.findOne({parentTypeId:parentTypeId}, function(err,doc){
+            collection.find({parentTypeId:parentTypeId}).sort().toArray(function(err, daliyPaperSubTypes){
                 mongodbPool.release(db);
                 if(err){
                     return callback(err);
                 }
 
-                callback(null, doc);
+                callback(null, daliyPaperSubTypes);
             });
         });
     });
