@@ -251,6 +251,10 @@ exports.level2_type = function(req, res){
         if(err){
             return res.json({flag:"fail",content:err});
         }
-        res.json({flag:"success",content:daliyPaperSubTypes});
+        if(daliyPaperSubTypes){
+            res.json({flag:"success",content:daliyPaperSubTypes});
+        }else{
+            res.json({flag:"empty"});
+        }
     });
 };
