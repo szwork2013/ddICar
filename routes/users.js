@@ -2,6 +2,7 @@ var crypto = require('crypto');
 var fs = require('fs');
 var User = require('../models/users.js');
 var SingleLogin = require('../models/SingleLogin.js');
+var uuid = require('node-uuid');
 
 exports.putUser = function(req, res){
     var user_id = req.body.user_id;
@@ -32,7 +33,13 @@ exports.putUser = function(req, res){
 
 exports.postPic = function(req, res){
     var user_id = req.body.user_id;
+    var pic = req.files["pic"].name;
     console.log(req.files);
+
+    switch(req.files["pic"].type){
+        case "image/png":
+            pic = uuid.v1() + ".png";
+    }
 
     User.getOne(user_id,function(err, user){
         if(err){
@@ -43,8 +50,6 @@ exports.postPic = function(req, res){
             return res.json({flag:"fail",content:2010});//没有图片文件
         }
 
-        console.log(user);
-
         user.info.pic = req.files["pic"].name;
 
         User.update(user, function(err){
@@ -52,7 +57,7 @@ exports.postPic = function(req, res){
                 return res.json({flag:"fail",content:1001});
             }
 
-            var target_path = './public/images/' + req.files["pic"].name;
+            var target_path = './public/images/' + pic;
             // 使用同步方式重命名一个文件
             fs.renameSync(req.files["pic"].path, target_path);
 
