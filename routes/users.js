@@ -32,6 +32,7 @@ exports.putUser = function(req, res){
 
 exports.postPic = function(req, res){
     var user_id = req.body.user_id;
+    console.log(req.files);
 
     User.getOne(user_id,function(err, user){
         if(err){
