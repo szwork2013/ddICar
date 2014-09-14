@@ -193,28 +193,21 @@ exports.setDaliyPaperSettings = function(req, res){
     var md5 = crypto.createHash('sha256');
     var newCheckKey = md5.update(daliyPaperSettingsStr+salt).digest('hex');
 
-    console.log(user_id);
-    console.log(req.sessions.user_id);
+    User.getOne(user_id, function(err, user){
+        if(err){
+            return res.json({flag:"fail",content:1001});
+        }
 
-    if(req.session.user_id == user_id){
-        User.getOne(user_id, function(err, user){
+        user.daliy_paper = DaliyPaperSettings;
+
+        User.update(user, function(err){
             if(err){
                 return res.json({flag:"fail",content:1001});
             }
 
-            user.daliy_paper = DaliyPaperSettings;
-
-            User.update(user, function(err){
-                if(err){
-                    return res.json({flag:"fail",content:1001});
-                }
-
-                res.json({flag:"success",content:"修改成功"});//修改成功
-            });
+            res.json({flag:"success",content:"修改成功"});//修改成功
         });
-    }else{
-        return res.json({flag:"fail",content:2007});//年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰
-    }
+    });
 };
 
 exports.getDaliyPaperSettings = function(req, res){
