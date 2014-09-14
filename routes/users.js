@@ -183,6 +183,7 @@ exports.resetPassword = function(req, res){
 
 
 exports.setDaliyPaperSettings = function(req, res){
+    console.log(req.body);
     var user_id = req.body.user_id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
 
