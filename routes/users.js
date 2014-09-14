@@ -221,7 +221,11 @@ exports.getDaliyPaperSettings = function(req, res){
             return res.json({flag:"fail",content:1001});
         }
 
-        res.json({flag:"success",content:user.daliy_paper});
+        if(user.daliy_paper){
+            res.json({flag:"success",content:user.daliy_paper});
+        }else{
+            res.json({flag:"empty"});
+        }
     });
 };
 
