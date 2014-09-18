@@ -7,10 +7,11 @@ var Favorite = require('./favorite');
 var DaliyPaper = require('./DaliyPaper');
 var DaliyPaperType = require('./DaliyPaperType');
 var YourVoice = require('./YourVoice');
+var ODBWarning = require('./ODBWarning');
 
 /* GET home page. */
 
-router.post('/users/reg', User.reg); // 用户注册
+router.post('/users/reg',ODBWarning.getToken, User.reg); // 用户注册
 router.post('/users/login',User.checkNotLogin, User.login);// 用户登录
 router.get('/users/logout',User.checkLogin, User.logout);// 用户登出
 
@@ -31,5 +32,8 @@ router.get('/daliyPaper/getLevel1Type',User.checkLogin, DaliyPaperType.level1_ty
 router.get('/daliyPaper/getLevel2Type/:type',User.checkLogin, DaliyPaperType.level2_type);  // 获取日报二级类型
 
 router.get('/yourVoice/getByType',User.checkLogin, YourVoice.getByType);  // 获取你的声音列表
+
+router.get('/users/getWarning',ODBWarning.getToken, ODBWarning.sendWarning);
+
 
 module.exports = router;
