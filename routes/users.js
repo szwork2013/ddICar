@@ -13,11 +13,15 @@ exports.putUser = function (req, res) {
     var name = req.body.name;
     var deviceSN = req.body.deviceSN;
 
+    console.log(req.body);
+
     if (req.session.user_id == user_id) {
         User.getOne(user_id, function (err, user) {
             if (err) {
                 return res.json({flag: "fail", content: 1001});
             }
+
+            console.log(user);
 
             user.name = name;
             user.sex = sex;
