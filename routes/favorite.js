@@ -32,23 +32,27 @@ exports.favorite = function(req, res){
     var user_id = req.body.user_id;
     var post_id = req.body.post_id;
 
-    var newFavorite = new Favorite({
-        user_id:user_id,
-        post_id:post_id
-    });
+    Favorite.getByUserAndPostId(function(err,favorite){
+        if(!favorite){
+            var newFavorite = new Favorite({
+                user_id:user_id,
+                post_id:post_id
+            });
 
-    newFavorite.save(function(err, favorite){
-        if(err){
-            return res.json({flag:"fail",content:1001});
+            newFavorite.save(function(err, favorite){
+                if(err){
+                    return res.json({flag:"fail",content:1001});
+                }
+
+                DaliyPaper.setFavorite(post_id, function(err){
+                    if(err){
+                        return res.json({flag:"fail",content:1001});
+                    }
+
+                    res.json({flag:"success",content:"收藏成功"});
+                });
+            });
         }
-
-        DaliyPaper.setFavorite(post_id, function(err){
-            if(err){
-                return res.json({flag:"fail",content:1001});
-            }
-
-            res.json({flag:"success",content:"收藏成功"});
-        });
     });
 };
 

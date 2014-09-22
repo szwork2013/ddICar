@@ -116,6 +116,29 @@ User.getByPhone = function(phone, callback){
     });
 };
 
+User.getBydeviceSN = function(deviceSN,callback){
+    mongodbPool.acquire(function(err, db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('users', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+            collection.findOne({'info.deviceSN':deviceSN},function(err,doc){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                return callback(null, doc);
+            });
+        });
+    });
+};
+
 User.getByTime = function(user,callback){
     mongodbPool.acquire(function(err,db){
         if(err){

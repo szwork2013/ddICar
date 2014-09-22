@@ -63,6 +63,29 @@ Favorite.getOne = function(id, callback){
     });
 };
 
+Favorite.getByUserAndPostId = function(user_id,post_id,callback){
+    mongodbPool.acquire(function(err, db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('favorite', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+            collection.findOne({'user_id': user_id,'post_id':post_id},function(err,doc){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                return callback(null, doc);
+            });
+        });
+    });
+};
+
 Favorite.getAll = function(user_id, callback){
     mongodbPool.acquire(function(err,db){
         if(err){
