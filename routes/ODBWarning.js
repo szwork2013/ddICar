@@ -9,8 +9,13 @@ var User = require('../models/users');
 exports.sendWarning = function (req, res) {
     console.log("begin");
     getWarnings(function(err, warnings){
+        console.log('warnings:'+warnings);
         warnings.forEach(function(e){
+            console.log('deviceSN:'+e["deviceSN"]);
+
             User.getBydeviceSN(e["deviceSN"],function(err, user){
+                console.log('user:'+user);
+
                 request(
                     { method: 'POST',
                         uri: settings.hxURI + '/messages',
