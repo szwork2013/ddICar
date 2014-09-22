@@ -5,10 +5,11 @@ function User(user){
 	this.info = {
 		phone: user.phone,
 		password: user.password,
-		name: "None",
+		name: user.name,
         pic:"None",
         sex:"None",
-        intro:"这个人还没有写简介，懒死了"
+        intro:"这个人还没有写简介，懒死了",
+        deviceSN:""
 	};
 	this.daliy_paper = {};
     this.you_voice = {};

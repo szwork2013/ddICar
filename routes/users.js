@@ -11,6 +11,7 @@ exports.putUser = function (req, res) {
     var sex = req.body.sex;
     var intro = req.body.intro;
     var name = req.body.name;
+    var deviceSN = req.body.deviceSN;
 
     if (req.session.user_id == user_id) {
         User.getOne(user_id, function (err, user) {
@@ -21,6 +22,7 @@ exports.putUser = function (req, res) {
             user.name = name;
             user.sex = sex;
             user.intro = intro;
+            user.deviceSN = deviceSN;
 
             User.update(user, function (err) {
                 if (err) {
