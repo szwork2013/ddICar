@@ -6,8 +6,6 @@ var request = require('request');
 var settings = require('../settings');
 var User = require('../models/users');
 
-
-
 exports.sendWarning = function (req, res) {
     console.log("begin");
     getWarnings(function(err, warnings){
