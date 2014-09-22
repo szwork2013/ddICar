@@ -22,10 +22,10 @@ exports.putUser = function (req, res) {
 
         console.log(user);
 
-        user.name = name;
-        user.sex = sex;
-        user.intro = intro;
-        user.deviceSN = deviceSN;
+        user.info.name = name;
+        user.info.sex = sex;
+        user.info.intro = intro;
+        user.info.deviceSN = deviceSN;
 
         User.update(user, function (err) {
             if (err) {
