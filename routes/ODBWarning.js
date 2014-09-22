@@ -14,7 +14,7 @@ exports.sendWarning = function (req, res) {
             console.log('deviceSN:'+e["deviceSN"]);
 
             User.getBydeviceSN(e["deviceSN"],function(err, user){
-                console.log('user:'+user);
+                console.log('faultcodelist'+e["obd_faultcodelist"]);
 
                 request(
                     { method: 'POST',
@@ -25,7 +25,7 @@ exports.sendWarning = function (req, res) {
                             "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
                             "msg": {
                                 "type": "txt",
-                                "msg": e['odb_faultcodelist'] //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
+                                "msg": e["obd_faultcodelist"] //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
                             },
                             "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
                         })
