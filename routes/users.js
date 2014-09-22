@@ -15,28 +15,30 @@ exports.putUser = function (req, res) {
 
     console.log(req.body);
 
-    if (req.session.user_id == user_id) {
-        User.getOne(user_id, function (err, user) {
+    User.getOne(user_id, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        console.log(user);
+
+        user.name = name;
+        user.sex = sex;
+        user.intro = intro;
+        user.deviceSN = deviceSN;
+
+        User.update(user, function (err) {
             if (err) {
                 return res.json({flag: "fail", content: 1001});
             }
 
-            console.log(user);
-
-            user.name = name;
-            user.sex = sex;
-            user.intro = intro;
-            user.deviceSN = deviceSN;
-
-            User.update(user, function (err) {
-                if (err) {
-                    return res.json({flag: "fail", content: 1001});
-                }
-
-                res.json({flag: "success", content: "修改成功"});
-            });
+            res.json({flag: "success", content: "修改成功"});
         });
-    }
+    });
+
+/*    if (req.session.user_id == user_id) {
+
+    }*/
 };
 
 exports.postPic = function (req, res) {
