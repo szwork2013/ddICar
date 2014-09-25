@@ -40,7 +40,7 @@ router.get('/daliyPaper/getLevel2Type/:type',User.checkLogin, DaliyPaperType.lev
 
 router.get('/yourVoice/getByType',User.checkLogin, YourVoice.getByType);  // 获取你的声音列表
 router.get('/yourVoice/getType',User.checkLogin, YourVoiceType.getType);  // 获取你的声音类型
-router.post('yourVoice/uploadMyVoice',User.checkLogin, multipartMiddleware, YourVoice.uploadMyVoice); // 上传我的定制声音
+router.post('/yourVoice/uploadMyVoice',User.checkLogin, multipartMiddleware, YourVoice.uploadMyVoice); // 上传我的定制声音
 
 /* 车机功能 */
 router.get('/users/getWarning',hxMiddleWare.getToken, ODBWarning.sendWarning);

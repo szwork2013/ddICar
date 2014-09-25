@@ -30,7 +30,7 @@ exports.favorite = function(req, res){
     var user_id = req.body.user_id;
     var post_id = req.body.post_id;
 
-    Favorite.getByUserAndPostId(function(err,favorite){
+    Favorite.getByUserAndPostId(user_id,post_id,function(err,favorite){
         if(!favorite){
             var newFavorite = new Favorite({
                 user_id:user_id,

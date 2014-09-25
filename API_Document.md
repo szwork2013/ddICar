@@ -214,3 +214,39 @@ response:获取成功, {flag:'success',content: {daliyPaperSubTypes object}}
          获取失败, {flag:'empty'}
 ```
 ######Note:
+##上传我的定制声音
+```
+POST /yourVoice/uploadMyVoice
+```
+######JSON Format:
+```
+request: {'content':'xxxxx',
+			'audio':{audio file}
+response:保存成功, {flag:'success',content: 3001}
+         保存失败, {flag:'fail',content: 1001}
+```
+######Note:
+##获取故障列表
+```
+GET /users/getWarnings/:id
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {warnings object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
+```
+######Note:
+##获取车况
+```
+GET /users/getCarStatus/:id
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {status object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
+```
+######Note:
