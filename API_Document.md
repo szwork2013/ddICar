@@ -4,85 +4,153 @@
 ##用户注册
 
 ```
-POST /reg
+POST /users/reg
 ```
 ######JSON Format:
 ```
 requset: {'phone':'xxxxx',
-			'email':'xxxx',
-			'password':'xxxxxx',
-			'password_repeat':'xxxxx'}
-response: 注册成功, {success:{core user object},error:null}
-          注册失败, {success:null,error: {core err object}}
-          注册失败, {success:null,error: "您已登录"}
-          注册失败, {success:null,error: "用户已存在"}
+			'password':'xxxxxx'}
+response: 注册成功, {flag:'success',content:{user object}
+          注册失败, {flag:'fail',content: 2001}
+          注册失败, {flag:'fail',content: 1001}
 ```
 ######NOTE: 
 
 
 ##用户登录
 ```
-POST /login
+POST /users/login
 ```
 ######JSON Format:
 ```
-request: {'phone':'xxxxx','email':'xxxx','password':'xxxxxx'}
-response: 登录成功, {success:{core user object},error:null}
-          登录失败, {success:null,error: {core err object}}
-          登录失败, {success:null,error: "您已登录"}
-          登录失败, {success:null,error: "密码错误"}
-          登录失败, {success:null,error: "用户不存在"}
+request: {'phone':'xxxxx','password':'xxxxxx'}
+response: 登录成功, {flag:'success',content:{user object}
+          登录失败, {flag:'fail',content: 2000}
+          登录失败, {flag:'fail',content: 2008}
 ```
 ######NOTE: 
 
 ##用户登出
 ```
-GET /logout
+GET /users/logout
 ```
 ######JSON Format:
 ```
 request: None
-response: 登出成功, {success:"登出成功",error: null}
-          登出失败, {success:null,error: "您已登出"}
-          登出失败, {success:null,error: "登出失败"}
-```
-######Note:
-
-##检测用户数据版本
-```
-POST /checkUserVersion
-```
-######JSON Format:
-```
-request: {core user object}
-response:检测成功, {success:"need to upload device data",error: null}
-         检测成功, {success:"need to download the newest data",error: null}
-         检测失败, {success:null,error: "您未登录"}
+response: 登出成功, {flag:'success',content: 3002}
+          登出失败, {flag:'fail',content: 2004}
 ```
 ######Note:
 
 ##获取用户
 ```
-GET /getUser
+GET /users/getUser/:id
 ```
 ######JSON Format:
 ```
 request: None
-response:获取成功, {success:{core user object},error: null}
-         获取失败, {success:null,error: {core err object}}
+response:获取成功, {flag:'success',content: {user object}}
+         获取失败, {flag:'fail',content: 1001}
 ```
 ######Note:
 
 ##更新用户
 ```
-POST /putUser
+POST /users/putUser
 ```
 ######JSON Format:
 ```
-request: {userDate:core user object, checkKey:string}
-response:更新成功, {success:"putUser success",error: null}
-         更新失败, {success:null,error: "年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰"}
-         更新失败, {success:null,error: {core err object}
-         更新失败, {success:null,error: "您未登出"}
+request: {'user_id':'xxxxx',
+			'sex':'xxxxx',
+			'intro':'xxxxx',
+			'name':'xxxxx',
+			'deviceSN':'xxxxxx'}
+response:更新成功, {flag:'success',content: 3001}
+         更新失败, {flag:'fail',content: 1001}
+```
+######Note:
+##保存用户头像
+```
+POST /users/postPic
+```
+######JSON Format:
+```
+request: {'user_id':'xxxxx',
+			'pic':{file object}
+response:保存成功, {flag:'success',content: 3003}
+         保存失败, {flag:'fail',content: 2010}
+         保存失败, {flag:'fail',content: 1001}
+```
+######Note:
+##保存日报设置
+```
+POST /users/setDaliyPaperSettings
+```
+######JSON Format:
+```
+request: {'user_id':'xxxxx',
+			'DaliyPaperSettings':{DaliyPaperSettings object}
+response:保存成功, {flag:'success',content: 3001}
+         保存失败, {flag:'fail',content: 1001}
+```
+######Note:
+##获取用户
+```
+GET /users/getDaliyPaperSettings/:id
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {user.daliy_paper object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
+```
+######Note:
+##保存日报设置
+```
+POST /users/setAppSettings
+```
+######JSON Format:
+```
+request: {'user_id':'xxxxx',
+			'AppSettings':{AppSettings object}
+response:保存成功, {flag:'success',content: 3001}
+         保存失败, {flag:'fail',content: 1001}
+```
+######Note:
+##获取用户
+```
+GET /users/getAppSettings/:id
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {user.settings object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
+```
+######Note:
+##获取我的收藏
+```
+GET /users/favorite/showAll/:id
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {daliyPapers object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
+```
+######Note:
+##保存日报设置
+```
+POST /users/setAppSettings
+```
+######JSON Format:
+```
+request: {'user_id':'xxxxx',
+			'AppSettings':{AppSettings object}
+response:保存成功, {flag:'success',content: 3001}
+         保存失败, {flag:'fail',content: 1001}
 ```
 ######Note:

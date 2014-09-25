@@ -20,8 +20,6 @@ exports.putUser = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        console.log(user);
-
         user.info.name = name;
         user.info.sex = sex;
         user.info.intro = intro;
@@ -32,19 +30,14 @@ exports.putUser = function (req, res) {
                 return res.json({flag: "fail", content: 1001});
             }
 
-            res.json({flag: "success", content: "修改成功"});
+            res.json({flag: "success", content: 3001});
         });
     });
-
-/*    if (req.session.user_id == user_id) {
-
-    }*/
 };
 
 exports.postPic = function (req, res) {
     var user_id = req.body.user_id;
     var pic = req.files["pic"].name;
-    console.log(req.files);
 
     switch (req.files["pic"].type) {
         case "image/png":
@@ -77,8 +70,8 @@ exports.postPic = function (req, res) {
 };
 
 exports.getUser = function (req, res) {
-    var userId = req.params["id"];
-    User.getOne(userId, function (err, user) {
+    var user_id = req.params["id"];
+    User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
@@ -119,8 +112,6 @@ exports.reg = function (req, res) {
             }
 
             req.session.user = user;
-            console.log(user);
-            console.log(user._id);
             req.session.user_id = user._id;
 
             // 注册环信用户
@@ -211,15 +202,8 @@ exports.resetPassword = function (req, res) {
 
 
 exports.setDaliyPaperSettings = function (req, res) {
-    console.log(req.body);
     var user_id = req.body.user_id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
-
-    var checkKey = req.body.checkKey;
-    var salt = "ce23dc8d7a345337836211f829f0c05d";
-    var daliyPaperSettingsStr = JSON.stringify(DaliyPaperSettings);
-    var md5 = crypto.createHash('sha256');
-    var newCheckKey = md5.update(daliyPaperSettingsStr + salt).digest('hex');
 
     User.getOne(user_id, function (err, user) {
         if (err) {
@@ -233,7 +217,7 @@ exports.setDaliyPaperSettings = function (req, res) {
                 return res.json({flag: "fail", content: 1001});
             }
 
-            res.json({flag: "success", content: "修改成功"});//修改成功
+            res.json({flag: "success", content: 3001});//修改成功
         });
     });
 };
@@ -258,31 +242,21 @@ exports.setAppSettings = function (req, res) {
     var user_id = req.body.user_id;
     var AppSettings = req.body.AppSettings;
 
-    var checkKey = req.body.checkKey;
-    var salt = "ce23dc8d7a345337836211f829f0c05d";
-    var appSettingsStr = JSON.stringify(AppSettings);
-    var md5 = crypto.createHash('sha256');
-    var newCheckKey = md5.update(appSettingsStr + salt).digest('hex');
+    User.getOne(user_id, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
 
-    if (req.session.user_id == user_id) {
-        User.getOne(user_id, function (err, user) {
+        user.settings = AppSettings;
+
+        User.update(user, function (err) {
             if (err) {
                 return res.json({flag: "fail", content: 1001});
             }
 
-            user.settings = AppSettings;
-
-            User.update(user, function (err) {
-                if (err) {
-                    return res.json({flag: "fail", content: 1001});
-                }
-
-                res.json({flag: "success", content: "修改成功"});//修改成功
-            });
+            res.json({flag: "success", content: 3001});//修改成功
         });
-    } else {
-        return res.json({flag: "fail", content: 2007});//年轻人，你这可不是一条可持续发展的道路啊！看你这么感兴趣，来我们公司吧！要不做点什么，相信不久你就可以升职加薪，出任总经理，担任CEO迎娶白富美走上人生巅峰
-    }
+    });
 };
 
 exports.getAppSettings = function (req, res) {

@@ -6,7 +6,7 @@ var DaliyPaper = require('../models/DaliyPaper');
 var ObjectId = require('mongodb').ObjectID;
 
 exports.getAll = function(req, res){
-    Favorite.getAll(req.body.user_id, function(err, favorites){
+    Favorite.getAll(req.params['id'], function(err, favorites){
         if(err){
             return res.json({flag:"fail",content:1001});
         }
@@ -15,8 +15,6 @@ exports.getAll = function(req, res){
         favorites.forEach(function(e){
             post_ids.push(ObjectId(e.post_id));
         });
-
-        console.log(post_ids);
 
         DaliyPaper.getSome(post_ids, function(err, daliyPapers){
 
@@ -49,7 +47,7 @@ exports.favorite = function(req, res){
                         return res.json({flag:"fail",content:1001});
                     }
 
-                    res.json({flag:"success",content:"收藏成功"});
+                    res.json({flag:"success",content:3001});
                 });
             });
         }

@@ -7,15 +7,10 @@ var settings = require('../settings');
 var User = require('../models/users');
 
 exports.sendWarning = function (req, res) {
-    console.log("begin");
     getWarnings(function(err, warnings){
-        console.log('warnings:'+warnings);
         warnings.forEach(function(e){
-            console.log('deviceSN:'+e["deviceSN"]);
 
             User.getBydeviceSN(e["deviceSN"],function(err, user){
-                console.log('faultcodelist'+e["obd_faultcodelist"]);
-
                 request(
                     { method: 'POST',
                         uri: settings.hxURI + '/messages',
@@ -31,9 +26,7 @@ exports.sendWarning = function (req, res) {
                         })
                     }
                     , function (error, response, body) {
-                        console.log('error: ' + response.statusCode);
                         console.log(body);
-                        console.log("end");
                     }
                 );
             });
