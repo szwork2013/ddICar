@@ -190,3 +190,27 @@ response:获取成功, {flag:'success',content: {daliyPaperSubTypes object}}
          获取失败, {flag:'empty'}
 ```
 ######Note:
+##获取你的声音列表
+```
+GET /yourVoice/getByType
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {daliyPaperSubTypes object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
+```
+######Note:
+##获取你的声音类型
+```
+GET /yourVoice/getType
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {daliyPaperSubTypes object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
+```
+######Note:

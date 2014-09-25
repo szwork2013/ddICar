@@ -40,10 +40,19 @@ exports.getWarningList = function(req, res){
             return res.json({flag:'fail', content:1001});
         }
 
-        getWarningsBySN(user.info.deviceSN, function(err,warnings){
+        getWarningsBySN(user.info.deviceSN, function(err,rows){
             if(err){
                 return res.json({flag:'fail', content:1001});
             }
+
+            var warnings = [];
+            rows.forEach(function(e){
+                var warning = {};
+                if(e["odb_faultcodelist"] == 'P0211'){
+                    warning[title] = "喷油器电路异常";
+                    warnings.push(warning);
+                }
+            });
 
             res.json({flag:'success', content:warnings})
         });
