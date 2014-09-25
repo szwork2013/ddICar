@@ -44,7 +44,7 @@ router.post('yourVoice/uploadMyVoice',User.checkLogin, multipartMiddleware, Your
 
 /* 车机功能 */
 router.get('/users/getWarning',hxMiddleWare.getToken, ODBWarning.sendWarning);
-router.get('/users/getWarnings',ODBWarning.getWarningList);
+router.get('/users/getWarnings/:id',ODBWarning.getWarningList);
 router.get('/users/getCarStatus/:id',User.checkLogin ,CarInfo.getStatus);
 
 module.exports = router;
