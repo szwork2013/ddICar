@@ -47,9 +47,10 @@ exports.getWarningList = function(req, res){
 
             var warnings = [];
             rows.forEach(function(e){
+                console.log(e["odb_faultcodelist"]);
                 var warning = {};
                 if(e["odb_faultcodelist"] == 'P0211'){
-                    warning[title] = "喷油器电路异常";
+                    warning['title'] = "喷油器电路异常";
                     warnings.push(warning);
                 }
             });
