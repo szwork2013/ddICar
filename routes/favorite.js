@@ -50,6 +50,8 @@ exports.favorite = function(req, res){
                     res.json({flag:"success",content:3001});
                 });
             });
+        }else{
+            res.json({flag:"success",content:3001});
         }
     });
 };
