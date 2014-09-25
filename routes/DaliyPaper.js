@@ -52,7 +52,6 @@ exports.add = function(req, res){
 };
 
 exports.update = function(req, res){
-    console.log(req.body);
     var id = req.body.id;
     var title = req.body.title;
     var author = req.body.author;

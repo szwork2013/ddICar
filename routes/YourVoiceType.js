@@ -74,3 +74,14 @@ exports.showAll = function(req, res){
         });
     });
 };
+
+/////////////////////  iOS //////////////////////
+exports.getType = function(req, res){
+    YourVoiceType.getAll(function(err, youVoiceTypes){
+        if(err){
+            return res.json({flag:'fail',content:1001});
+        }
+
+        res.json({flag:'success',content:youVoiceTypes});
+    })
+};

@@ -142,15 +142,51 @@ response:获取成功, {flag:'success',content: {daliyPapers object}}
          获取失败, {flag:'empty'}
 ```
 ######Note:
-##保存日报设置
+##收藏日报
 ```
-POST /users/setAppSettings
+POST /users/favorite
 ```
 ######JSON Format:
 ```
 request: {'user_id':'xxxxx',
-			'AppSettings':{AppSettings object}
+			'post_id':'xxxxx'
 response:保存成功, {flag:'success',content: 3001}
          保存失败, {flag:'fail',content: 1001}
+```
+######Note:
+##取消收藏日报
+```
+POST /users/unfavorite
+```
+######JSON Format:
+```
+request: {'user_id':'xxxxx',
+			'post_id':'xxxxx'
+response:保存成功, {flag:'success',content: 3001}
+         保存失败, {flag:'fail',content: 1001}
+```
+######Note:
+##获取日报一级类型
+```
+GET /daliyPaper/getLevel1Type
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {daliyPaperTypes object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
+```
+######Note:
+##获取日报二级类型
+```
+GET /daliyPaper/getLevel2Type/:type
+```
+######JSON Format:
+```
+request: None
+response:获取成功, {flag:'success',content: {daliyPaperSubTypes object}}
+         获取失败, {flag:'fail',content: 1001}
+         获取失败, {flag:'empty'}
 ```
 ######Note:

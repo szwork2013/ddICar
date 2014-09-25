@@ -34,6 +34,22 @@ exports.sendWarning = function (req, res) {
     });
 };
 
+exports.getWarningList = function(req, res){
+    User.getOne(req.params['id'],function(err, user){
+        if(err){
+            return res.json({flag:'fail', content:1001});
+        }
+
+        getWarningsBySN(user.info.deviceSN, function(err,warnings){
+            if(err){
+                return res.json({flag:'fail', content:1001});
+            }
+
+            res.json({flag:'success', content:warnings})
+        });
+    })
+};
+
 
 function getWarnings(callback) {
     mysql.getConnection(function (err, connection) {
@@ -47,4 +63,15 @@ function getWarnings(callback) {
     });
 }
 
+function getWarningsBySN(deviceSN, callback) {
+    mysql.getConnection(function (err, connection) {
+        connection.query('select * from `obd_db_test`.`obd_data_luo_faultcode` where `deviceSN` = '+deviceSN+' limit 0,1000', function (err, rows) {
+            if (err){
+                callback(err);
+            }
+
+            callback(err,rows);
+        });
+    });
+}
 

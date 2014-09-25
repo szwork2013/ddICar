@@ -239,7 +239,7 @@ exports.level2_showAll = function(req, res){
 exports.level1_type = function(req, res){
     DaliyPaperType.getAll(function(err, daliyPaperTypes){
         if(err){
-            return res.json({flag:"fail",content:err});
+            return res.json({flag:"fail",content:1001});
         }
         res.json({flag:"success",content:daliyPaperTypes});
     });
@@ -249,7 +249,7 @@ exports.level2_type = function(req, res){
     var level1_type = req.params["type"];
     DaliyPaperSubType.getIdByParentTypeId(level1_type, function(err, daliyPaperSubTypes){
         if(err){
-            return res.json({flag:"fail",content:err});
+            return res.json({flag:"fail",content:1001});
         }
         if(daliyPaperSubTypes){
             res.json({flag:"success",content:daliyPaperSubTypes});
