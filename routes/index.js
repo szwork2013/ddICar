@@ -24,7 +24,7 @@ router.get('/PC', function(req, res){
     });
 });
 router.get('/Mobile', function(req, res){
-    res.render('ddicar.mobile',{
+    res.render('ddicar_mobile',{
         title:"大东车慧"
     });
 });
