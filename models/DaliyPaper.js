@@ -9,7 +9,8 @@ function DaliyPaper(daliyPaper){
     this.author = daliyPaper.author;
     this.pic = daliyPaper.pic;
     this.typeId = daliyPaper.typeId;
-    this.audio = daliyPaper.audio;
+    this.contentType = daliyPaper.contentType;
+    this.content = daliyPaper.content;
     this.favorites = 0;
 }
 
@@ -21,7 +22,8 @@ DaliyPaper.prototype.save = function(callback){
         author:this.author,
         pic:this.pic,
         typeId:this.typeId,
-        audio:this.audio
+        contentType:this.contentType,
+        content:this.content
     };
 
     mongodbPool.acquire(function(err, db){

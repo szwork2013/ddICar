@@ -12,16 +12,29 @@ exports.add = function(req, res){
     var author = req.body.author;
     var pic = req.files["pic"].name;
     var typeId = req.body.daliyPaperSubType;
+    var contentType = req.body.contentType;
     var audio = req.files["audio"].name;
+    var txt = req.body.txt;
 
     switch(req.files["pic"].type){
         case "image/png":
             pic = uuid.v1() + ".png";
     }
 
-    switch(req.files["audio"].type){
-        case "audio/mp3":
-            audio = uuid.v1() + ".mp3";
+    if(req.files["audio"]){
+        switch(req.files["audio"].type){
+            case "audio/mp3":
+                audio = uuid.v1() + ".mp3";
+        }
+    }
+
+    switch(contentType){
+        case "音频":
+            content = audio;
+            break;
+        case "文字":
+            content = txt;
+            break;
     }
 
     var newDaliyPaper = new DaliyPaper({
@@ -29,7 +42,8 @@ exports.add = function(req, res){
         author:author,
         pic:pic,
         typeId:typeId,
-        audio:audio
+        contentType:contentType,
+        content:content
     });
 
     newDaliyPaper.save(function(err, daliyPaper){
