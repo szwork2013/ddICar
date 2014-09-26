@@ -8,7 +8,7 @@ var DaliyPaper = require('./DaliyPaper');
 var DaliyPaperType = require('./DaliyPaperType');
 var YourVoice = require('./YourVoice');
 var YourVoiceType = require('./YourVoiceType');
-var ODBWarning = require('./ODBWarning');
+var OBDWarning = require('./OBDWarning');
 var hxMiddleWare = require('./hxMiddleWare');
 var CarInfo = require('./CarInfo');
 
@@ -33,7 +33,7 @@ router.get('/users/favorite/showAll/:id',User.checkLogin, Favorite.getAll);// �
 router.post('/users/favorite',User.checkLogin, Favorite.favorite); // 收藏
 router.post('/users/unfavorite',User.checkLogin, Favorite.unfavorite);// 取消收藏
 
-router.get('/users/daliyPaper/showAll',User.checkLogin, DaliyPaper.getAll);// 获取日报
+router.get('/users/daliyPaper/showAll/:id',User.checkLogin, DaliyPaper.getAll);// 获取日报
 
 router.get('/daliyPaper/getLevel1Type',User.checkLogin, DaliyPaperType.level1_type);  // 获取日报一级类型
 router.get('/daliyPaper/getLevel2Type/:type',User.checkLogin, DaliyPaperType.level2_type);  // 获取日报二级类型
@@ -43,8 +43,9 @@ router.get('/yourVoice/getType',User.checkLogin, YourVoiceType.getType);  // 获
 router.post('/yourVoice/uploadMyVoice',User.checkLogin, multipartMiddleware, YourVoice.uploadMyVoice); // 上传我的定制声音
 
 /* 车机功能 */
-router.get('/users/getWarning',hxMiddleWare.getToken, ODBWarning.sendWarning);
-router.get('/users/getWarnings/:id',ODBWarning.getWarningList);
+router.post('/users/sendWarning',hxMiddleWare.getAccessToken, OBDWarning.sendWarning);
+router.get('/users/getWarnings/:id',OBDWarning.getWarningList);
 router.get('/users/getCarStatus/:id',User.checkLogin ,CarInfo.getStatus);
+router.get('/users/getWarningCount/:id',User.checkLogin ,OBDWarning.getWarningCount); // 获取故障总数
 
 module.exports = router;
