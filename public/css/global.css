@@ -1,0 +1,166 @@
+
+
+#container {
+	width:580px;
+	padding:10px;
+	margin:0 auto;
+	position:relative;
+	z-index:0;
+}
+
+#example {
+	width:600px;
+	position:absolute;
+	top: 50%;
+	left: 50%;
+	height: 378px;
+	background: url("../img/example-frame.png") no-repeat center;
+	margin: -112px 0 0 -88px;
+	opacity: 0;
+
+	transition:all .3s ease;
+	-webkit-transition:all .3s ease;
+	-moz-transition:all .3s ease;
+	-o-transition:all .3s ease;
+
+	margin: -172px 0 0 -88px\0;
+	opacity: 1\0;
+	*margin: -172px 0 0 -88px;
+	*opacity: 1;
+}
+#example.example_ani{
+	margin: -172px 0 0 -88px;
+	opacity: 1;
+}
+#ribbon {
+	position:absolute;
+	top:-3px;
+	left:-15px;
+	z-index:500;
+}
+
+#frame {
+	position:absolute;
+	z-index:0;
+	width:739px;
+	height:341px;
+	top:-3px;
+	left:-80px;
+}
+
+#slides {
+	position:absolute;
+	top:62px;
+	left:32px;
+	z-index:100;
+}
+
+#slides .next,#slides .prev {
+	position: absolute;
+top: 230px;
+left: 200px;
+width: 26px;
+height: 26px;
+display: block;
+z-index: 101;
+background: url("../img/arrow-next.png") no-repeat center;
+}
+#slides .prev{
+background: url("../img/arrow-prev.png") no-repeat center;
+}
+#slides .prevsel{
+background: url("../img/arrow-prev-.png") no-repeat center;
+cursor: default;
+}
+#slides .nextsel{
+background: url("../img/arrow-next-.png") no-repeat center;
+cursor: default;
+}
+.slides_container {
+	width: 535px;
+height: 232px;
+	overflow:hidden;
+	position:relative;
+}
+
+#slides .next {
+	left:310px;
+}
+
+.pagination {
+	margin:26px auto 0;
+	width:100px;
+}
+
+.pagination li {
+	float:left;
+	margin:0 1px;
+}
+
+.pagination li a {
+	display:block;
+	width:12px;
+	height:0;
+	padding-top:12px;
+	background-image:url(../img/pagination.png);
+	background-position:0 0;
+	float:left;
+	overflow:hidden;
+}
+
+.pagination li.current a {
+	background-position:0 -12px;
+}
+
+#footer {
+	text-align:center;
+	width:580px;
+	margin-top:9px;
+	padding:4.5px 0 18px;
+	border-top:1px solid #dfdfdf;
+}
+
+#footer p {
+	margin:4.5px 0;
+	font-size:1.0em;
+}
+#example dl{
+	overflow: hidden;
+}
+#example dl dt{
+	float: left;
+	font-size: 32px;
+	font-weight: bold;
+	color: #fff;
+	line-height: 60px;
+	padding-left: 50px;
+}
+#example dl a{
+	display: block;
+	float: right;
+	color: #a3adca;
+	font-size: 14px;
+	line-height: 60px;
+padding-right: 49px;
+}
+.slides_container div ul{
+	padding-top: 9px;
+}
+.slides_container div ul li{
+	list-style-type: none;
+	line-height: 34px;
+	font-size: 16px;
+	padding-left: 17px;
+}
+#slides .num{
+	position: absolute;
+	top: 232px;
+left: 248px;
+font-size: 12px;
+color: #bdc0c8;
+line-height: 22px;
+}
+
+.slides_control div{
+	width: 535px;
+}
