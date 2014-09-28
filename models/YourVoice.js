@@ -4,17 +4,17 @@
 var mongodbPool = require('./db');
 var ObjectID = require('mongodb').ObjectID;
 
-function Audio(audio){
-    this.audioFileId = audio.audioFileId;
-    this.type = audio.type;
-    this.content = audio.content;
-    this.uploadDate = audio.uploadDate;
+function YourVoice(yourVoice){
+    this.audioFileId = yourVoice.audioFileId;
+    this.type = yourVoice.type;
+    this.content = yourVoice.content;
+    this.uploadDate = yourVoice.uploadDate;
 }
 
-module.exports = Audio;
+module.exports = YourVoice;
 
-Audio.prototype.save = function(callback){
-    var audio = {
+YourVoice.prototype.save = function(callback){
+    var yourVoice = {
         audioFileId:this.audioFileId,
         type:this.type,
         content:this.content,
@@ -24,30 +24,30 @@ Audio.prototype.save = function(callback){
         if(err){
             return callback(err);
         }
-        db.collection('audio',function(err,collection){
+        db.collection('YourVoice',function(err,collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
             }
-            collection.ensureIndex('audioFileId',function(err,audio){});
-            collection.insert(audio,{w:1},function(err,audio){
+            collection.ensureIndex('audioFileId',function(err,yourVoice){});
+            collection.insert(yourVoice,{w:1},function(err,yourVoice){
                 mongodbPool.release(db);
                 if(err){
                     return callback(err);
                 }
-                callback(null,audio);
+                callback(null,yourVoice);
             });
         });
     });
 };
 
-Audio.getAll = function(callback){
+YourVoice.getAll = function(callback){
     mongodbPool.acquire(function(err, db){
         if(err){
             return callback(err);
         }
 
-        db.collection('audio', function(err, collection){
+        db.collection('YourVoice', function(err, collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
@@ -65,13 +65,13 @@ Audio.getAll = function(callback){
     });
 };
 
-Audio.getByType = function(type,callback){
+YourVoice.getByType = function(type,callback){
     mongodbPool.acquire(function(err, db){
         if(err){
             return callback(err);
         }
 
-        db.collection('audio', function(err, collection){
+        db.collection('YourVoice', function(err, collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
@@ -93,13 +93,13 @@ Audio.getByType = function(type,callback){
     });
 };
 
-Audio.getOne = function(id, callback){
+YourVoice.getOne = function(id, callback){
     mongodbPool.acquire(function(err, db){
         if(err){
             return callback(err);
         }
 
-        db.collection('audio', function(err, collection){
+        db.collection('YourVoice', function(err, collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
@@ -117,13 +117,13 @@ Audio.getOne = function(id, callback){
     });
 };
 
-Audio.delete = function(id, callback){
+YourVoice.delete = function(id, callback){
   mongodbPool.acquire(function(err, db){
       if(err){
           return callback(err);
       }
 
-      db.collection('audio', function(err, collection){
+      db.collection('YourVoice', function(err, collection){
         if(err){
             mongodbPool.release(db);
             return callback(err);

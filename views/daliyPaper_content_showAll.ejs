@@ -105,7 +105,7 @@
                                 <option value="文字">文字</option>
                             </select>
                             <input name="audio" type="file" class="form-control" id="audio">
-                            <input name="txt" type="textarea" class="form-control" id="txt"/>
+                            <textarea name="txt" type=""  class="form-control" id="txt"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -181,7 +181,11 @@
                     <div class="form-group">
                         <label for=“audio” class="col-sm-4 control-label">音频</label>
                         <div class="col-sm-7">
+                            <% if(e.contentType == "音频"){ %>
                             <input name="audio" type="file" class="form-control" id="audio">
+                            <% }else if(e.contentType == "文字"){ %>
+                            <textarea name="txt" type=""  class="form-control" id="txt"><%= e.content %></textarea>
+                            <% } %>
                         </div>
                     </div>
                     <div class="form-group">
@@ -202,6 +206,9 @@
 
 <script>
     $(document).ready(function(){
+        $('#audio').show();
+        $('#txt').hide();
+
         $('#daliyPaperType').change(function(){
             var subTypes = $('#daliyPaperSubType');
             subTypes.empty();

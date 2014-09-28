@@ -11,7 +11,7 @@ SingleLogin.prototype.save = function(callback){
 	var loginInfo = {
 		userID: this.userID,
 		sessionID: this.sessionID
-	}
+	};
     
 	mongodbPool.acquire(function(err,db){
         if(err){
@@ -34,4 +34,4 @@ SingleLogin.prototype.save = function(callback){
 
         });
     });
-}
+};

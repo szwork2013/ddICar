@@ -18,15 +18,15 @@
                 <td>#提示类型</td>
                 <td>#操作</td>
             </tr>
-            <% if(audios){ %>
+            <% if(yourVoices){ %>
             <% var n=0 %>
-            <% audios.forEach(function(e){%>
+            <% yourVoices.forEach(function(e){%>
             <%n++;%>
             <tr>
                 <td><%=n%></td>
                 <td><%=e.type%></td>
                 <td><%=e.content%></td>
-                <td><a href="/admins/yourVoice/delete/<%=e._id%>">删除</a></td>
+                <td><a href="/admins/yourVoice/content/delete/<%=e._id%>">删除</a></td>
             </tr>
             <%});%>
             <%}%>
@@ -44,7 +44,7 @@
             </div>
             <div class="modal-body">
                 <p class="lead">信息录入</p>
-                <form class="form-horizontal" role="form" method="POST" action="/admins/yourVoice/add" enctype='multipart/form-data'>
+                <form class="form-horizontal" role="form" method="POST" action="/admins/yourVoice/content/add" enctype='multipart/form-data'>
                     <div class="form-group">
                         <label for="type" class="col-sm-4 control-label">声音类型</label>
                         <div class="col-sm-7">
@@ -67,7 +67,7 @@
                     <div class="form-group">
                         <label for="daliyPaperSubType" class="col-sm-4 control-label">声音文件</label>
                         <div class="col-sm-7">
-                            <input name="voice" type="file" class="form-control" id="voice">
+                            <input name="audio" type="file" class="form-control" id="audio">
                         </div>
                     </div>
                     <div class="form-group">

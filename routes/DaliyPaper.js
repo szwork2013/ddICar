@@ -21,15 +21,15 @@ exports.add = function(req, res){
             pic = uuid.v1() + ".png";
     }
 
-    if(req.files["audio"]){
-        switch(req.files["audio"].type){
-            case "audio/mp3":
-                audio = uuid.v1() + ".mp3";
-        }
-    }
-
+    var content;
     switch(contentType){
         case "音频":
+            switch(req.files["audio"].type){
+                case "audio/mpeg":
+                case "audio/mp3":
+                    audio = uuid.v1() + ".mp3";
+                    break;
+            }
             content = audio;
             break;
         case "文字":
@@ -56,9 +56,11 @@ exports.add = function(req, res){
         // 使用同步方式重命名一个文件
         fs.renameSync(req.files["pic"].path, pic_target_path);
 
-        var audio_target_path = './public/audio/daliyPaper/' + audio;
-        // 使用同步方式重命名一个文件
-        fs.renameSync(req.files["audio"].path, audio_target_path);
+        if(req.files["audio"].name){
+            var audio_target_path = './public/audio/daliyPaper/' + audio;
+            // 使用同步方式重命名一个文件
+            fs.renameSync(req.files["audio"].path, audio_target_path);
+        }
 
         req.flash('success', "添加该日报成功！");
         res.redirect('/admins/daliyPaper/content/showAll');
@@ -71,19 +73,13 @@ exports.update = function(req, res){
     var author = req.body.author;
     var pic = req.files["pic"].name;
     var typeId = req.body.daliyPaperSubType;
-    var audio = req.files["audio"].name;
+    var audio;
+    var txt;
 
     if(req.files["pic"]){
         switch(req.files["pic"].type){
             case "image/png":
                 pic = uuid.v1() + ".png";
-        }
-    }
-
-    if(req.files["audio"]){
-        switch(req.files["audio"].type){
-            case "audio/mp3":
-                audio = uuid.v1() + ".mp3";
         }
     }
 
@@ -95,13 +91,28 @@ exports.update = function(req, res){
             req.flash("error","此日报不存在！");
         }
 
+        var content;
+        switch(daliyPaper.contentType){
+            case "音频":
+                switch(req.files["audio"].type){
+                    case "audio/mpeg":
+                    case "audio/mp3":
+                        audio = uuid.v1() + ".mp3";
+                        break;
+                }
+                content = audio;
+                break;
+            case "文字":
+                content = req.body.txt;
+                break;
+        }
+
         daliyPaper.title = title;
         daliyPaper.author = author;
         daliyPaper.typeId = typeId;
         if(req.files["pic"])
             daliyPaper.pic = pic;
-        if(req.files["audio"])
-            daliyPaper.audio = audio;
+        daliyPaper.content = content;
 
         if(pic != daliyPaper.pic){
             fs.unlink('./public/images/' + daliyPaper.pic, function(err){
@@ -116,9 +127,11 @@ exports.update = function(req, res){
 
                         fs.renameSync(req.files["pic"].path, './public/images/'+daliyPaper.pic);
 
-                        var audio_target_path = './public/audio/daliyPaper/' + audio;
-                        // 使用同步方式重命名一个文件
-                        fs.renameSync(req.files["audio"].path, audio_target_path);
+                        if(req.files["audio"].name){
+                            var audio_target_path = './public/audio/daliyPaper/' + audio;
+                            // 使用同步方式重命名一个文件
+                            fs.renameSync(req.files["audio"].path, audio_target_path);
+                        }
 
                         req.flash("success", "修改成功！");
                         res.redirect("/admins/daliyPaper/content/showAll");

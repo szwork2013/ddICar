@@ -7,9 +7,10 @@ var uuid = require('node-uuid');
 var Admin = require('../models/admins');
 var User = require('../models/users');
 var DaliyPaperType = require('./DaliyPaperType');
-var Audio = require('./audio');
+var YourVoice = require('./YourVoice');
 var DaliyPaper = require('./DaliyPaper');
 var YourVoiceType = require('./YourVoiceType');
+var OBDErrorCode = require('./OBDErrorCode');
 
 var router = express.Router();
 
@@ -231,11 +232,20 @@ router.get('/yourVoice/type/delete/:id', YourVoiceType.delete);
 
 router.post('/yourVoice/type/update', YourVoiceType.update);
 
-router.get('/yourVoice/content/showAll', Audio.showAll);
+router.get('/yourVoice/content/showAll', YourVoice.showAll);
 
-router.post('/yourVoice/content/add', multipartMiddleware, Audio.uploadSysVoice);
+router.post('/yourVoice/content/add', multipartMiddleware, YourVoice.uploadSysVoice);
 
-router.get('/yourVoice/content/delete/:id', Audio.delete);
+router.get('/yourVoice/content/delete/:id', YourVoice.delete);
+
+router.post('/OBDErrorCode/update', OBDErrorCode.update);
+
+router.get('/OBDErrorCode/showAll', OBDErrorCode.showAll);
+
+router.post('/OBDErrorCode/add', OBDErrorCode.add);
+
+router.get('/OBDErrorCode/delete/:id', OBDErrorCode.delete);
+
 
 function checkLogin(req, res, next){
     if(!req.session.admin){

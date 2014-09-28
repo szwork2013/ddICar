@@ -5,6 +5,7 @@ var mysql = require('../models/db_mySql');
 var request = require('request');
 var settings = require('../settings');
 var User = require('../models/users');
+var OBDErrorCode = require('../models/OBDErrorCode');
 
 exports.sendWarning = function (req, res) {
     var deviceSN = req.body.deviceSN;
@@ -51,10 +52,10 @@ exports.getWarningList = function(req, res){
             var warnings = [];
             rows.forEach(function(e){
                 var warning = {};
-                if(e["obd_faultcodelist"] == 'P0211'){
-                    warning['title'] = "喷油器电路异常";
+                OBDErrorCode.getOneByCode(e["obd_faultcodelist"],function(err, obdErrorCode){
+                    warning['title'] = obdErrorCode.mean;
                     warnings.push(warning);
-                }
+                });
             });
 
             res.json({flag:'success', content:warnings})
