@@ -78,6 +78,7 @@ exports.showAll = function(req, res){
 };
 
 exports.getByType = function(req, res){
+    var type = req.params['type'];
     YourVoice.getByType(type,function(err, yourVoices){
         if(err){
             return res.json({flag:"fail",content:1001});

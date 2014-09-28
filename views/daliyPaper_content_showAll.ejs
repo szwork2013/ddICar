@@ -32,21 +32,26 @@
                 <td><%=e.author%></td>
                 <td>
                     <% if(daliyPaperSubTypes){ %>
-                    <% daliyPaperSubTypes.forEach(function(t){ %>
-                    <% if(e.typeId == t._id){ %>
-
-                    <% if(daliyPaperTypes){ %>
-                    <% daliyPaperTypes.forEach(function(_t){ %>
-                    <% if(t.parentTypeId == _t._id){ %>
-                    <%=_t.name%> <%=t.name%>
+                        <% daliyPaperSubTypes.forEach(function(t){ %>
+                            <% if(e.typeId == t._id){ %>
+                                <% if(daliyPaperTypes){ %>
+                                    <% daliyPaperTypes.forEach(function(_t){ %>
+                                        <% if(t.parentTypeId == _t._id){ %>
+                                            <%=_t.name%> <%=t.name%>
+                                        <% } %>
+                                    <% }) %>
+                                <% } %>
+                            <% } %>
+                        <% }) %>
                     <% } %>
-                    <% }) %>
-                    <% } %>
-                    <% } %>
-                    <% }) %>
-                    <% } %></td>
+                </td>
                 <td>
-                    <audio src="/audio/daliyPaper/<%=e.audio%>" controls="controls">您的浏览器不支持 audio 标签。</audio></td>
+                    <% if(e.contentType == "音频"){ %>
+                    <audio src="/audio/daliyPaper/<%=e.content%>" controls="controls">您的浏览器不支持 audio 标签。</audio>
+                    <% }else if(e.contentType == "文字"){ %>
+                    <%= e.content %>
+                    <% } %>
+                </td>
                 <td><a href="/admins/daliyPaper/content/delete/<%=e._id%>">删除</a> <a data-toggle="modal" data-target="#<%=e._id%>">修改</a></td>
             </tr>
             <%});%>
