@@ -86,6 +86,30 @@ OBDErrorCode.getOneByCode = function(code, callback){
     });
 };
 
+OBDErrorCode.getOneByCodes = function(codes, callback){
+    mongodbPool.acquire(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('OBDErrorCode',function(err,collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.find({code:{'$in':codes}}).sort().toArray(function(err,docs){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(err,docs);
+            });
+        });
+    });
+};
+
 OBDErrorCode.getAll = function(callback){
 
     mongodbPool.acquire(function(err,db){

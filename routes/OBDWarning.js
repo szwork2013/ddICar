@@ -49,19 +49,21 @@ exports.getWarningList = function(req, res){
                 return res.json({flag:'fail', content:1001});
             }
 
+            /*var warnings = [];
+            for(var i =0;i<rows.length;i++){
+                console.log(rows[i]["obd_faultcodelist"]);
+                var warning = {};
+                warning["code"] = rows[i]["obd_faultcodelist"];
+                warnings.push(warning);
+            }*/
+
             var warnings = [];
             rows.forEach(function(e){
-                var warning = {};
-                console.log(e["obd_faultcodelist"]);
-                OBDErrorCode.getOneByCode(e["obd_faultcodelist"],function(err, obdErrorCode){
-                    if(obdErrorCode){
-                        warning['title'] = obdErrorCode.mean;
-                        warnings.push(warning);
-                        console.log(warnings);
-                    }
-                });
-            },function(){
-                res.json({flag:'success', content:warnings});
+                warnings.push(e["obd_faultcodelist"]);
+            });
+
+            OBDErrorCode.getOneByCodes(warnings,function(err, obdErrorCodes){
+                res.json({flag:'success', content:obdErrorCodes});
             });
         });
     })
@@ -98,7 +100,7 @@ function getWarnings(callback) {
 
 function getWarningsBySN(deviceSN, callback) {
     mysql.getConnection(function (err, connection) {
-        connection.query('select `obd_faultcodelist` from `obd_db_test`.`obd_data_luo_faultcode` where `deviceSN` = '+deviceSN+' limit 0,1000', function (err, rows) {
+        connection.query('select * from `obd_db_test`.`obd_data_luo_faultcode` where `deviceSN` = '+deviceSN+' limit 0,1000', function (err, rows) {
             if (err){
                 callback(err);
             }
