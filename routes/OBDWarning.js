@@ -11,31 +11,34 @@ exports.sendWarning = function (req, res) {
     var deviceSN = req.body.deviceSN;
     var faultcodelist = req.body.faultcodelist;
 
-    getWarnings(function(err, warnings){
+    User.getBydeviceSN(deviceSN,function(err, user){
+        request(
+            { method: 'POST',
+                uri: settings.hxURI + '/messages',
+                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + settings["HX_access_token"]},
+                body: JSON.stringify({
+                    "target_type": "users", //or chatgroups
+                    "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
+                    "msg": {
+                        "type": "txt",
+                        "msg": faultcodelist //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
+                    },
+                    "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
+                })
+            }
+            , function (error, response, body) {
+                console.log(body);
+                res.json(body);
+            }
+        );
+    });
+
+    /*getWarnings(function(err, warnings){
         warnings.forEach(function(e){
 
-            User.getBydeviceSN(deviceSN,function(err, user){
-                request(
-                    { method: 'POST',
-                        uri: settings.hxURI + '/messages',
-                        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + settings["HX_access_token"]},
-                        body: JSON.stringify({
-                            "target_type": "users", //or chatgroups
-                            "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
-                            "msg": {
-                                "type": "txt",
-                                "msg": faultcodelist //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
-                            },
-                            "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
-                        })
-                    }
-                    , function (error, response, body) {
-                        console.log(body);
-                    }
-                );
-            });
+
         });
-    });
+    });*/
 };
 
 exports.getWarningList = function(req, res){
