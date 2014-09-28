@@ -15,7 +15,7 @@ exports.sendWarning = function (req, res) {
         request(
             { method: 'POST',
                 uri: settings.hxURI + '/messages',
-                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + settings["HX_access_token"]},
+                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + req.session.access_token},
                 body: JSON.stringify({
                     "target_type": "users", //or chatgroups
                     "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']

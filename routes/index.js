@@ -58,7 +58,7 @@ router.get('/yourVoice/getType',User.checkLogin, YourVoiceType.getType);  // 获
 router.post('/yourVoice/uploadMyVoice',User.checkLogin, multipartMiddleware, YourVoice.uploadMyVoice); // 上传我的定制声音
 
 /* 车机功能 */
-router.post('/users/sendWarning',hxMiddleWare.getAccessToken, OBDWarning.sendWarning);
+router.post('/users/sendWarning',hxMiddleWare.getToken, OBDWarning.sendWarning);
 router.get('/users/getWarnings/:id',OBDWarning.getWarningList);
 router.get('/users/getCarStatus/:id',User.checkLogin ,CarInfo.getStatus);
 router.get('/users/getWarningCount/:id',User.checkLogin ,OBDWarning.getWarningCount); // 获取故障总数
