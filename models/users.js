@@ -12,7 +12,7 @@ function User(user){
         deviceSN:""
 	};
 	this.daliy_paper = {};
-    this.you_voice = {};
+    this.your_voice = {};
     this.settings = {};
 }
 
@@ -20,7 +20,10 @@ module.exports = User;
 
 User.prototype.save = function(callback){
 	var user = {
-		info: this.info
+		info: this.info,
+        daliy_paper: this.daliy_paper,
+        your_voice: this.your_voice,
+        settings: this.settings
 	};
 
 	mongodbPool.acquire(function(err, db){

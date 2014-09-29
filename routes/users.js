@@ -210,8 +210,9 @@ exports.setDaliyPaperSettings = function (req, res) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
-
-        user.daliy_paper = DaliyPaperSettings;
+        if(user.daliy_paper){
+            user.daliy_paper = DaliyPaperSettings;
+        }
 
         User.update(user, function (err) {
             if (err) {
@@ -248,7 +249,9 @@ exports.setAppSettings = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        user.settings = AppSettings;
+        if(user.settings){
+            user.settings = AppSettings;
+        }
 
         User.update(user, function (err) {
             if (err) {
@@ -285,6 +288,40 @@ exports.getYourVoice = function (req, res) {
     });
 };
 
+exports.setYourVoiceSettings = function(req, res){
+    var user_id = req.body.user_id;
+    var YourVoiceSettings = req.body.YourVoiceSettings;
+
+    User.getOne(user_id, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        if(user.your_voice){
+            user.your_voice = YourVoiceSettings;
+        }
+
+        User.update(user, function (err) {
+            if (err) {
+                return res.json({flag: "fail", content: 1001});
+            }
+
+            res.json({flag: "success", content: 3001});//修改成功
+        });
+    });
+};
+
+exports.getYourVoiceSettings = function (req, res) {
+    var user_id = req.params["id"];
+
+    User.getOne(user_id, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        res.json({flag: "success", content: user.your_voice});
+    });
+};
 
 exports.checkLogin = function (req, res, next) {
     if (!req.session.user) {

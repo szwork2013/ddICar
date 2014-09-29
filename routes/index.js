@@ -41,6 +41,9 @@ router.post('/users/resetPassword',User.checkLogin, User.resetPassword);// 用�
 router.post('/users/setDaliyPaperSettings',User.checkLogin, User.setDaliyPaperSettings); // 保存日报设置
 router.get('/users/getDaliyPaperSettings/:id',User.checkLogin, User.getDaliyPaperSettings); // 获取日报设置
 
+router.post('/users/setYourVoiceSettings',User.checkLogin, User.setYourVoiceSettings); // 保存你的声音设置
+router.get('/users/getYourVoiceSettings/:id',User.checkLogin, User.getYourVoiceSettings); // 获取你的声音设置
+
 router.post('/users/setAppSettings',User.checkLogin, User.setAppSettings); // 保存app设置
 router.get('/users/getAppSettings/:id',User.checkLogin, User.getAppSettings); // 获取日报设置
 
