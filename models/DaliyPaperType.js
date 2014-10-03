@@ -135,3 +135,50 @@ DaliyPaperType.update = function(DaliyPaperType, callback){
         });
     });
 };
+
+DaliyPaperType.geSome = function(ids, callback){
+    mongodbPool.acquire(function(err, db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('DaliyPaperType', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.find().sort().toArray(function(err, daliyPaperTypes){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                var result = [];
+                daliyPaperTypes.forEach(function(e){
+                    var _t;
+                    ids.forEach(function(_e){
+                        if(e._id == _e.id){
+                            _t={
+                                "_id" : e._id,
+                                "name" : e.name,
+                                "pic" : e.pic,
+                                "percent": _e.percent
+                            }
+                        }else{
+                            _t={
+                                "_id" : e._id,
+                                "name" : e.name,
+                                "pic" : e.pic,
+                                "percent": "0"
+                            }
+                        }
+                        result.push(_t);
+                    });
+                });
+
+                callback(null, result);
+            });
+        });
+    });
+};

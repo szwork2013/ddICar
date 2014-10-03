@@ -196,3 +196,27 @@ User.getAll = function(callback){
         });
     });
 };
+
+User.getQuery = function(query,callback){
+    mongodbPool.acquire(function(err,db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('users',function(err,collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.find(query).sort().toArray(function(err,docs){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+
+                callback(err,docs);
+            });
+        });
+    });
+};

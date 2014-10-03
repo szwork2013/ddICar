@@ -5,6 +5,8 @@ var SingleLogin = require('../models/SingleLogin.js');
 var uuid = require('node-uuid');
 var request = require('request');
 var settings = require('../settings');
+var DaliyPaperType = require('../models/DaliyPaperType');
+var DaliyPaperSubType = require('../models/DaliyPaperSubType');
 
 exports.putUser = function (req, res) {
     var user_id = req.body.user_id;
@@ -204,13 +206,12 @@ exports.resetPassword = function (req, res) {
 exports.setDaliyPaperSettings = function (req, res) {
     var user_id = req.body.user_id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
-    console.log(DaliyPaperSettings);
 
     User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
-        if(user.daliy_paper){
+        if (user.daliy_paper) {
             user.daliy_paper = DaliyPaperSettings;
         }
 
@@ -232,11 +233,97 @@ exports.getDaliyPaperSettings = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        if (user.daliy_paper) {
-            res.json({flag: "success", content: user.daliy_paper});
-        } else {
-            res.json({flag: "empty"});
+        var ids = [];
+        user.daliy_paper.forEach(function (e) {
+            var _t = {
+                id: e.id,
+                percent: e.percent
+            };
+            ids.push(_t);
+        });
+
+        DaliyPaperType.geSome(ids, function (err, result) {
+            if (err) {
+                return res.json({flag: "fail", content: 1001});
+            }
+
+            res.json({flag: "success", content: result});
+        });
+    });
+};
+
+exports.getDaliyPaperSubTypeSettings = function (req, res) {
+    var user_id = req.params["user_id"],
+        type_id = req.params["type_id"];
+
+    User.getOne(user_id, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
         }
+
+        user.daliy_paper.forEach(function (e) {
+
+            if (type_id == e.id) {
+                var result = [];
+                DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
+                    if (err) {
+                        return res.json({flag: "fail", content: 1001});
+                    }
+
+                    daliyPaperSubTypes.forEach(function (_e) {
+                        for (var i = 0; i < e.child.length; i++) {
+                            var item;
+                            if(e.child[i]==_e._id){
+                                item = {
+                                    "_id" : _e._id,
+                                    "name" : _e.name,
+                                    "pic" : _e.pic,
+                                    "selected":true
+                                };
+                            }else{
+                                item = {
+                                    "_id" : _e._id,
+                                    "name" : _e.name,
+                                    "pic" : _e.pic,
+                                    "selected":false
+                                };
+                            }
+                            result.push(item);
+                        }
+                    });
+
+                    res.json({flag: "success", content: result});
+                })
+            }
+        });
+    })
+};
+
+exports.setDaliyPaperSubTypeSettings = function(req, res){
+    var user_id = req.body.user_id;
+    var type_id = req.body.type_id;
+    var DaliyPaperSubTypeSettings = req.body.DaliyPaperSubTypeSettings;
+
+    User.getOne(user_id, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        if (user.daliy_paper) {
+            user.daliy_paper.forEach(function(e){
+                if(e.id == type_id){
+                    e.child = DaliyPaperSubTypeSettings;
+                }
+            });
+        }
+
+        User.update(user, function (err) {
+            if (err) {
+                return res.json({flag: "fail", content: 1001});
+            }
+
+            res.json({flag: "success", content: 3001});//修改成功
+        });
     });
 };
 
@@ -249,7 +336,7 @@ exports.setAppSettings = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        if(user.settings){
+        if (user.settings) {
             user.settings = AppSettings;
         }
 
@@ -288,7 +375,7 @@ exports.getYourVoice = function (req, res) {
     });
 };
 
-exports.setYourVoiceSettings = function(req, res){
+exports.setYourVoiceSettings = function (req, res) {
     var user_id = req.body.user_id;
     var YourVoiceSettings = req.body.YourVoiceSettings;
 
@@ -297,7 +384,7 @@ exports.setYourVoiceSettings = function(req, res){
             return res.json({flag: "fail", content: 1001});
         }
 
-        if(user.your_voice){
+        if (user.your_voice) {
             user.your_voice = YourVoiceSettings;
         }
 

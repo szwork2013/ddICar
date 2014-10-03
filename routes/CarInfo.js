@@ -8,7 +8,41 @@ var User = require('../models/users');
 
 function getCarStatus(deviceSN,callback){
     mysql.getConnection(function(err,connection){
-        connection.query('select * from `obd_db_test`.`obd_data_luo_lastshow` where `deviceSN` = '+deviceSN+' limit 0,1000',function(err,rows){
+        connection.query('select `obd_LoadValue` as `负荷计算值`,' +
+            '`obd_CoolTemper` as `发动机冷却液温度`,' +
+            '`obd_EngineRPM` as `发动机转速`,' +
+            '`obd_Odometer` as `里程`,' +
+            '`obd_VehicleSpeed` as `车速`,' +
+            '`obd_IntakeAirTemper` as `进气温度`,' +
+            '`obd_AirFlowRate` as `空气流量`,' +
+            '`obd_ThrottlePosition` as `节气门绝对位置`,' +
+            '`obd_ModuleVol` as `控制模块电压`,' +
+            '`obd_AmbientAirTemper` as `环境温度`,' +
+            '`obd_LongFuelTrim` as `长期燃油修正`,' +
+            '`obd_TimingAdvance` as `气缸1点火提前角`,' +
+            '`obd_IntakePressure` as `进气歧管绝对压力`,' +
+            '`obd_VehicleOBD` as `本车OBD标准`,' +
+            '`obd_OilPerHour` as `每小时油耗`,' +
+            '`obd_OilPerKM` as `100Km油耗`,' +
+            '`obd_RemainOil` as `剩余油量`,' +
+            '`obd_FuelPressure` as `燃油压力`,' +
+            '`obd_IntakeManifoldPressure` as `进气压力`,' +
+            '`obd_RunTimeSinEngineStart` as `发动机运行时间`,' +
+            '`obd_BaromatricPressure` as `大气压力`,' +
+            '`obd_CommandER` as `空燃比系数`,' +
+            '`obd_RelativeTP` as `节气门开度`,' +
+            '`obd_AccePedalPosition` as `油门踏板相对位置`,' +
+            '`obd_TimeRunMILOn` as `故障后行驶时间`,' +
+            '`obd_EngineOilTemp` as `机油温度`,' +
+            '`obd_EngineMal_0_` as `发动机故障状态_0`,' +
+            '`obd_EngineMal_1_` as `发动机故障状态_1`,' +
+            '`obd_TCMMal_0_` as `变速箱故障状态_0`,' +
+            '`obd_TCMMal_1_` as `变速箱故障状态_1`,' +
+            '`obd_ABSMal_0_` as `刹车系统故障_0`,' +
+            '`obd_ABSMal_1_` as `刹车系统故障_1`,' +
+            '`obd_SRSMal_0_` as `气囊系统故障_0`,' +
+            '`obd_SRSMal_1_` as `气囊系统故障_1`' +
+            ' from `obd_db_test`.`obd_data_luo_lastshow` where `deviceSN` = '+deviceSN+' limit 0,1000',function(err,rows){
             callback(err,rows[0]);
         });
     });
