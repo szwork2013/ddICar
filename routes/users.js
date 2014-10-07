@@ -323,6 +323,7 @@ exports.setDaliyPaperSubTypeSettings = function (req, res) {
     var user_id = req.body.user_id;
     var type_id = req.body.type_id;
     var DaliyPaperSubTypeSettings = req.body.DaliyPaperSubTypeSettings;
+    console.log(req.body);
 
     User.getOne(user_id, function (err, user) {
         if (err) {
