@@ -206,16 +206,23 @@ exports.resetPassword = function (req, res) {
 exports.setDaliyPaperSettings = function (req, res) {
     var user_id = req.body.user_id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
+
+    var daliy_papers = [];
+    DaliyPaperSettings.forEach(function(e){
+        var t = JSON.parse(e);
+        daliy_papers.push(t);
+    });
     console.log(req.body);
+    console.log(daliy_papers);
 
     User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
         console.log(user);
-        
+
         if (user.daliy_paper) {
-            user.daliy_paper = DaliyPaperSettings;
+            user.daliy_paper = daliy_papers;
         }
 
         User.update(user, function (err) {
