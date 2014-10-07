@@ -157,9 +157,15 @@ DaliyPaperType.geSome = function (ids, callback) {
                 var result = [];
                 console.log(ids);
                 console.log(daliyPaperTypes);
-                ids.forEach(function (_e) {
-                    daliyPaperTypes.forEach(function (e) {
-                        var _t;
+
+                daliyPaperTypes.forEach(function (e) {
+                    var _t = {
+                        "_id": e._id,
+                        "name": e.name,
+                        "pic": e.pic,
+                        "percent": "0"
+                    };
+                    ids.forEach(function (_e) {
                         if (_e) {
                             if (e._id == _e.id) {
                                 _t = {
@@ -168,25 +174,11 @@ DaliyPaperType.geSome = function (ids, callback) {
                                     "pic": e.pic,
                                     "percent": _e.percent
                                 }
-                            } else {
-                                _t = {
-                                    "_id": e._id,
-                                    "name": e.name,
-                                    "pic": e.pic,
-                                    "percent": "0"
-                                }
-                            }
-                        } else {
-                            _t = {
-                                "_id": e._id,
-                                "name": e.name,
-                                "pic": e.pic,
-                                "percent": "0"
+
                             }
                         }
-
-                        result.push(_t);
                     });
+                    result.push(_t);
                 });
 
                 callback(null, result);
