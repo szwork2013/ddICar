@@ -41,8 +41,8 @@ router.post('/users/resetPassword',User.checkLogin, User.resetPassword);// 用�
 router.post('/users/setDaliyPaperSettings',User.checkLogin, User.setDaliyPaperSettings); // 保存一级日报设置
 router.get('/users/getDaliyPaperSettings/:id',User.checkLogin, User.getDaliyPaperSettings); // 获取一级日报设置
 
-router.post('/users/setDaliyPaperSubTypeSettings',User.checkLogin, User.setDaliyPaperSubTypeSettings); // 保存一级日报设置
-router.get('/users/getDaliyPaperSubTypeSettings/:user_id/:type_id',User.checkLogin, User.getDaliyPaperSubTypeSettings); // 获取一级日报设置
+router.post('/users/setDaliyPaperSubTypeSettings', User.setDaliyPaperSubTypeSettings); // 保存一级日报设置
+router.get('/users/getDaliyPaperSubTypeSettings/:user_id/:type_id', User.getDaliyPaperSubTypeSettings); // 获取一级日报设置
 
 router.post('/users/setYourVoiceSettings',User.checkLogin, User.setYourVoiceSettings); // 保存你的声音设置
 router.get('/users/getYourVoiceSettings/:id',User.checkLogin, User.getYourVoiceSettings); // 获取你的声音设置
