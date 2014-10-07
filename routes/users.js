@@ -332,8 +332,10 @@ exports.setDaliyPaperSubTypeSettings = function (req, res) {
 
         if (user.daliy_paper) {
             user.daliy_paper.forEach(function (e) {
+                console.log(e);
                 if (e.id == type_id) {
                     e.child = DaliyPaperSubTypeSettings;
+                    console.log(e);
                 }
             });
         }
