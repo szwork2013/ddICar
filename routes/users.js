@@ -290,8 +290,14 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
                     console.log(daliyPaperSubTypes);
 
                     daliyPaperSubTypes.forEach(function (_e) {
+                        var item = {
+                            "_id" : _e._id,
+                            "name" : _e.name,
+                            "pic" : _e.pic,
+                            "selected":false
+                        };
                         for (var i = 0; i < e.child.length; i++) {
-                            var item;
+
                             if(e.child[i]==_e._id){
                                 item = {
                                     "_id" : _e._id,
@@ -299,16 +305,9 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
                                     "pic" : _e.pic,
                                     "selected":true
                                 };
-                            }else{
-                                item = {
-                                    "_id" : _e._id,
-                                    "name" : _e.name,
-                                    "pic" : _e.pic,
-                                    "selected":false
-                                };
                             }
-                            result.push(item);
                         }
+                        result.push(item);
                     });
 
                     res.json({flag: "success", content: result});
