@@ -4,33 +4,33 @@
 var mongodbPool = require('./db');
 var ObjectId = require('mongodb').ObjectID;
 
-function DaliyPaperType(daliyPaperType){
+function DaliyPaperType(daliyPaperType) {
     this.name = daliyPaperType.name;
     this.pic = daliyPaperType.pic;
 }
 
 module.exports = DaliyPaperType;
 
-DaliyPaperType.prototype.save = function(callback){
+DaliyPaperType.prototype.save = function (callback) {
     var DaliyPaperType = {
-        name:this.name,
-        pic:this.pic
+        name: this.name,
+        pic: this.pic
     };
 
-    mongodbPool.acquire(function(err,db){
-        if(err){
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('DaliyPaperType', function(err, collection){
-            if(err){
+        db.collection('DaliyPaperType', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.insert(DaliyPaperType,function(err,doc){
+            collection.insert(DaliyPaperType, function (err, doc) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
@@ -40,21 +40,21 @@ DaliyPaperType.prototype.save = function(callback){
     });
 };
 
-DaliyPaperType.getAll = function(callback){
-    mongodbPool.acquire(function(err, db){
-        if(err){
+DaliyPaperType.getAll = function (callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('DaliyPaperType', function(err, collection){
-            if(err){
+        db.collection('DaliyPaperType', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.find().sort().toArray(function(err, daliyPaperTypes){
+            collection.find().sort().toArray(function (err, daliyPaperTypes) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
@@ -64,21 +64,21 @@ DaliyPaperType.getAll = function(callback){
     });
 };
 
-DaliyPaperType.getOne = function(id, callback){
-    mongodbPool.acquire(function(err,db){
-        if(err){
+DaliyPaperType.getOne = function (id, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('DaliyPaperType',function(err,collection){
-            if(err){
+        db.collection('DaliyPaperType', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.findOne({_id:ObjectId(id)}, function(err,doc){
+            collection.findOne({_id: ObjectId(id)}, function (err, doc) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
@@ -88,21 +88,21 @@ DaliyPaperType.getOne = function(id, callback){
     });
 };
 
-DaliyPaperType.delete = function(id, callback){
-    mongodbPool.acquire(function(err, db){
-        if(err){
+DaliyPaperType.delete = function (id, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('DaliyPaperType', function(err, collection){
-            if(err){
+        db.collection('DaliyPaperType', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.remove({_id:ObjectId(id)}, function(err){
+            collection.remove({_id: ObjectId(id)}, function (err) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     callback(err);
                 }
 
@@ -112,21 +112,21 @@ DaliyPaperType.delete = function(id, callback){
     });
 };
 
-DaliyPaperType.update = function(DaliyPaperType, callback){
-    mongodbPool.acquire(function(err,db){
-        if(err){
+DaliyPaperType.update = function (DaliyPaperType, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('DaliyPaperType',function(err,collection){
-            if(err){
+        db.collection('DaliyPaperType', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.update({_id:ObjectId(DaliyPaperType._id)},{$set:DaliyPaperType},{safe:true}, function(err){
+            collection.update({_id: ObjectId(DaliyPaperType._id)}, {$set: DaliyPaperType}, {safe: true}, function (err) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
@@ -136,51 +136,50 @@ DaliyPaperType.update = function(DaliyPaperType, callback){
     });
 };
 
-DaliyPaperType.geSome = function(ids, callback){
-    mongodbPool.acquire(function(err, db){
-        if(err){
+DaliyPaperType.geSome = function (ids, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('DaliyPaperType', function(err, collection){
-            if(err){
+        db.collection('DaliyPaperType', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.find().sort().toArray(function(err, daliyPaperTypes){
+            collection.find().sort().toArray(function (err, daliyPaperTypes) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
                 var result = [];
-                daliyPaperTypes.forEach(function(e){
-
-                    ids.forEach(function(_e){
+                ids.forEach(function (_e) {
+                    daliyPaperTypes.forEach(function (e) {
                         var _t;
-                        if(!_e){
-                            _t={
-                                "_id" : e._id,
-                                "name" : e.name,
-                                "pic" : e.pic,
-                                "percent": "0"
-                            }
-                        }else{
-                            if(e._id == _e.id){
-                                _t={
-                                    "_id" : e._id,
-                                    "name" : e.name,
-                                    "pic" : e.pic,
+                        if (_e) {
+                            if (e._id == _e.id) {
+                                _t = {
+                                    "_id": e._id,
+                                    "name": e.name,
+                                    "pic": e.pic,
                                     "percent": _e.percent
                                 }
-                            }else{
-                                _t={
-                                    "_id" : e._id,
-                                    "name" : e.name,
-                                    "pic" : e.pic,
+                            } else {
+                                _t = {
+                                    "_id": e._id,
+                                    "name": e.name,
+                                    "pic": e.pic,
                                     "percent": "0"
                                 }
+                            }
+                        } else {
+                            _t = {
+                                "_id": e._id,
+                                "name": e.name,
+                                "pic": e.pic,
+                                "percent": "0"
                             }
                         }
 
