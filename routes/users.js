@@ -256,19 +256,23 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
     var user_id = req.params["user_id"],
         type_id = req.params["type_id"];
 
+    console.log("aa");
     User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
-
+        console.log("user"+user);
         user.daliy_paper.forEach(function (e) {
 
+            console.log("e"+e);
             if (type_id == e.id) {
                 var result = [];
                 DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
                     if (err) {
                         return res.json({flag: "fail", content: 1001});
                     }
+
+                    console.log(daliyPaperSubTypes);
 
                     daliyPaperSubTypes.forEach(function (_e) {
                         for (var i = 0; i < e.child.length; i++) {
