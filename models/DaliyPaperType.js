@@ -156,8 +156,9 @@ DaliyPaperType.geSome = function(ids, callback){
 
                 var result = [];
                 daliyPaperTypes.forEach(function(e){
-                    var _t;
+
                     ids.forEach(function(_e){
+                        var _t;
                         if(!_e){
                             _t={
                                 "_id" : e._id,
