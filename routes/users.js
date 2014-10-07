@@ -209,7 +209,9 @@ exports.setDaliyPaperSettings = function (req, res) {
 
     var daliy_papers = [];
     DaliyPaperSettings.forEach(function(e){
+        console.log(e);
         var t = JSON.parse(e);
+        console.log(t);
         daliy_papers.push(t);
     });
     console.log(req.body);
