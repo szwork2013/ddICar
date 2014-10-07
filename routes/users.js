@@ -207,21 +207,24 @@ exports.setDaliyPaperSettings = function (req, res) {
     var user_id = req.body.user_id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
 
-    var daliy_papers = [];
-    DaliyPaperSettings.forEach(function(e){
-        console.log("eeeee:"+e);
-        var t = JSON.parse(e);
-        console.log("ttttt:"+t);
-        daliy_papers.push(t);
-    });
+
     console.log(req.body);
-    console.log(daliy_papers);
+
 
     User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
         console.log(user);
+
+        var daliy_papers = [];
+        DaliyPaperSettings.forEach(function(e){
+            console.log("eeeee:"+e);
+            var t = JSON.parse(e);
+            console.log("ttttt:"+t);
+            daliy_papers.push(t);
+        });
+        console.log(daliy_papers);
 
         if (user.daliy_paper) {
             user.daliy_paper = daliy_papers;
