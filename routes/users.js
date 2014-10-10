@@ -403,15 +403,13 @@ exports.setYourVoiceSettings = function (req, res) {
     var user_id = req.body.user_id;
     var type = req.body.type;
 
-    YourVoice.getIdsByType(type, function(err, ids){
+    YourVoice.getIdsByType(type, user_id, function (err, ids) {
         User.getOne(user_id, function (err, user) {
             if (err) {
                 return res.json({flag: "fail", content: 1001});
             }
 
-            if (user.your_voice) {
-                user.your_voice = ids;
-            }
+            user.your_voice = ids;
 
             User.update(user, function (err) {
                 if (err) {
@@ -432,7 +430,17 @@ exports.getYourVoiceSettings = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        res.json({flag: "success", content: user.your_voice});
+        var query = {_id: {'$in': user.your_voice}};
+        console.log(user.your_voice);
+        YourVoice.getQuery(query, function (err, youVoices) {
+            if (err) {
+                return res.json({flag: "fail", content: 1001});
+            }
+
+            console.log(youVoices);
+
+            res.json({flag: "success", content: youVoices});
+        });
     });
 };
 
