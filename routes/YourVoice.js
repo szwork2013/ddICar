@@ -102,9 +102,10 @@ exports.getByType = function (req, res) {
 
 ////////////////  iOS ////////////////
 exports.uploadMyVoice = function (req, res) {
+    console.log(req.body);
+    console.log(req.files);
     var audio = req.files["audio"].name;
     var voice_id = req.body.voice_id;
-    console.log(req.body);
 
     if (req.files["audio"]) {
         switch (req.files["audio"].type) {
