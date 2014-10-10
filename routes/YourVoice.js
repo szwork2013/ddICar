@@ -102,9 +102,9 @@ exports.getByType = function (req, res) {
 
 ////////////////  iOS ////////////////
 exports.uploadMyVoice = function (req, res) {
-    var user_id = req.body.user_id;
     var audio = req.files["audio"].name;
     var voice_id = req.body.voice_id;
+    console.log(req.body);
 
     if (req.files["audio"]) {
         switch (req.files["audio"].type) {
@@ -124,6 +124,8 @@ exports.uploadMyVoice = function (req, res) {
         fs.renameSync(req.files["audio"].path, target_path);
 
         youVoice.audioFileId = audio;
+
+        console.log(youVoice);
 
         YourVoice.update(youVoice,function(err){
             res.json({flag: "success", content: 3001});
