@@ -7,6 +7,7 @@ var request = require('request');
 var settings = require('../settings');
 var DaliyPaperType = require('../models/DaliyPaperType');
 var DaliyPaperSubType = require('../models/DaliyPaperSubType');
+var YourVoice = require('./YourVoice');
 
 exports.putUser = function (req, res) {
     var user_id = req.body.user_id;
@@ -400,23 +401,25 @@ exports.getYourVoice = function (req, res) {
 
 exports.setYourVoiceSettings = function (req, res) {
     var user_id = req.body.user_id;
-    var YourVoiceSettings = req.body.YourVoiceSettings;
+    var type = req.body.type;
 
-    User.getOne(user_id, function (err, user) {
-        if (err) {
-            return res.json({flag: "fail", content: 1001});
-        }
-
-        if (user.your_voice) {
-            user.your_voice = YourVoiceSettings;
-        }
-
-        User.update(user, function (err) {
+    YourVoice.getIdsByType(type, function(err, ids){
+        User.getOne(user_id, function (err, user) {
             if (err) {
                 return res.json({flag: "fail", content: 1001});
             }
 
-            res.json({flag: "success", content: 3001});//修改成功
+            if (user.your_voice) {
+                user.your_voice = ids;
+            }
+
+            User.update(user, function (err) {
+                if (err) {
+                    return res.json({flag: "fail", content: 1001});
+                }
+
+                res.json({flag: "success", content: 3001});//修改成功
+            });
         });
     });
 };

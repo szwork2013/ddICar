@@ -5,7 +5,9 @@ var YourVoice = require('../models/YourVoice');
 var uuid = require('node-uuid');
 var fs = require('fs');
 var YourVoiceType = require('../models/YourVoiceType');
+var userYourVoice = require('../models/userYourVoice');
 var backpage = "/admins/yourVoice/content/showAll";
+var User = require('../models/users');
 
 exports.uploadSysVoice = function(req, res){
     var type = req.body.type;
@@ -84,7 +86,7 @@ exports.getByType = function(req, res){
             type = "男神";
             break;
         case "nvshen":
-            type = "男神";
+            type = "女神";
             break;
     }
 
@@ -100,6 +102,7 @@ exports.getByType = function(req, res){
 
 ////////////////  iOS ////////////////
 exports.uploadMyVoice = function(req, res){
+    var user_id = req.body.user_id;
     var content = req.body.content;
     var audio = req.files["audio"].name;
 
@@ -117,7 +120,7 @@ exports.uploadMyVoice = function(req, res){
         uploadDate:new Date()
     });
 
-    newYourVoice.save(function(err){
+    newYourVoice.save(function(err, yourVoice){
         if(err){
             return res.json({flag:"fail",content:1001});
         }
@@ -126,6 +129,53 @@ exports.uploadMyVoice = function(req, res){
         // 使用同步方式重命名一个文件
         fs.renameSync(req.files["audio"].path, target_path);
 
-        res.json({flag:"success",content:3001});
+        var newUserYourVoice = new userYourVoice({
+            user_id:user_id,
+            your_voice_id:yourVoice._id
+        });
+
+        newUserYourVoice.save(function(err,userYourVoice){
+            if(err){
+                return res.json({flag:"fail",content:1001});
+            }
+
+            res.json({flag:"success",content:3001});
+        });
+    });
+};
+
+exports.setMyVoice = function(req, res){
+    var user_id = req.body.user_id;
+    var type = req.body.type;
+
+    YourVoice.getByType(type,function(err, yourVoices){
+        if(err){
+            return res.json({flag:"fail",content:1001});
+        }
+
+        var ids = [];
+        yourVoices.forEach(function(e){
+            ids.push(e._id);
+        });
+
+
+
+        res.json({flag:"success",content:yourVoices});
+    });
+};
+
+
+exports.getIdsByType = function(type,callback){
+    YourVoice.getIdsByType(type,function(err, yourVoices){
+        if(err){
+            return res.json({flag:"fail",content:1001});
+        }
+
+        var ids = [];
+        yourVoices.forEach(function(e){
+            ids.push(e._id);
+        });
+
+        callback(err,ids);
     });
 };
