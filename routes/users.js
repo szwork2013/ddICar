@@ -256,13 +256,15 @@ exports.getDaliyPaperSettings = function (req, res) {
         }
 
         var ids = [];
-        user.daliy_paper.forEach(function (e) {
-            var _t = {
-                id: e.id,
-                percent: e.percent
-            };
-            ids.push(_t);
-        });
+        if (user.daliy_paper) {
+            user.daliy_paper.forEach(function (e) {
+                var _t = {
+                    id: e.id,
+                    percent: e.percent
+                };
+                ids.push(_t);
+            });
+        }
 
         DaliyPaperType.geSome(ids, function (err, result) {
             if (err) {
