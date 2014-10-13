@@ -115,6 +115,9 @@ exports.uploadMyVoice = function (req, res) {
             case "audio/AMR":
                 audio = uuid.v1() + ".amr";
                 break;
+            case "audio/wav":
+                audio = uuid.v1() + ".wav";
+                break;
         }
     }
 

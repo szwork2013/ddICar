@@ -34,13 +34,6 @@ exports.sendWarning = function (req, res) {
             );
         });
     });
-
-    /*getWarnings(function(err, warnings){
-        warnings.forEach(function(e){
-
-
-        });
-    });*/
 };
 
 exports.getWarningList = function(req, res){
@@ -53,14 +46,6 @@ exports.getWarningList = function(req, res){
             if(err){
                 return res.json({flag:'fail', content:1001});
             }
-
-            /*var warnings = [];
-            for(var i =0;i<rows.length;i++){
-                console.log(rows[i]["obd_faultcodelist"]);
-                var warning = {};
-                warning["code"] = rows[i]["obd_faultcodelist"];
-                warnings.push(warning);
-            }*/
 
             var warnings = [];
             rows.forEach(function(e){
