@@ -12,7 +12,7 @@ function User(user) {
         intro: "这个人还没有写简介，懒死了",
         deviceSN: ""
     };
-    this.daliy_paper = {};
+    this.daliy_paper = [];
     this.your_voice = {
         type: "",
         ids: []
