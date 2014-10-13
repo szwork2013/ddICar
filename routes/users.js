@@ -257,9 +257,9 @@ exports.getDaliyPaperSettings = function (req, res) {
 
         var ids = [];
         console.log(user.daliy_paper);
-        console.log(user.daliy_paper.length);
+        console.log(typeof (user.daliy_paper).length);
 
-        if (jQuery.isEmptyObject(user.daliy_paper)) {
+        if (user.daliy_paper != {}) {
             user.daliy_paper.forEach(function (e) {
                 var _t = {
                     id: e.id,
