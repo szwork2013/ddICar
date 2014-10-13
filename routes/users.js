@@ -256,6 +256,8 @@ exports.getDaliyPaperSettings = function (req, res) {
         }
 
         var ids = [];
+        console.log(user.daliy_paper);
+        console.log(user.daliy_paper.length);
         if (user.daliy_paper.length != 0) {
             user.daliy_paper.forEach(function (e) {
                 var _t = {
