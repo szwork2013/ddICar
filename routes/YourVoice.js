@@ -136,6 +136,10 @@ exports.uploadMyVoice = function (req, res) {
         console.log(youVoice);
 
         YourVoice.update(youVoice,function(err){
+            if(err){
+                return json({flag: "fail", content: 1001});
+            }
+            console.log(err);
             res.json({flag: "success", content: 3001});
         });
     });
