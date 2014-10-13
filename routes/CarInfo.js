@@ -56,3 +56,53 @@ exports.getStatus = function(req, res){
         })
     })
 };
+
+exports.sendStatus = function(req, res){
+    User.getBydeviceSN(req.body.deviceSN, function(err,user){
+        var carStatus = req.body.carStatus;
+
+        request(
+            { method: 'POST',
+                uri: settings.hxURI + '/messages',
+                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + req.session.access_token},
+                body: JSON.stringify({
+                    "target_type": "users", //or chatgroups
+                    "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
+                    "msg": {
+                        "type": "txt",
+                        "msg": {type:carStatus,content:carStatus} //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
+                    },
+                    "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
+                })
+            }
+            , function (error, response, body) {
+                res.json({flag:'success', content:"success"});
+            }
+        );
+    })
+};
+
+exports.sendDrivingBehavior = function(req, res){
+    User.getBydeviceSN(req.body.deviceSN, function(err,user){
+        var DrivingBehavior = req.body.DrivingBehavior;
+
+        request(
+            { method: 'POST',
+                uri: settings.hxURI + '/messages',
+                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + req.session.access_token},
+                body: JSON.stringify({
+                    "target_type": "users", //or chatgroups
+                    "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
+                    "msg": {
+                        "type": "txt",
+                        "msg": {type:DrivingBehavior,content:DrivingBehavior} //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
+                    },
+                    "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
+                })
+            }
+            , function (error, response, body) {
+                res.json({flag:'success', content:"success"});
+            }
+        );
+    })
+};

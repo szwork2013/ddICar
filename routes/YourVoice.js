@@ -138,26 +138,6 @@ exports.uploadMyVoice = function (req, res) {
     });
 };
 
-exports.setMyVoice = function (req, res) {
-    var user_id = req.body.user_id;
-    var type = req.body.type;
-
-    YourVoice.getByType(type, function (err, yourVoices) {
-        if (err) {
-            return res.json({flag: "fail", content: 1001});
-        }
-
-        var ids = [];
-        yourVoices.forEach(function (e) {
-            ids.push(e._id);
-        });
-
-
-        res.json({flag: "success", content: yourVoices});
-    });
-};
-
-
 exports.getIdsByType = function (type, user_id, callback) {
     if (type == "myVoice") {
         YourVoice.getByType(user_id, function (err, yourVoices) {
@@ -166,31 +146,17 @@ exports.getIdsByType = function (type, user_id, callback) {
             }
 
             if (yourVoices.length == 0) {
-                YourVoice.getByType(type, function (err, _yourVoices) {
+                YourVoice.cloneToMyVoice(type, function (err, ids) {
                     if (err) {
-                        return res.json({flag: "fail", content: 1001});
+                        return callback(err);
                     }
-
-                    var ids = [];
-                    _yourVoices.forEach(function (e) {
-                        var newYouVoice = new YourVoice({
-                            audioFileId: e.audioFileId,
-                            type: user_id,
-                            content: e.content,
-                            uploadDate: new Date()
-                        });
-
-                        newYouVoice.save(function (err, youVoice) {
-                            ids.push(youVoice._id);
-                        });
-                    });
 
                     callback(err, ids);
                 });
             } else {
                 YourVoice.getByType(user_id, function (err, yourVoices) {
                     if (err) {
-                        callback(err);
+                        return callback(err);
                     }
 
                     var ids = [];
@@ -227,5 +193,30 @@ exports.getQuery = function (query, callback) {
         }
 
         callback(null, yourVoices);
+    });
+};
+
+
+exports.cloneToMyVoice = function (type, user_id, callback) {
+    YourVoice.getByType(type, function (err, yourVoices) {
+        if (err) {
+            return callback(err);
+        }
+
+        var ids = [];
+        yourVoices.forEach(function (e) {
+            var newYouVoice = new YourVoice({
+                audioFileId: e.audioFileId,
+                type: user_id,
+                content: e.content,
+                uploadDate: new Date()
+            });
+
+            newYouVoice.save(function (err, youVoice) {
+                ids.push(youVoice._id);
+            });
+        });
+
+        callback(err, ids);
     });
 };

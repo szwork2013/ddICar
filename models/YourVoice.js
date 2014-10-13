@@ -4,7 +4,7 @@
 var mongodbPool = require('./db');
 var ObjectID = require('mongodb').ObjectID;
 
-function YourVoice(yourVoice){
+function YourVoice(yourVoice) {
     this.audioFileId = yourVoice.audioFileId;
     this.type = yourVoice.type;
     this.content = yourVoice.content;
@@ -13,48 +13,48 @@ function YourVoice(yourVoice){
 
 module.exports = YourVoice;
 
-YourVoice.prototype.save = function(callback){
+YourVoice.prototype.save = function (callback) {
     var yourVoice = {
-        audioFileId:this.audioFileId,
-        type:this.type,
-        content:this.content,
-        uploadDate:this.uploadDate
+        audioFileId: this.audioFileId,
+        type: this.type,
+        content: this.content,
+        uploadDate: this.uploadDate
     };
-    mongodbPool.acquire(function(err,db){
-        if(err){
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
-        db.collection('YourVoice',function(err,collection){
-            if(err){
+        db.collection('YourVoice', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
-            collection.insert(yourVoice,{w:1},function(err,yourVoice){
+            collection.insert(yourVoice, {w: 1}, function (err, yourVoice) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
-                callback(null,yourVoice[0]);
+                callback(null, yourVoice[0]);
             });
         });
     });
 };
 
-YourVoice.update = function(yourVoice, callback){
-    mongodbPool.acquire(function(err, db){
-        if(err){
+YourVoice.update = function (yourVoice, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('YourVoice',function(err, collection){
-            if(err){
+        db.collection('YourVoice', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.update({'_id':YourVoice._id},{$set:YourVoice},{safe:true},function(err){
+            collection.update({'_id': YourVoice._id}, {$set: YourVoice}, {safe: true}, function (err) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
@@ -64,21 +64,21 @@ YourVoice.update = function(yourVoice, callback){
     });
 };
 
-YourVoice.getAll = function(callback){
-    mongodbPool.acquire(function(err, db){
-        if(err){
+YourVoice.getAll = function (callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('YourVoice', function(err, collection){
-            if(err){
+        db.collection('YourVoice', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.find().sort().toArray(function(err, docs){
+            collection.find().sort().toArray(function (err, docs) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
@@ -88,25 +88,25 @@ YourVoice.getAll = function(callback){
     });
 };
 
-YourVoice.getByType = function(type,callback){
-    mongodbPool.acquire(function(err, db){
-        if(err){
+YourVoice.getByType = function (type, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('YourVoice', function(err, collection){
-            if(err){
+        db.collection('YourVoice', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
             var query = {
-                type:type
+                type: type
             };
 
-            collection.find(query).sort().toArray(function(err, docs){
+            collection.find(query).sort().toArray(function (err, docs) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
@@ -116,21 +116,21 @@ YourVoice.getByType = function(type,callback){
     });
 };
 
-YourVoice.getOne = function(id, callback){
-    mongodbPool.acquire(function(err, db){
-        if(err){
+YourVoice.getOne = function (id, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        db.collection('YourVoice', function(err, collection){
-            if(err){
+        db.collection('YourVoice', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.findOne({_id:ObjectID(id)}, function(err, doc){
+            collection.findOne({_id: ObjectID(id)}, function (err, doc) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
@@ -140,49 +140,49 @@ YourVoice.getOne = function(id, callback){
     });
 };
 
-YourVoice.delete = function(id, callback){
-  mongodbPool.acquire(function(err, db){
-      if(err){
-          return callback(err);
-      }
-
-      db.collection('YourVoice', function(err, collection){
-        if(err){
-            mongodbPool.release(db);
+YourVoice.delete = function (id, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
             return callback(err);
         }
 
-        collection.remove({_id:ObjectID(id)}, function(err){
-            mongodbPool.release(db);
-            if(err){
-                return callback(err);
-            }
-
-            callback(err);
-        });
-      });
-  });
-};
-
-YourVoice.getQuery = function(query,callback){
-    mongodbPool.acquire(function(err,db){
-        if(err){
-            return callback(err);
-        }
-
-        db.collection('YourVoice',function(err,collection){
-            if(err){
+        db.collection('YourVoice', function (err, collection) {
+            if (err) {
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.find(query).sort().toArray(function(err,docs){
+            collection.remove({_id: ObjectID(id)}, function (err) {
                 mongodbPool.release(db);
-                if(err){
+                if (err) {
                     return callback(err);
                 }
 
-                callback(err,docs);
+                callback(err);
+            });
+        });
+    });
+};
+
+YourVoice.getQuery = function (query, callback) {
+    mongodbPool.acquire(function (err, db) {
+        if (err) {
+            return callback(err);
+        }
+
+        db.collection('YourVoice', function (err, collection) {
+            if (err) {
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.find(query).sort().toArray(function (err, docs) {
+                mongodbPool.release(db);
+                if (err) {
+                    return callback(err);
+                }
+
+                callback(err, docs);
             });
         });
     });

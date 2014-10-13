@@ -117,32 +117,38 @@ exports.reg = function (req, res) {
             req.session.user = user;
             req.session.user_id = user._id;
 
-            // 注册环信用户
-            request(
-                { method: 'POST',
-                    uri: settings.hxURI + '/users',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({"username": user.info.phone, "password": user.info.password}
-                    )
-                }
-                , function (error, response, body) {
-                    console.log('error: ' + response.statusCode);
-                    console.log(body);
+            YourVoice.cloneToMyVoice("nanshen", user._id.toString(), function (err, ids) {
+                user.your_voice = {type: "MyVoice", ids: ids};
+                User.update(user, function (err) {
+                    if (err) {
+                        return callback(err);
+                    }
 
-                    var newUserLogin = new SingleLogin({
-                        userID: user._id,
-                        sessionID: req.sessionID
-                    });
-
-                    newUserLogin.save(function (err) {
-                        if (err) {
-                            return res.json({flag: "fail", content: 1001}); //sysErr
-                        } else {
-                            return res.json({flag: "success", content: user});
+                    // 注册环信用户
+                    request(
+                        { method: 'POST',
+                            uri: settings.hxURI + '/users',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({"username": user.info.phone, "password": user.info.password}
+                            )
                         }
-                    });
-                }
-            );
+                        , function (error, response, body) {
+                            var newUserLogin = new SingleLogin({
+                                userID: user._id,
+                                sessionID: req.sessionID
+                            });
+
+                            newUserLogin.save(function (err) {
+                                if (err) {
+                                    return res.json({flag: "fail", content: 1001}); //sysErr
+                                } else {
+                                    return res.json({flag: "success", content: user});
+                                }
+                            });
+                        }
+                    );
+                });
+            });
         });
     });
 };
@@ -272,15 +278,13 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
     var user_id = req.params["user_id"],
         type_id = req.params["type_id"];
 
-    console.log("aa");
     User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
-        console.log("user" + user);
+
         user.daliy_paper.forEach(function (e) {
 
-            console.log("e" + e);
             if (type_id == e.id) {
                 var result = [];
                 DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
@@ -386,16 +390,15 @@ exports.getAppSettings = function (req, res) {
     });
 };
 
-exports.getYourVoice = function (req, res) {
+exports.getYourVoiceChooseType = function (req, res) {
     var user_id = req.body.id;
-    var type = req.body.type;
 
     User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        res.json({flag: "success", content: user.settings});
+        res.json({flag: "success", content: user.your_voice.type});
     });
 };
 
@@ -409,7 +412,7 @@ exports.setYourVoiceSettings = function (req, res) {
                 return res.json({flag: "fail", content: 1001});
             }
 
-            user.your_voice = ids;
+            user.your_voice = {type: type, ids: ids};
 
             User.update(user, function (err) {
                 if (err) {
@@ -430,7 +433,7 @@ exports.getYourVoiceSettings = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        var query = {_id: {'$in': user.your_voice}};
+        var query = {_id: {'$in': user.your_voice.ids}};
         console.log(user.your_voice);
         YourVoice.getQuery(query, function (err, youVoices) {
             if (err) {
