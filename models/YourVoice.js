@@ -52,7 +52,7 @@ YourVoice.update = function (yourVoice, callback) {
                 return callback(err);
             }
 
-            collection.update({'_id': YourVoice._id}, {$set: YourVoice}, {safe: true}, function (err) {
+            collection.update({'_id': YourVoice._id}, {$set: yourVoice}, {safe: true}, function (err) {
                 mongodbPool.release(db);
                 if (err) {
                     return callback(err);

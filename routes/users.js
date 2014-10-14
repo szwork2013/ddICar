@@ -8,6 +8,7 @@ var settings = require('../settings');
 var DaliyPaperType = require('../models/DaliyPaperType');
 var DaliyPaperSubType = require('../models/DaliyPaperSubType');
 var YourVoice = require('./YourVoice');
+var DaliyPaperTypeBLL = require('./DaliyPaperType');
 
 exports.putUser = function (req, res) {
     var user_id = req.body.user_id;
@@ -119,34 +120,39 @@ exports.reg = function (req, res) {
 
             YourVoice.cloneToMyVoice("nanshen", user._id.toString(), function (err, ids) {
                 user.your_voice = {type: "MyVoice", ids: ids};
-                User.update(user, function (err) {
-                    if (err) {
-                        return callback(err);
-                    }
 
-                    // 注册环信用户
-                    request(
-                        { method: 'POST',
-                            uri: settings.hxURI + '/users',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({"username": user.info.phone, "password": user.info.password}
-                            )
-                        }
-                        , function (error, response, body) {
-                            var newUserLogin = new SingleLogin({
-                                userID: user._id,
-                                sessionID: req.sessionID
-                            });
+                DaliyPaperTypeBLL.getDaliyPeperDefaultSettings(function (err, defaultSettings) {
+                    user.daliy_paper = defaultSettings;
 
-                            newUserLogin.save(function (err) {
-                                if (err) {
-                                    return res.json({flag: "fail", content: 1001}); //sysErr
-                                } else {
-                                    return res.json({flag: "success", content: user});
-                                }
-                            });
+                    User.update(user, function (err) {
+                        if (err) {
+                            return callback(err);
                         }
-                    );
+
+                        // 注册环信用户
+                        request(
+                            { method: 'POST',
+                                uri: settings.hxURI + '/users',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({"username": user.info.phone, "password": user.info.password}
+                                )
+                            }
+                            , function (error, response, body) {
+                                var newUserLogin = new SingleLogin({
+                                    userID: user._id,
+                                    sessionID: req.sessionID
+                                });
+
+                                newUserLogin.save(function (err) {
+                                    if (err) {
+                                        return res.json({flag: "fail", content: 1001}); //sysErr
+                                    } else {
+                                        return res.json({flag: "success", content: user});
+                                    }
+                                });
+                            }
+                        );
+                    });
                 });
             });
         });
@@ -214,24 +220,16 @@ exports.setDaliyPaperSettings = function (req, res) {
     var user_id = req.body.user_id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
 
-
-    console.log(req.body);
-
-
     User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
-        console.log(user);
 
         var daliy_papers = [];
         DaliyPaperSettings.forEach(function (e) {
-            console.log("eeeee:" + e);
             var t = JSON.parse(e);
-            console.log("ttttt:" + t);
             daliy_papers.push(t);
         });
-        console.log(daliy_papers);
 
         if (user.daliy_paper) {
             user.daliy_paper = daliy_papers;
@@ -256,8 +254,6 @@ exports.getDaliyPaperSettings = function (req, res) {
         }
 
         var ids = [];
-        console.log(user.daliy_paper);
-        console.log(user.daliy_paper.length);
 
         if (user.daliy_paper.length != 0) {
             user.daliy_paper.forEach(function (e) {
@@ -327,7 +323,7 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
                     })
                 }
             });
-        }else{
+        } else {
             var result = [];
             DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
                 if (err) {

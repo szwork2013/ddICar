@@ -258,3 +258,25 @@ exports.level2_type = function(req, res){
         }
     });
 };
+
+
+
+exports.getDaliyPeperDefaultSettings = function(){
+    DaliyPaperType.getAll(function (err, daliyPaperTypes) {
+        if (err) {
+            return callback(err);
+        }
+
+        var ids = [];
+        daliyPaperTypes.forEach(function (e) {
+            var item = {
+                id: e._id,
+                percent:"0",
+                child:[]
+            };
+            ids.push(item);
+        });
+
+        callback(err, ids);
+    });
+};

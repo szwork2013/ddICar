@@ -85,3 +85,6 @@ exports.getType = function(req, res){
         res.json({flag:'success',content:youVoiceTypes});
     })
 };
+
+
+
