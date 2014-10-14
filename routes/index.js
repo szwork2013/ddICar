@@ -46,7 +46,6 @@ router.get('/users/getDaliyPaperSubTypeSettings/:user_id/:type_id', User.getDali
 
 router.post('/users/setYourVoiceSettings', User.checkLogin, User.setYourVoiceSettings); // 保存你的声音设置
 router.get('/users/getYourVoiceSettings/:id', User.checkLogin, User.getYourVoiceSettings); // 获取你的声音设置
-router.get('/users/getYourVoiceChooseType/:id', User.checkLogin, User.getYourVoiceChooseType);
 
 router.post('/users/setAppSettings', User.checkLogin, User.setAppSettings); // 保存app设置
 router.get('/users/getAppSettings/:id', User.checkLogin, User.getAppSettings); // 获取日报设置

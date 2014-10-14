@@ -288,44 +288,68 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        user.daliy_paper.forEach(function (e) {
+        if (user.daliy_paper != 0) {
+            user.daliy_paper.forEach(function (e) {
 
-            if (type_id == e.id) {
-                var result = [];
-                DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
-                    if (err) {
-                        return res.json({flag: "fail", content: 1001});
-                    }
+                if (type_id == e.id) {
+                    var result = [];
+                    DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
+                        if (err) {
+                            return res.json({flag: "fail", content: 1001});
+                        }
 
-                    console.log(daliyPaperSubTypes);
+                        console.log(daliyPaperSubTypes);
 
-                    daliyPaperSubTypes.forEach(function (_e) {
-                        var item = {
-                            "_id": _e._id,
-                            "name": _e.name,
-                            "pic": _e.pic,
-                            "selected": false
-                        };
-                        if (e.child) {
-                            for (var i = 0; i < e.child.length; i++) {
+                        daliyPaperSubTypes.forEach(function (_e) {
+                            var item = {
+                                "_id": _e._id,
+                                "name": _e.name,
+                                "pic": _e.pic,
+                                "selected": false
+                            };
+                            if (e.child) {
+                                for (var i = 0; i < e.child.length; i++) {
 
-                                if (e.child[i] == _e._id) {
-                                    item = {
-                                        "_id": _e._id,
-                                        "name": _e.name,
-                                        "pic": _e.pic,
-                                        "selected": true
-                                    };
+                                    if (e.child[i] == _e._id) {
+                                        item = {
+                                            "_id": _e._id,
+                                            "name": _e.name,
+                                            "pic": _e.pic,
+                                            "selected": true
+                                        };
+                                    }
                                 }
                             }
-                        }
-                        result.push(item);
-                    });
+                            result.push(item);
+                        });
 
-                    res.json({flag: "success", content: result});
-                })
-            }
-        });
+                        res.json({flag: "success", content: result});
+                    })
+                }
+            });
+        }else{
+            var result = [];
+            DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
+                if (err) {
+                    return res.json({flag: "fail", content: 1001});
+                }
+
+                console.log(daliyPaperSubTypes);
+
+                daliyPaperSubTypes.forEach(function (_e) {
+                    var item = {
+                        "_id": _e._id,
+                        "name": _e.name,
+                        "pic": _e.pic,
+                        "selected": false
+                    };
+
+                    result.push(item);
+                });
+
+                res.json({flag: "success", content: result});
+            })
+        }
     })
 };
 
