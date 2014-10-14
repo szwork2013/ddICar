@@ -261,7 +261,7 @@ exports.level2_type = function(req, res){
 
 
 
-exports.getDaliyPeperDefaultSettings = function(){
+exports.getDaliyPeperDefaultSettings = function(callback){
     DaliyPaperType.getAll(function (err, daliyPaperTypes) {
         if (err) {
             return callback(err);
