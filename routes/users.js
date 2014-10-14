@@ -105,26 +105,30 @@ exports.reg = function (req, res) {
         password: password
     });
 
+    console.log("1");
     User.getByPhone(phone, function (err, user) {
         if (user) {
             return res.json({flag: "fail", content: 2001});//用户已存在
         }
-
+        console.log("2");
         newUser.save(function (err, user) {
             if (err) {
                 return res.json({flag: "fail", content: 1001}); //sysErr
             }
-
+            console.log("3");
             req.session.user = user;
             req.session.user_id = user._id;
 
             YourVoice.cloneToMyVoice("nanshen", user._id.toString(), function (err, ids) {
+                console.log("4");
                 user.your_voice = {type: "MyVoice", ids: ids};
 
                 DaliyPaperTypeBLL.getDaliyPeperDefaultSettings(function (err, defaultSettings) {
+                    console.log("5");
                     user.daliy_paper = defaultSettings;
 
                     User.update(user, function (err) {
+                        console.log("6");
                         if (err) {
                             return callback(err);
                         }
