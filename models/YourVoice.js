@@ -51,7 +51,7 @@ YourVoice.update = function (yourVoice, callback) {
                 mongodbPool.release(db);
                 return callback(err);
             }
-            
+
             collection.update({'_id': yourVoice._id}, {$set: yourVoice}, {safe: true}, function (err) {
                 mongodbPool.release(db);
                 if (err) {
