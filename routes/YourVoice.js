@@ -84,14 +84,6 @@ exports.showAll = function (req, res) {
 
 exports.getByType = function (req, res) {
     var type = req.params['type'];
-    switch (type) {
-        case "nanshen":
-            type = "男神";
-            break;
-        case "nvshen":
-            type = "女神";
-            break;
-    }
 
     YourVoice.getByType(type, function (err, yourVoices) {
         if (err) {
