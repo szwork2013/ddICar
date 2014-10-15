@@ -237,12 +237,14 @@ exports.download = function (req, res) {
         var archive = new zip();
 
 
+        console.log(files);
         archive.addFiles(files,
             function (err) {
                 if (err) return console.log("err while adding files", err);
 
                 var buff = archive.toBuffer();
 
+                if (fs.existsSync("./public/audio/yourVoice/" + type + ".zip") === true) fs.unlinkSync("./public/audio/yourVoice/" + type + ".zip");
                 fs.writeFile("./public/audio/yourVoice/" + type + ".zip", buff, function () {
                     console.log("Finished");
                     res.json({flag: "success", content: "./public/audio/yourVoice/" + type + ".zip"});
