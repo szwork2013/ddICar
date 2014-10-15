@@ -5,9 +5,11 @@ var mysql = require('../models/db_mySql');
 var request = require('request');
 var settings = require('../settings');
 var User = require('../models/users');
+var OBDErrorCode = require('../models/OBDErrorCode');
+var YourVoice = require('./YourVoice');
 
-function getCarStatus(deviceSN,callback){
-    mysql.getConnection(function(err,connection){
+function getCarStatus(deviceSN, callback) {
+    mysql.getConnection(function (err, connection) {
         connection.query('select `obd_LoadValue` as `负荷计算值`,' +
             '`obd_CoolTemper` as `发动机冷却液温度`,' +
             '`obd_EngineRPM` as `发动机转速`,' +
@@ -42,48 +44,57 @@ function getCarStatus(deviceSN,callback){
             '`obd_ABSMal_1_` as `刹车系统故障_1`,' +
             '`obd_SRSMal_0_` as `气囊系统故障_0`,' +
             '`obd_SRSMal_1_` as `气囊系统故障_1`' +
-            ' from `obd_db_test`.`obd_data_luo_lastshow` where `deviceSN` = '+deviceSN+' limit 0,1000',function(err,rows){
-            callback(err,rows[0]);
+            ' from `obd_db_test`.`obd_data_luo_lastshow` where `deviceSN` = ' + deviceSN + ' limit 0,1000', function (err, rows) {
+            callback(err, rows[0]);
         });
     });
 }
 
-exports.getStatus = function(req, res){
-    User.getOne(req.params['id'],function(err,user){
-        getCarStatus(user.info.deviceSN, function(err, status){
+exports.getStatus = function (req, res) {
+    User.getOne(req.params['id'], function (err, user) {
+        getCarStatus(user.info.deviceSN, function (err, status) {
             console.log(status);
             res.json(status);
         })
     })
 };
 
-exports.sendStatus = function(req, res){
-    User.getBydeviceSN(req.body.deviceSN, function(err,user){
-        var carStatus = req.body.carStatus;
+exports.sendStatus = function (req, res) {
+    User.getBydeviceSN(req.body.deviceSN, function (err, user) {
+        OBDErrorCode.getOneByCode(req.body.carStatus, function (err, obdErrorCode) {
+            var query = {type: user.your_voice.type, content: obdErrorCode.mean};
+            YourVoice.getQuery(query, function (err, yourVoice) {
+                request(
+                    { method: 'POST',
+                        uri: settings.hxURI + '/messages',
+                        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + req.session.access_token},
+                        body: JSON.stringify({
+                            "target_type": "users", //or chatgroups
+                            "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
+                            "msg": {
+                                "type": "txt",
+                                "msg": JSON.stringify({type: "carStatus", content: obdErrorCode.mean, code: obdErrorCode.code, audio: yourVoice.audioFileId }) //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
+                            },
+                            "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
+                        })
+                    }
+                    , function (error, response, body) {
+                        if (error) {
+                            console.log("环信：" + error);
+                        }
+                    }
+                );
 
-        request(
-            { method: 'POST',
-                uri: settings.hxURI + '/messages',
-                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + req.session.access_token},
-                body: JSON.stringify({
-                    "target_type": "users", //or chatgroups
-                    "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
-                    "msg": {
-                        "type": "txt",
-                        "msg": JSON.stringify({type:"carStatus",content:carStatus}) //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
-                    },
-                    "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
-                })
-            }
-            , function (error, response, body) {
-                res.json({flag:'success', content:"success"});
-            }
-        );
+                res.json({flag: 'success', content: "success"});
+            })
+        });
+
+
     })
 };
 
-exports.sendDrivingBehavior = function(req, res){
-    User.getBydeviceSN(req.body.deviceSN, function(err,user){
+exports.sendDrivingBehavior = function (req, res) {
+    User.getBydeviceSN(req.body.deviceSN, function (err, user) {
         var DrivingBehavior = req.body.DrivingBehavior;
 
         request(
@@ -95,13 +106,13 @@ exports.sendDrivingBehavior = function(req, res){
                     "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
                     "msg": {
                         "type": "txt",
-                        "msg": {type:DrivingBehavior,content:DrivingBehavior} //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
+                        "msg": JSON.stringify({type: "DrivingBehavior", content: DrivingBehavior}) //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
                     },
                     "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
                 })
             }
             , function (error, response, body) {
-                res.json({flag:'success', content:"success"});
+                res.json({flag: 'success', content: "success"});
             }
         );
     })

@@ -19,7 +19,9 @@ exports.uploadSysVoice = function (req, res) {
     }
 
     switch (req.files["audio"].type) {
-        case "audio/mpeg":
+        case "audio/m4a":
+            audioFileId = uuid.v1() + ".m4a";
+            break;
         case "audio/mp3":
             audioFileId = uuid.v1() + ".mp3";
             break;
