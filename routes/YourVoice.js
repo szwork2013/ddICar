@@ -10,6 +10,7 @@ var backpage = "/admins/yourVoice/content/showAll";
 var User = require('../models/users');
 
 exports.uploadSysVoice = function (req, res) {
+    console.log(req.files);
     var type = req.body.type;
     var content = req.body.content;
     var audioFileId = req.files["audio"].name;
@@ -19,7 +20,7 @@ exports.uploadSysVoice = function (req, res) {
     }
 
     switch (req.files["audio"].type) {
-        case "audio/m4a":
+        case "audio/x-m4a":
             audioFileId = uuid.v1() + ".m4a";
             break;
         case "audio/mp3":
