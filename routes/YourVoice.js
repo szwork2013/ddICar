@@ -236,7 +236,6 @@ exports.download = function (req, res) {
 
         var archive = new zip();
 
-
         console.log(files);
         archive.addFiles(files,
             function (err) {
@@ -245,9 +244,9 @@ exports.download = function (req, res) {
                 var buff = archive.toBuffer();
 
                 if (fs.existsSync("./public/audio/yourVoice/" + type + ".zip") === true) fs.unlinkSync("./public/audio/yourVoice/" + type + ".zip");
-                fs.writeFile("./public/audio/yourVoice/" + type + ".zip", buff, function () {
+                fs.writeFile("./public/audio/yourVoice/" + type + ".zip", buff, function (err) {
                     console.log("Finished");
-                    res.json({flag: "success", content: "./public/audio/yourVoice/" + type + ".zip"});
+                    res.json({flag: "success", content: "http://182.92.160.208:3000/audio/yourVoice/" + type + ".zip"});
                 });
             }
         )
