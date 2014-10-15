@@ -8,6 +8,7 @@ var YourVoiceType = require('../models/YourVoiceType');
 var userYourVoice = require('../models/userYourVoice');
 var backpage = "/admins/yourVoice/content/showAll";
 var User = require('../models/users');
+var zip = require("node-native-zip");
 
 exports.uploadSysVoice = function (req, res) {
     console.log(req.files);
@@ -130,8 +131,8 @@ exports.uploadMyVoice = function (req, res) {
 
         console.log(youVoice);
 
-        YourVoice.update(youVoice,function(err){
-            if(err){
+        YourVoice.update(youVoice, function (err) {
+            if (err) {
                 return json({flag: "fail", content: 1001});
             }
             console.log(err);
@@ -220,5 +221,34 @@ exports.cloneToMyVoice = function (type, user_id, callback) {
         });
 
         callback(err, ids);
+    });
+};
+
+exports.download = function (req, res) {
+    var type = req.params["type"];
+
+    YourVoice.getByType(type, function (err, yourVoices) {
+        var files = [];
+        yourVoices.forEach(function (e) {
+            var file = {name: e.audioFileId, path: "./public/audio/yourVoice/" + e.audioFileId}
+            files.push(file);
+        });
+
+        var archive = new zip();
+
+
+        archive.addFiles(files,
+            function (err) {
+                if (err) return console.log("err while adding files", err);
+
+                var buff = archive.toBuffer();
+
+                fs.writeFile("./public/audio/yourVoice/" + type + ".zip", buff, function () {
+                    console.log("Finished");
+                    res.json({flag: "success", content: "./public/audio/yourVoice/" + type + ".zip"});
+                });
+            }
+        )
+        ;
     });
 };

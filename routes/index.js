@@ -62,6 +62,7 @@ router.get('/daliyPaper/getLevel2Type/:type', User.checkLogin, DaliyPaperType.le
 router.get('/yourVoice/getByType/:type', User.checkLogin, YourVoice.getByType);  // 获取你的声音列表
 router.get('/yourVoice/getType', User.checkLogin, YourVoiceType.getType);  // 获取你的声音类型
 router.post('/yourVoice/uploadMyVoice', User.checkLogin, multipartMiddleware, YourVoice.uploadMyVoice); // 上传我的定制声音
+router.get('yourVoice/:type/download', User.checkLogin, YourVoice.download);
 
 /* 车机功能 */
 router.post('/users/sendWarning', hxMiddleWare.getToken, OBDWarning.sendWarning);
