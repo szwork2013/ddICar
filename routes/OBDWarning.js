@@ -6,6 +6,7 @@ var request = require('request');
 var settings = require('../settings');
 var User = require('../models/users');
 var ODBErrorCode = require('../models/odbErrorCode');
+var ODBErrorRecord = require('../models/odbErrorRecord');
 
 exports.sendWarning = function (req, res) {
     var deviceSN = req.body.deviceSN;
@@ -47,9 +48,26 @@ exports.getWarningList = function (req, res) {
                 return res.json({flag: 'fail', content: 1001});
             }
 
+            var query = {
+                deviceSN: e["deviceSN"],
+                obd_faultcodelist: e["obd_faultcodelist"],
+                gps_date: e["gps_date"],
+                gps_Longitude: e["gps_Longitude"],
+                gps_Latitude: e["gps_Latitude"],
+                update_time: e["update_time"]
+            };
+
+            ODBErrorRecord.getQuery(query, function (err, records) {
+                if (records.length == 0) {
+                    var odbErrorRecord = new odbErrorRecord(query);
+                    odbErrorRecord.save(function (err, doc) {
+                    });
+                }
+            });
+
             var warnings = [];
             rows.forEach(function (e) {
-                warnings.push(e["obd_faultcodelist"]);
+                warnings.push();
             });
 
             ODBErrorCode.getOneByCodes(warnings, function (err, odbErrorCodes) {

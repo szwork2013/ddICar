@@ -74,7 +74,6 @@ exports.update = function(req, res){
     var pic = req.files["pic"].name;
     var typeId = req.body.daliyPaperSubType;
     var audio;
-    var txt;
 
     if(req.files["pic"]){
         switch(req.files["pic"].type){

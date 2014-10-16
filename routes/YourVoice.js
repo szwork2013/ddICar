@@ -142,51 +142,55 @@ exports.uploadMyVoice = function (req, res) {
 };
 
 exports.getIdsByType = function (type, user_id, callback) {
-    if (type == "myVoice") {
-        YourVoice.getByType(user_id, function (err, yourVoices) {
-            if (err) {
-                callback(err);
-            }
+    YourVoice.getByType(user_id, function (err, yourVoices) {
+        if (err) {
+            return callback(err);
+        }
 
-            if (yourVoices.length == 0) {
-                YourVoice.cloneToMyVoice(type, function (err, ids) {
-                    if (err) {
-                        return callback(err);
-                    }
-
-                    callback(err, ids);
-                });
-            } else {
-                YourVoice.getByType(user_id, function (err, yourVoices) {
-                    if (err) {
-                        return callback(err);
-                    }
-
-                    var ids = [];
-                    yourVoices.forEach(function (e) {
-                        ids.push(e._id);
-                    });
-
-                    console.log("zhixingdaolezheli");
-
-                    callback(err, ids);
-                });
-            }
+        var ids = [];
+        yourVoices.forEach(function (e) {
+            ids.push(e._id);
         });
-    } else {
-        YourVoice.getByType(type, function (err, yourVoices) {
-            if (err) {
-                callback(err);
-            }
 
-            var ids = [];
-            yourVoices.forEach(function (e) {
-                ids.push(e._id);
-            });
+        console.log("zhixingdaolezheli");
 
-            callback(err, ids);
-        });
-    }
+        callback(err, ids);
+    });
+//    if (type == "myVoice") {
+//        YourVoice.getByType(user_id, function (err, yourVoices) {
+//            if (err) {
+//                callback(err);
+//            }
+//
+//            YourVoice.getByType(user_id, function (err, yourVoices) {
+//                if (err) {
+//                    return callback(err);
+//                }
+//
+//                var ids = [];
+//                yourVoices.forEach(function (e) {
+//                    ids.push(e._id);
+//                });
+//
+//                console.log("zhixingdaolezheli");
+//
+//                callback(err, ids);
+//            });
+//        });
+//    } else {
+//        YourVoice.getByType(type, function (err, yourVoices) {
+//            if (err) {
+//                callback(err);
+//            }
+//
+//            var ids = [];
+//            yourVoices.forEach(function (e) {
+//                ids.push(e._id);
+//            });
+//
+//            callback(err, ids);
+//        });
+//    }
 };
 
 exports.getQuery = function (query, callback) {
