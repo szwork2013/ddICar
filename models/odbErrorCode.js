@@ -4,15 +4,15 @@
 var mongodbPool = require('./db');
 var ObjectId = require('mongodb').ObjectID;
 
-function OBDErrorCode(obdErrorCode){
-    this.code = obdErrorCode.code;
-    this.mean = obdErrorCode.mean;
+function ODBErrorCode(odbErrorCode){
+    this.code = odbErrorCode.code;
+    this.mean = odbErrorCode.mean;
 }
 
-module.exports = OBDErrorCode;
+module.exports = ODBErrorCode;
 
-OBDErrorCode.prototype.save = function(callback){
-    var OBDErrorCode = {
+ODBErrorCode.prototype.save = function(callback){
+    var ODBErrorCode = {
         code:this.code,
         mean:this.mean
     };
@@ -22,13 +22,13 @@ OBDErrorCode.prototype.save = function(callback){
             return callback(err);
         }
 
-        db.collection('OBDErrorCode', function(err, collection){
+        db.collection('ODBErrorCode', function(err, collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.insert(OBDErrorCode,{w:1},function(err, doc){
+            collection.insert(ODBErrorCode,{w:1},function(err, doc){
                 mongodbPool.release(db);
                 if(err){
                     return callback(err);
@@ -40,13 +40,13 @@ OBDErrorCode.prototype.save = function(callback){
     });
 };
 
-OBDErrorCode.getOne = function(id, callback){
+ODBErrorCode.getOne = function(id, callback){
     mongodbPool.acquire(function(err, db){
         if(err){
             return callback(err);
         }
 
-        db.collection('OBDErrorCode', function(err, collection){
+        db.collection('ODBErrorCode', function(err, collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
@@ -63,13 +63,13 @@ OBDErrorCode.getOne = function(id, callback){
     });
 };
 
-OBDErrorCode.getOneByCode = function(code, callback){
+ODBErrorCode.getOneByCode = function(code, callback){
     mongodbPool.acquire(function(err, db){
         if(err){
             return callback(err);
         }
 
-        db.collection('OBDErrorCode', function(err, collection){
+        db.collection('ODBErrorCode', function(err, collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
@@ -86,13 +86,13 @@ OBDErrorCode.getOneByCode = function(code, callback){
     });
 };
 
-OBDErrorCode.getOneByCodes = function(codes, callback){
+ODBErrorCode.getOneByCodes = function(codes, callback){
     mongodbPool.acquire(function(err,db){
         if(err){
             return callback(err);
         }
 
-        db.collection('OBDErrorCode',function(err,collection){
+        db.collection('ODBErrorCode',function(err,collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
@@ -110,14 +110,14 @@ OBDErrorCode.getOneByCodes = function(codes, callback){
     });
 };
 
-OBDErrorCode.getAll = function(callback){
+ODBErrorCode.getAll = function(callback){
 
     mongodbPool.acquire(function(err,db){
         if(err){
             return callback(err);
         }
 
-        db.collection('OBDErrorCode',function(err,collection){
+        db.collection('ODBErrorCode',function(err,collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
@@ -135,13 +135,13 @@ OBDErrorCode.getAll = function(callback){
     });
 };
 
-OBDErrorCode.delete = function(id, callback){
+ODBErrorCode.delete = function(id, callback){
     mongodbPool.acquire(function(err, db){
         if(err){
             return callback(err);
         }
 
-        db.collection('OBDErrorCode', function(err, collection){
+        db.collection('ODBErrorCode', function(err, collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
@@ -158,19 +158,19 @@ OBDErrorCode.delete = function(id, callback){
     });
 };
 
-OBDErrorCode.update = function(OBDErrorCode, callback){
+ODBErrorCode.update = function(odbErrorCode, callback){
     mongodbPool.acquire(function(err,db){
         if(err){
             return callback(err);
         }
 
-        db.collection('OBDErrorCode',function(err,collection){
+        db.collection('ODBErrorCode',function(err,collection){
             if(err){
                 mongodbPool.release(db);
                 return callback(err);
             }
 
-            collection.update({_id:ObjectId(OBDErrorCode._id)},{$set:OBDErrorCode},{safe:true}, function(err){
+            collection.update({_id:ObjectId(odbErrorCode._id)},{$set:odbErrorCode},{safe:true}, function(err){
                 mongodbPool.release(db);
                 if(err){
                     return callback(err);

@@ -10,7 +10,7 @@ var DaliyPaperType = require('./DaliyPaperType');
 var YourVoice = require('./YourVoice');
 var DaliyPaper = require('./DaliyPaper');
 var YourVoiceType = require('./YourVoiceType');
-var OBDErrorCode = require('./OBDErrorCode');
+var ODBErrorCode = require('./odbErrorCode');
 
 var router = express.Router();
 
@@ -238,13 +238,13 @@ router.post('/yourVoice/content/add', multipartMiddleware, YourVoice.uploadSysVo
 
 router.get('/yourVoice/content/delete/:id', YourVoice.delete);
 
-router.post('/OBDErrorCode/update', OBDErrorCode.update);
+router.post('/OBDErrorCode/update', ODBErrorCode.update);
 
-router.get('/OBDErrorCode/showAll', OBDErrorCode.showAll);
+router.get('/OBDErrorCode/showAll', ODBErrorCode.showAll);
 
-router.post('/OBDErrorCode/add', OBDErrorCode.add);
+router.post('/OBDErrorCode/add', ODBErrorCode.add);
 
-router.get('/OBDErrorCode/delete/:id', OBDErrorCode.delete);
+router.get('/OBDErrorCode/delete/:id', ODBErrorCode.delete);
 
 
 function checkLogin(req, res, next){

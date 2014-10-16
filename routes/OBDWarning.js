@@ -5,14 +5,14 @@ var mysql = require('../models/db_mySql');
 var request = require('request');
 var settings = require('../settings');
 var User = require('../models/users');
-var OBDErrorCode = require('../models/OBDErrorCode');
+var ODBErrorCode = require('../models/odbErrorCode');
 
 exports.sendWarning = function (req, res) {
     var deviceSN = req.body.deviceSN;
     var faultcodelist = req.body.faultcodelist;
 
     User.getBydeviceSN(deviceSN, function (err, user) {
-        OBDErrorCode.getOneByCode(faultcodelist, function (err, obdErrorCode) {
+        ODBErrorCode.getOneByCode(faultcodelist, function (err, odbErrorCode) {
             request(
                 { method: 'POST',
                     uri: settings.hxURI + '/messages',
@@ -22,14 +22,14 @@ exports.sendWarning = function (req, res) {
                         "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
                         "msg": {
                             "type": "txt",
-                            "msg": JSON.stringify({type: "warning", content: obdErrorCode.mean}) //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
+                            "msg": JSON.stringify({type: "warning", content: odbErrorCode.mean}) //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
                         },
                         "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
                     })
                 }
                 , function (error, response, body) {
                     console.log(body);
-                    res.json({flag: 'success', content: obdErrorCode});
+                    res.json({flag: 'success', content: odbErrorCode});
                 }
             );
         });
@@ -52,8 +52,8 @@ exports.getWarningList = function (req, res) {
                 warnings.push(e["obd_faultcodelist"]);
             });
 
-            OBDErrorCode.getOneByCodes(warnings, function (err, obdErrorCodes) {
-                res.json({flag: 'success', content: obdErrorCodes});
+            ODBErrorCode.getOneByCodes(warnings, function (err, odbErrorCodes) {
+                res.json({flag: 'success', content: odbErrorCodes});
             });
         });
     })

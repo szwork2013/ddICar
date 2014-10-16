@@ -5,7 +5,7 @@ var mysql = require('../models/db_mySql');
 var request = require('request');
 var settings = require('../settings');
 var User = require('../models/users');
-var OBDErrorCode = require('../models/OBDErrorCode');
+var OBDErrorCode = require('../models/odbErrorCode');
 var YourVoice = require('./YourVoice');
 
 function getCarStatus(deviceSN, callback) {
@@ -73,7 +73,7 @@ exports.sendStatus = function (req, res) {
                             "target": [user.info.phone], //注意这里需要用数组, 即使只有一个用户, 也要用数组 ['u1']
                             "msg": {
                                 "type": "txt",
-                                "msg": JSON.stringify({type: "carStatus", content: obdErrorCode.mean, code: obdErrorCode.code, audio: yourVoice.audioFileId }) //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
+                                "msg": JSON.stringify({type: "carStatus", content: obdErrorCode.mean, audioType: user.your_voice.type, audio: yourVoice.audioFileId }) //消息内容，参考[聊天记录](http://developer.easemob.com/docs/emchat/rest/chatmessage.html)里的bodies内容
                             },
                             "from": "admin" //表示这个消息是谁发出来的, 可以没有这个属性, 那么就会显示是admin, 如果有的话, 则会显示是这个用户发出的
                         })

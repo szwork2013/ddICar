@@ -1,7 +1,7 @@
 /**
  * Created by amberglasses on 14-9-27.
  */
-var OBDErrorCode = require('../models/OBDErrorCode');
+var OBDErrorCode = require('../models/odbErrorCode');
 var backpage = "/admins/OBDErrorCode/showAll";
 
 exports.add = function(req, res){
