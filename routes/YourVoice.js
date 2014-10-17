@@ -98,8 +98,6 @@ exports.getByType = function (req, res) {
 
 ////////////////  iOS ////////////////
 exports.uploadMyVoice = function (req, res) {
-    console.log(req.body);
-    console.log(req.files);
     var audio = req.files["audio"].name;
     var voice_id = req.body.voice_id;
 
@@ -129,14 +127,13 @@ exports.uploadMyVoice = function (req, res) {
 
         youVoice.audioFileId = audio;
 
-        console.log(youVoice);
 
         YourVoice.update(youVoice, function (err) {
             if (err) {
                 return json({flag: "fail", content: 1001});
             }
-            console.log(err);
-            res.json({flag: "success", content: 3001});
+
+            res.json({flag: "success", content: youVoice});
         });
     });
 };
@@ -152,45 +149,8 @@ exports.getIdsByType = function (type, user_id, callback) {
             ids.push(e._id);
         });
 
-        console.log("zhixingdaolezheli");
-
         callback(err, ids);
     });
-//    if (type == "myVoice") {
-//        YourVoice.getByType(user_id, function (err, yourVoices) {
-//            if (err) {
-//                callback(err);
-//            }
-//
-//            YourVoice.getByType(user_id, function (err, yourVoices) {
-//                if (err) {
-//                    return callback(err);
-//                }
-//
-//                var ids = [];
-//                yourVoices.forEach(function (e) {
-//                    ids.push(e._id);
-//                });
-//
-//                console.log("zhixingdaolezheli");
-//
-//                callback(err, ids);
-//            });
-//        });
-//    } else {
-//        YourVoice.getByType(type, function (err, yourVoices) {
-//            if (err) {
-//                callback(err);
-//            }
-//
-//            var ids = [];
-//            yourVoices.forEach(function (e) {
-//                ids.push(e._id);
-//            });
-//
-//            callback(err, ids);
-//        });
-//    }
 };
 
 exports.getQuery = function (query, callback) {
@@ -202,7 +162,6 @@ exports.getQuery = function (query, callback) {
         callback(null, yourVoices);
     });
 };
-
 
 exports.cloneToMyVoice = function (type, user_id, callback) {
     YourVoice.getByType(type, function (err, yourVoices) {

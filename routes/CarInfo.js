@@ -64,6 +64,9 @@ exports.sendStatus = function (req, res) {
     User.getBydeviceSN(req.body.deviceSN, function (err, user) {
         OBDErrorCode.getOneByCode(req.body.carStatus, function (err, obdErrorCode) {
             var query = {type: user.your_voice.type, content: obdErrorCode.mean};
+            if (user.your_voice.type == "myVoice") {
+                query.type = user._id.toString();
+            }
             YourVoice.getQuery(query, function (err, yourVoices) {
                 var msg = {type: "carStatus",
                     content: obdErrorCode.mean,

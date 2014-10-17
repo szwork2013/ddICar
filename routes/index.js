@@ -69,7 +69,7 @@ router.post('/users/sendWarning', hxMiddleWare.getToken, OBDWarning.sendWarning)
 router.post('/users/sendCarStatus', hxMiddleWare.getToken, CarInfo.sendStatus);
 router.post('/users/sendDrivingBehavior', hxMiddleWare.getToken, CarInfo.sendDrivingBehavior);
 
-router.get('/users/getWarnings/:id', OBDWarning.getWarningList);
+router.get('/users/getWarnings/:id', OBDWarning.getWarningsList);
 router.get('/users/getCarStatus/:id', User.checkLogin, CarInfo.getStatus);
 router.get('/users/getWarningCount/:id', User.checkLogin, OBDWarning.getWarningCount); // 获取故障总数
 
