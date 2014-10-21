@@ -83,6 +83,18 @@ exports.getUser = function (req, res) {
     });
 };
 
+exports.getFriends = function (req, res) {
+    var friendlist = req.body.friendslist;
+    var query = {"info.phone": {'$in': friendlist}};
+    User.getQuery(query, function (err, users) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        return res.json({flag: "success", content: users});
+    })
+};
+
 exports.logout = function (req, res) {
     req.session.destroy(function (err) {
         if (err) {
@@ -463,7 +475,7 @@ exports.getYourVoiceSettings = function (req, res) {
         }
 
         var query = {_id: {'$in': user.your_voice.ids}};
-        console.log(user.your_voice);
+
         YourVoice.getQuery(query, function (err, youVoices) {
             if (err) {
                 return res.json({flag: "fail", content: 1001});

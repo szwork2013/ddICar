@@ -8,7 +8,7 @@ var DaliyPaper = require('./DaliyPaper');
 var DaliyPaperType = require('./DaliyPaperType');
 var YourVoice = require('./YourVoice');
 var YourVoiceType = require('./YourVoiceType');
-var OBDWarning = require('./OBDWarning');
+var ODBWarning = require('./ODBWarning');
 var hxMiddleWare = require('./hxMiddleWare');
 var CarInfo = require('./CarInfo');
 
@@ -37,6 +37,7 @@ router.get('/users/getUser/:id', User.checkLogin, User.getUser);// 获取用户�
 router.post('/users/putUser', User.checkLogin, User.putUser);// 保存用户信息
 router.post('/users/postPic', User.checkLogin, multipartMiddleware, User.postPic);// 保存用户头像
 router.post('/users/resetPassword', User.checkLogin, User.resetPassword);// 用户重置密码
+router.post('/users/getFriends',User.checkLogin,User.getFriends);
 
 router.post('/users/setDaliyPaperSettings', User.checkLogin, User.setDaliyPaperSettings); // 保存一级日报设置
 router.get('/users/getDaliyPaperSettings/:id', User.checkLogin, User.getDaliyPaperSettings); // 获取一级日报设置
@@ -65,12 +66,12 @@ router.post('/yourVoice/uploadMyVoice', User.checkLogin, multipartMiddleware, Yo
 router.get('/yourVoice/:type/download', User.checkLogin, YourVoice.download);
 
 /* 车机功能 */
-router.post('/users/sendWarning', hxMiddleWare.getToken, OBDWarning.sendWarning);
+router.post('/users/sendWarning', hxMiddleWare.getToken, ODBWarning.sendWarning);
 router.post('/users/sendCarStatus', hxMiddleWare.getToken, CarInfo.sendStatus);
 router.post('/users/sendDrivingBehavior', hxMiddleWare.getToken, CarInfo.sendDrivingBehavior);
 
-router.get('/users/getWarnings/:id', OBDWarning.getWarningsList);
+router.get('/users/getWarnings/:id', ODBWarning.getWarningsList);
 router.get('/users/getCarStatus/:id', User.checkLogin, CarInfo.getStatus);
-router.get('/users/getWarningCount/:id', User.checkLogin, OBDWarning.getWarningCount); // 获取故障总数
+router.get('/users/getWarningCount/:id', User.checkLogin, ODBWarning.getWarningCount); // 获取故障总数
 
 module.exports = router;

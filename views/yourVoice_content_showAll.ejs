@@ -3,7 +3,7 @@
 
 <div class="col-sm-offset-1 col-sm-7">
     <div class="well">
-        <h5>管理员：<%=admin.name%></h5>
+        <h5>管理员：<%= admin.name %></h5>
         <hr/>
         <% if(error){ %>
         <%= error %>
@@ -19,18 +19,26 @@
                 <td>#操作</td>
             </tr>
             <% if(yourVoices){ %>
-            <% var n=0 %>
-            <% yourVoices.forEach(function(e){%>
-            <%n++;%>
+            <% var n = 0 %>
+            <% yourVoices.forEach(function(e){ %>
+
+            <% if(e.type == "nanshen" || e.type == "nvshen"){ %>
+            <% n++; %>
             <tr>
-                <td><%=n%></td>
+                <td><%= n %></td>
                 <td>
-                    <%=e.type%></td>
-                <td><%=e.content%></td>
-                <td><a href="/admins/yourVoice/content/delete/<%=e._id%>">删除</a></td>
+                    <% if(e.type == "nanshen"){ %>
+                    男神
+                    <% }else if(e.type == "nvshen"){ %>
+                    女神
+                    <% } %>
+                </td>
+                <td><%= e.content %></td>
+                <td><a href="/admins/yourVoice/content/delete/<%= e._id %>">删除</a></td>
             </tr>
-            <%});%>
-            <%}%>
+            <% } %>
+            <% }); %>
+            <% } %>
         </table>
         <button type="button" class="btn btn-default " data-toggle="modal" data-target="#add">添加</button>
 
@@ -45,9 +53,12 @@
             </div>
             <div class="modal-body">
                 <p class="lead">信息录入</p>
-                <form class="form-horizontal" role="form" method="POST" action="/admins/yourVoice/content/add" enctype='multipart/form-data'>
+
+                <form class="form-horizontal" role="form" method="POST" action="/admins/yourVoice/content/add"
+                      enctype='multipart/form-data'>
                     <div class="form-group">
                         <label for="type" class="col-sm-4 control-label">声音类型</label>
+
                         <div class="col-sm-7">
                             <select class="form-control" name="type" id="type">
                                 <option value="nanshen">男神</option>
@@ -58,16 +69,18 @@
                     </div>
                     <div class="form-group">
                         <label for="daliyPaperType" class="col-sm-4 control-label">提示类型</label>
+
                         <div class="col-sm-7">
                             <select class="form-control" name="content" id="content">
                                 <% yourVoiceTypes.forEach(function(e){ %>
-                                    <option value="<%=e.name%>"><%=e.name%></option>
+                                <option value="<%= e.name %>"><%= e.name %></option>
                                 <% }); %>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="daliyPaperSubType" class="col-sm-4 control-label">声音文件</label>
+
                         <div class="col-sm-7">
                             <input name="audio" type="file" class="form-control" id="audio">
                         </div>
