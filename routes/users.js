@@ -8,6 +8,7 @@ var DaliyPaperSubType = require('../models/DaliyPaperSubType');
 var YourVoice = require('./YourVoice');
 var DaliyPaperTypeBLL = require('./DaliyPaperType');
 var HX = require('./hxMiddleWare');
+var Common = require('../common');
 
 /* 注册 */
 exports.reg = function (req, res) {
@@ -111,7 +112,8 @@ exports.login = function (req, res) {
 
         req.session.user = user;
         console.log(user);
-        res.json({flag: "success", content: user});
+        res.json(Common.success(user, null));
+//        res.json({flag: "success", content: user});
     });
 };
 
