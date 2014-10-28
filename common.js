@@ -9,6 +9,7 @@ var success = function (data, str) {
         data: data
     };
 };
+
 // 请求失败后的响应
 var fail = function (code, str) {
     return {
