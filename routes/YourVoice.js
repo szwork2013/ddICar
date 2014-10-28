@@ -7,7 +7,6 @@ var fs = require('fs');
 var YourVoiceType = require('../models/YourVoiceType');
 var userYourVoice = require('../models/userYourVoice');
 var backpage = "/admins/yourVoice/content/showAll";
-var User = require('../models/users');
 var zip = require("node-native-zip");
 
 exports.uploadSysVoice = function (req, res) {

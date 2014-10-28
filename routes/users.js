@@ -3,21 +3,149 @@ var fs = require('fs');
 var User = require('../models/users.js');
 var SingleLogin = require('../models/SingleLogin.js');
 var uuid = require('node-uuid');
-var request = require('request');
-var settings = require('../settings');
 var DaliyPaperType = require('../models/DaliyPaperType');
 var DaliyPaperSubType = require('../models/DaliyPaperSubType');
 var YourVoice = require('./YourVoice');
 var DaliyPaperTypeBLL = require('./DaliyPaperType');
+var HX = require('./hxMiddleWare');
 
+/* 注册 */
+exports.reg = function (req, res) {
+    var phone = req.body.phone,
+        password = req.body.password;
+
+    var md5 = crypto.createHash('sha256');
+    password = md5.update(password).digest('hex');
+
+    // 新建用户
+    var newUser = new User({
+        name: phone.replace(new RegExp(phone.substr(3, 4)), '****'),
+        phone: phone,
+        password: password
+    });
+
+    // 检验是否重复注册
+    User.getByPhone(phone, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        if (user) {
+            return res.json({flag: "fail", content: 2001});//用户已存在
+        }
+
+        // 校验完成，该用户没有注册过。完成注册
+        newUser.save(function (err, user) {
+            if (err) {
+                return res.json({flag: "fail", content: 1001}); //sysErr
+            }
+
+            // 保存session信息
+            req.session.user = user;
+            req.session.user_id = user._id;
+
+            // 设置用户信息默认值 第一步设置你的声音默认值
+            YourVoice.cloneToMyVoice("nanshen", user._id.toString(), function (err, ids) {
+                if (err) {
+                    return res.json({flag: "fail", content: 1001});
+                }
+
+                // 设置定制日报一级类型默认值
+                DaliyPaperTypeBLL.getDaliyPeperDefaultSettings(function (err, defaultSettings) {
+                    if (err) {
+                        return res.json({flag: "fail", content: 1001});
+                    }
+
+                    user.your_voice = {type: "MyVoice", ids: ids};
+                    user.daliy_paper = defaultSettings;
+
+                    // 执行保存操作
+                    User.update(user, function (err) {
+                        if (err) {
+                            return res.json({flag: "fail", content: 1001});
+                        }
+
+                        // 注册环信用户
+                        HX.register();
+
+                        // 保存设备与用户关系
+                        var newUserLogin = new SingleLogin({
+                            userID: user._id,
+                            sessionID: req.sessionID
+                        });
+
+                        newUserLogin.save(function (err) {
+                            if (err) {
+                                return res.json({flag: "fail", content: 1001}); //sysErr
+                            }
+
+                            res.json({flag: "success", content: user});
+                        });
+                    });
+                });
+            });
+        });
+    });
+};
+
+/* 登录 */
+exports.login = function (req, res) {
+    var phone = req.body.phone,
+        md5 = crypto.createHash('sha256'),
+        password = md5.update(req.body.password).digest('hex');
+
+    // 查询是否有此用户
+    User.getByPhone(phone, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        if (!user) {
+            return res.json({flag: "fail", content: 2000});//用户不存在
+        }
+
+        // 检查密码是否一致
+        if (user.info.password != password) {
+            return res.json({flag: "fail", content: 2008});//密码错误
+        }
+
+        req.session.user = user;
+        console.log(user);
+        res.json({flag: "success", content: user});
+    });
+};
+
+/* 登出 */
+exports.logout = function (req, res) {
+    req.session.destroy(function (err) {
+        if (err) {
+            return res.json({flag: "fail", content: 2004});//登出失败
+        }
+
+        res.json({flag: "success", content: 3002});//登出成功
+    });
+};
+
+/* 获取用户信息 */
+exports.getUser = function (req, res) {
+    var user_id = req.params["id"];
+
+    User.getOne(user_id, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        res.json({flag: "success", content: user});
+    });
+};
+
+/* 保存用户信息 */
 exports.putUser = function (req, res) {
     var user_id = req.body.user_id;
     var sex = req.body.sex;
     var intro = req.body.intro;
     var name = req.body.name;
     var deviceSN = req.body.deviceSN;
-
-    console.log(req.body);
 
     User.getOne(user_id, function (err, user) {
         if (err) {
@@ -39,6 +167,7 @@ exports.putUser = function (req, res) {
     });
 };
 
+/* 保存用户头像 */
 exports.postPic = function (req, res) {
     var user_id = req.body.user_id;
     var pic = req.files["pic"].name;
@@ -68,134 +197,12 @@ exports.postPic = function (req, res) {
             // 使用同步方式重命名一个文件
             fs.renameSync(req.files["pic"].path, target_path);
 
-            res.json({flag: "success", content: "上传成功"});
+            res.json({flag: "success", content: 3003});
         });
     });
 };
 
-exports.getUser = function (req, res) {
-    var user_id = req.params["id"];
-    User.getOne(user_id, function (err, user) {
-        if (err) {
-            return res.json({flag: "fail", content: 1001});
-        }
-        return res.json({flag: "success", content: user});
-    });
-};
-
-exports.getFriends = function (req, res) {
-    var friendlist = req.body.friendslist;
-    var query = {"info.phone": {'$in': friendlist}};
-    User.getQuery(query, function (err, users) {
-        if (err) {
-            return res.json({flag: "fail", content: 1001});
-        }
-
-        return res.json({flag: "success", content: users});
-    })
-};
-
-exports.logout = function (req, res) {
-    req.session.destroy(function (err) {
-        if (err) {
-            return res.json({flag: "fail", content: 2004});//登出失败
-        }
-        return res.json({flag: "success", content: 3002});//登出成功
-    });
-};
-
-exports.reg = function (req, res) {
-    var phone = req.body.phone,
-        password = req.body.password;
-
-    var md5 = crypto.createHash('sha256');
-    password = md5.update(password).digest('hex');
-
-    var newUser = new User({
-        name: phone.replace(new RegExp(phone.substr(3, 4)), '****'),
-        phone: phone,
-        password: password
-    });
-
-    console.log("1");
-    User.getByPhone(phone, function (err, user) {
-        if (user) {
-            return res.json({flag: "fail", content: 2001});//用户已存在
-        }
-        console.log("2");
-        newUser.save(function (err, user) {
-            if (err) {
-                return res.json({flag: "fail", content: 1001}); //sysErr
-            }
-            console.log("3");
-            req.session.user = user;
-            req.session.user_id = user._id;
-
-            YourVoice.cloneToMyVoice("nanshen", user._id.toString(), function (err, ids) {
-                console.log("4");
-                user.your_voice = {type: "MyVoice", ids: ids};
-
-                DaliyPaperTypeBLL.getDaliyPeperDefaultSettings(function (err, defaultSettings) {
-                    console.log("5");
-                    user.daliy_paper = defaultSettings;
-
-                    User.update(user, function (err) {
-                        console.log("6");
-                        if (err) {
-                            return callback(err);
-                        }
-
-                        // 注册环信用户
-                        request(
-                            { method: 'POST',
-                                uri: settings.hxURI + '/users',
-                                headers: {'Content-Type': 'application/json'},
-                                body: JSON.stringify({"username": user.info.phone, "password": user.info.password}
-                                )
-                            }
-                            , function (error, response, body) {
-                                var newUserLogin = new SingleLogin({
-                                    userID: user._id,
-                                    sessionID: req.sessionID
-                                });
-
-                                newUserLogin.save(function (err) {
-                                    if (err) {
-                                        return res.json({flag: "fail", content: 1001}); //sysErr
-                                    } else {
-                                        return res.json({flag: "success", content: user});
-                                    }
-                                });
-                            }
-                        );
-                    });
-                });
-            });
-        });
-    });
-};
-
-exports.login = function (req, res) {
-    var md5 = crypto.createHash('sha256'),
-        password = md5.update(req.body.password).digest('hex');
-
-    // 查询是否有此用户
-    User.getByPhone(req.body.phone, function (err, user) {
-
-        if (!user) {
-            return res.json({flag: "fail", content: 2000});//用户不存在
-        }
-
-        // 检查密码是否一致
-        if (user.info.password != password) {
-            return res.json({flag: "fail", content: 2008});//密码错误
-        }
-
-        req.session.user = user;
-        return res.json({flag: "success", content: user});
-    });
-};
-
+/* 重置用户密码 */
 exports.resetPassword = function (req, res) {
     var oldPassword = req.body.oldpassword;
     var newPassword = req.body.newpassword;
@@ -208,12 +215,13 @@ exports.resetPassword = function (req, res) {
         if (err) {
             return res.json({flag: "fail", content: 1001})
         }
+
         if (!user) {
             return res.json({flag: "fail", content: 2000});//用户不存在
         }
 
         if (user.info.password != oldPassword) {
-            return res.json({flag: "fail", content: 2008})//旧密码输入错误
+            return res.json({flag: "fail", content: 2008});//旧密码输入错误
         }
 
         var _md5 = crypto.createHash('sha256');
@@ -231,7 +239,21 @@ exports.resetPassword = function (req, res) {
     });
 };
 
+/* 获取用户好友关系 */
+exports.getFriends = function (req, res) {
+    var friendlist = req.body.friendslist;
 
+    var query = {"info.phone": {'$in': friendlist}};
+    User.getQuery(query, function (err, users) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
+
+        return res.json({flag: "success", content: users});
+    })
+};
+
+/* 保存一级日报设置 */
 exports.setDaliyPaperSettings = function (req, res) {
     var user_id = req.body.user_id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
@@ -261,6 +283,7 @@ exports.setDaliyPaperSettings = function (req, res) {
     });
 };
 
+/* 获取一级日报设置 */
 exports.getDaliyPaperSettings = function (req, res) {
     var user_id = req.params["id"];
 
@@ -300,6 +323,7 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
+        // 这个判断在加入默认值后可删除
         if (user.daliy_paper != 0) {
             user.daliy_paper.forEach(function (e) {
 
@@ -309,8 +333,6 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
                         if (err) {
                             return res.json({flag: "fail", content: 1001});
                         }
-
-                        console.log(daliyPaperSubTypes);
 
                         daliyPaperSubTypes.forEach(function (_e) {
                             var item = {
@@ -365,11 +387,11 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
     })
 };
 
+/* 设置二级日报设置 */
 exports.setDaliyPaperSubTypeSettings = function (req, res) {
     var user_id = req.body.user_id;
     var type_id = req.body.type_id;
     var DaliyPaperSubTypeSettings = req.body.DaliyPaperSubTypeSettings;
-    console.log(req.body);
 
     User.getOne(user_id, function (err, user) {
         if (err) {
@@ -381,7 +403,6 @@ exports.setDaliyPaperSubTypeSettings = function (req, res) {
                 console.log(e);
                 if (e.id == type_id) {
                     e.child = DaliyPaperSubTypeSettings;
-                    console.log(e);
                 }
             });
         }

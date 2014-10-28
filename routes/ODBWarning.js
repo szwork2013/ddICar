@@ -2,8 +2,6 @@
  * Created by amberglasses on 14-9-16.
  */
 var mysql = require('../models/db_mySql');
-var request = require('request');
-var settings = require('../settings');
 var User = require('../models/users');
 var ODBErrorCode = require('../models/odbErrorCode');
 var ODBErrorRecord = require('../models/odbErrorRecord');

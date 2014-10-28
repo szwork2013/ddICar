@@ -2,8 +2,6 @@
  * Created by amberglasses on 14-9-23.
  */
 var mysql = require('../models/db_mySql');
-
-var settings = require('../settings');
 var User = require('../models/users');
 var OBDErrorCode = require('../models/odbErrorCode');
 var YourVoice = require('./YourVoice');
@@ -52,7 +50,9 @@ function getCarStatus(deviceSN, callback) {
 }
 
 exports.getStatus = function (req, res) {
-    User.getOne(req.params['id'], function (err, user) {
+    var user_id = req.params['id'];
+
+    User.getOne(user_id, function (err, user) {
         getCarStatus(user.info.deviceSN, function (err, status) {
             console.log(status);
             res.json(status);
@@ -61,13 +61,24 @@ exports.getStatus = function (req, res) {
 };
 
 exports.sendStatus = function (req, res) {
-    User.getBydeviceSN(req.body.deviceSN, function (err, user) {
-        OBDErrorCode.getOneByCode(req.body.carStatus, function (err, obdErrorCode) {
+    var deviceSN = req.body.deviceSN;
+    var carStatus = req.body.carStatus;
+
+    User.getBydeviceSN(deviceSN, function (err, user) {
+        OBDErrorCode.getOneByCode(carStatus, function (err, obdErrorCode) {
+            if (err) {
+                return res.json({flag: "fail", content: 1001});
+            }
+
             var query = {type: user.your_voice.type, content: obdErrorCode.mean};
             if (user.your_voice.type == "myVoice") {
                 query.type = user._id.toString();
             }
             YourVoice.getQuery(query, function (err, yourVoices) {
+                if (err) {
+                    return res.json({flag: "fail", content: 1001});
+                }
+
                 var msg = {type: "carStatus",
                     content: obdErrorCode.mean,
                     audio: yourVoices[0].audioFileId,
@@ -83,8 +94,13 @@ exports.sendStatus = function (req, res) {
 };
 
 exports.sendDrivingBehavior = function (req, res) {
-    User.getBydeviceSN(req.body.deviceSN, function (err, user) {
-        var DrivingBehavior = req.body.DrivingBehavior;
+    var deviceSN = req.body.deviceSN;
+    var DrivingBehavior = req.body.DrivingBehavior;
+
+    User.getBydeviceSN(deviceSN, function (err, user) {
+        if (err) {
+            return res.json({flag: "fail", content: 1001});
+        }
 
         HX.sendMessage(req.session.access_token, user.info.phone, {type: "DrivingBehavior", content: DrivingBehavior});
 

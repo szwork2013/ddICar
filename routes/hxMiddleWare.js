@@ -58,3 +58,20 @@ exports.sendMessage = function (token, contact, msg) {
         }
     );
 };
+
+exports.register = function(user){
+    // 注册环信用户
+    request(
+        { method: 'POST',
+            uri: settings.hxURI + '/users',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({"username": user.info.phone, "password": user.info.password}
+            )
+        }
+        , function (error, response, body) {
+            if (body) {
+                console.log("环信：" + body);
+            }
+        }
+    );
+};
