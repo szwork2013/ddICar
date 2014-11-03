@@ -3,7 +3,7 @@
 
 <div class="col-sm-offset-1 col-sm-7">
     <div class="well">
-        <h5>管理员：<%=admin.name%></h5>
+        <h5>管理员：<%= admin.name %></h5>
         <hr/>
         <% if(error){ %>
         <%= error %>
@@ -22,43 +22,47 @@
                 <td>#操作</td>
             </tr>
             <% if(daliyPapers){ %>
-            <% var n=0 %>
-            <% daliyPapers.forEach(function(e){%>
-            <%n++;%>
+            <% var n = 0 %>
+            <% daliyPapers.forEach(function(e){ %>
+            <% n++; %>
             <tr>
-                <td><%=n%></td>
-                <td><img src="/images/<%=e.pic%>" alt="<%=e.title%>"/></td>
-                <td><%=e.title%></td>
-                <td><%=e.author%></td>
+                <td><%= n %></td>
+                <td><img src="/images/<%= e.pic %>" alt="<%= e.title %>"/></td>
+                <td><%= e.title %></td>
+                <td><%= e.author %></td>
                 <td>
                     <% if(daliyPaperSubTypes){ %>
-                        <% daliyPaperSubTypes.forEach(function(t){ %>
-                            <% if(e.typeId == t._id){ %>
-                                <% if(daliyPaperTypes){ %>
-                                    <% daliyPaperTypes.forEach(function(_t){ %>
-                                        <% if(t.parentTypeId == _t._id){ %>
-                                            <%=_t.name%> <%=t.name%>
-                                        <% } %>
-                                    <% }) %>
-                                <% } %>
-                            <% } %>
-                        <% }) %>
+                    <% daliyPaperSubTypes.forEach(function(t){ %>
+                    <% if(e.typeId == t._id){ %>
+                    <% if(daliyPaperTypes){ %>
+                    <% daliyPaperTypes.forEach(function(_t){ %>
+                    <% if(t.parentTypeId == _t._id){ %>
+                    <%= _t.name %> <%= t.name %>
+                    <% } %>
+                    <% }) %>
+                    <% } %>
+                    <% } %>
+                    <% }) %>
                     <% } %>
                 </td>
                 <td>
-                    <% if(e.contentType == "音频"){ %>
-                    <audio src="/audio/daliyPaper/<%=e.content%>" controls="controls">您的浏览器不支持 audio 标签。</audio>
-                    <% }else if(e.contentType == "文字"){ %>
+                    <% if(e.contentType == "audio"){ %>
+                    <audio src="/audio/daliyPaper/<%= e.content %>" controls="controls">您的浏览器不支持 audio 标签。</audio>
+                    <% }else if(e.contentType == "text"){ %>
                     <%= e.content %>
                     <% } %>
                 </td>
-                <td><a href="/admins/daliyPaper/content/delete/<%=e._id%>">删除</a> <a data-toggle="modal" data-target="#<%=e._id%>">修改</a></td>
+                <td><a href="/admins/daliyPaper/content/delete/<%= e._id %>">删除</a> <a data-toggle="modal"
+                                                                                       data-target="#<%= e._id %>">修改</a>
+                </td>
             </tr>
-            <%});%>
-            <%}%>
+            <% }); %>
+            <% } %>
         </table>
+        <form action="/admins/daliyPaper/content/showAll/<%= pageIndex + 1 %>" method="get">
+            <button type="button" class="btn btn-default ">下一页</button>
+        </form>
         <button type="button" class="btn btn-default " data-toggle="modal" data-target="#add">添加</button>
-
     </div>
 </div>
 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -70,26 +74,31 @@
             </div>
             <div class="modal-body">
                 <p class="lead">信息录入</p>
-                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/content/add" enctype="multipart/form-data">
+
+                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/content/add"
+                      enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="title" class="col-sm-4 control-label">标题</label>
+
                         <div class="col-sm-7">
                             <input type="text" name="title" class="form-control" id="title" placeholder="标题"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for=“author” class="col-sm-4 control-label">作者</label>
+
                         <div class="col-sm-7">
                             <input name="author" type="text" class="form-control" id="author" placeholder="作者">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for=“type” class="col-sm-4 control-label">类型</label>
+
                         <div class="col-sm-7">
                             <select name="daliyPaperType" id="daliyPaperType">
                                 <option value="">未选择</option>
                                 <% daliyPaperTypes.forEach(function(e){ %>
-                                <option value="<%=e._id%>"><%=e.name%></option>
+                                <option value="<%= e._id %>"><%= e.name %></option>
                                 <% }) %>
                             </select>
                             <select name="daliyPaperSubType" id="daliyPaperSubType">
@@ -98,19 +107,21 @@
                     </div>
                     <div class="form-group">
                         <label for=“pic” class="col-sm-4 control-label">封图</label>
+
                         <div class="col-sm-7">
                             <input name="pic" type="file" class="form-control" id="pic">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for=“audio” class="col-sm-4 control-label">内容</label>
+
                         <div class="col-sm-7">
                             <select name="contentType" id="contentType">
-                                <option value="音频">音频</option>
-                                <option value="文字">文字</option>
+                                <option value="audio">音频</option>
+                                <option value="text">文字</option>
                             </select>
                             <input name="audio" type="file" class="form-control" id="audio">
-                            <textarea name="txt" type=""  class="form-control" id="txt"></textarea>
+                            <textarea name="txt" type="" class="form-control" id="txt"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -124,9 +135,10 @@
     </div>
 </div>
 
-<%if(daliyPapers){%>
-<%daliyPapers.forEach(function(e){%>
-<div class="modal fade" id="<%=e._id%>" tabindex="-1" role="dialog" aria-labelledby="starModalLabel" aria-hidden="true">
+<% if(daliyPapers){ %>
+<% daliyPapers.forEach(function(e){ %>
+<div class="modal fade" id="<%= e._id %>" tabindex="-1" role="dialog" aria-labelledby="starModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -134,42 +146,48 @@
                 <h4 class="modal-title" id="myModalLabel">日报管理</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/content/update" enctype="multipart/form-data">
+                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/content/update"
+                      enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="title" class="col-sm-4 control-label">标题</label>
+
                         <div class="col-sm-7">
-                            <input type="text" name="title" class="form-control" id="title" placeholder="<%=e.title%>" value="<%=e.title%>"/>
+                            <input type="text" name="title" class="form-control" id="title" placeholder="<%= e.title %>"
+                                   value="<%= e.title %>"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for=“author” class="col-sm-4 control-label">作者</label>
+
                         <div class="col-sm-7">
-                            <input name="author" type="text" class="form-control" id="author" placeholder="<%=e.author%>" value="<%=e.author%>">
+                            <input name="author" type="text" class="form-control" id="author"
+                                   placeholder="<%= e.author %>" value="<%= e.author %>">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for=“type” class="col-sm-4 control-label">类型</label>
+
                         <div class="col-sm-7">
                             <select name="daliyPaperType" id="daliyPaperType">
                                 <% daliyPaperSubTypes.forEach(function(t){ %>
-                                    <% if(t._id == e.typeId) {%>
-                                        <% daliyPaperTypes.forEach(function(_t){ %>
-                                        <% if(t.parentTypeId == _t._id) {%>
-                                            <option value="<%=_t._id%>" selected><%= _t.name %></option>
-                                        <% }else{ %>
-                                            <option value="<%=_t._id%>"><%= _t.name %></option>
-                                        <% } %>
-                                        <% }) %>
-                                    <% } %>
+                                <% if(t._id == e.typeId) { %>
+                                <% daliyPaperTypes.forEach(function(_t){ %>
+                                <% if(t.parentTypeId == _t._id) { %>
+                                <option value="<%= _t._id %>" selected><%= _t.name %></option>
+                                <% }else{ %>
+                                <option value="<%= _t._id %>"><%= _t.name %></option>
+                                <% } %>
+                                <% }) %>
+                                <% } %>
                                 <% }) %>
                             </select>
                             <select name="daliyPaperSubType" id="daliyPaperSubType">
                                 <% if(daliyPaperSubTypes){ %>
                                 <% daliyPaperSubTypes.forEach(function(t){ %>
                                 <% if(e.typeId == t._id){ %>
-                                <option value="<%=t._id%>" selected><%= t.name %></option>
+                                <option value="<%= t._id %>" selected><%= t.name %></option>
                                 <% }else{ %>
-                                <option value="<%=t._id%>"><%= t.name %></option>
+                                <option value="<%= t._id %>"><%= t.name %></option>
                                 <% } %>
                                 <% }) %>
                                 <% } %>
@@ -178,24 +196,26 @@
                     </div>
                     <div class="form-group">
                         <label for=“author” class="col-sm-4 control-label">封图</label>
+
                         <div class="col-sm-7">
-                            <img src="/images/<%=e.pic%>" alt="<%=e.title%>"/>
+                            <img src="/images/<%= e.pic %>" alt="<%= e.title %>"/>
                             <input name="pic" type="file" class="form-control" id="pic">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for=“audio” class="col-sm-4 control-label">音频</label>
+
                         <div class="col-sm-7">
-                            <% if(e.contentType == "音频"){ %>
+                            <% if(e.contentType == "audio"){ %>
                             <input name="audio" type="file" class="form-control" id="audio">
-                            <% }else if(e.contentType == "文字"){ %>
-                            <textarea name="txt" type=""  class="form-control" id="txt"><%= e.content %></textarea>
+                            <% }else if(e.contentType == "text"){ %>
+                            <textarea name="txt" type="" class="form-control" id="txt"><%= e.content %></textarea>
                             <% } %>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-10">
-                            <input type="hidden" name="id" value="<%=e._id%>"/>
+                            <input type="hidden" name="id" value="<%= e._id %>"/>
                             <button type="submit" class="btn btn-default">修改</button>
                         </div>
                     </div>
@@ -204,29 +224,28 @@
         </div>
     </div>
 </div>
-<%});%>
-<%}%>
-
+<% }); %>
+<% } %>
 <%- include footer %>
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
         $('#audio').show();
         $('#txt').hide();
 
-        $('#daliyPaperType').change(function(){
+        $('#daliyPaperType').change(function () {
             var subTypes = $('#daliyPaperSubType');
             subTypes.empty();
             <%daliyPaperSubTypes.forEach(function(e){%>
-                if($(this).children('option:selected').val()=='<%=e.parentTypeId%>'){
-                    var option = $('<option value="<%=e._id%>"><%=e.name%></option>');
-                    subTypes.append(option);
-                }
+            if ($(this).children('option:selected').val() == '<%=e.parentTypeId%>') {
+                var option = $('<option value="<%=e._id%>"><%=e.name%></option>');
+                subTypes.append(option);
+            }
             <%})%>
         });
 
-        $('#contentType').change(function(){
-            switch($('#contentType').children('option:selected').val()){
+        $('#contentType').change(function () {
+            switch ($('#contentType').children('option:selected').val()) {
                 case '音频':
                     $('#audio').show();
                     $('#txt').hide();

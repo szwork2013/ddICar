@@ -14,57 +14,58 @@ var ODBErrorCode = require('./odbErrorCode');
 
 var router = express.Router();
 
-router.get('/', function(req, res){
-	res.render('admin_login',{
-		title:"这里是大东车慧运营管理平台网站客户端！"
-	});
+router.get('/', function (req, res) {
+    res.render('admin_login', {
+        title: "这里是大东车慧运营管理平台网站客户端！"
+    });
 });
 
-router.get('/showAll', function(req, res){
-    Admin.getAll(function(err, admins){
-        if(err){
-            req.flash('error',err);
+router.get('/showAll', function (req, res) {
+
+    Admin.getAll(function (err, admins) {
+        if (err) {
+            req.flash('error', err);
         }
 
-        res.render('admin_showAll',{
-            title:"东东电台管理后台",
-            success:req.flash('success'),
-            error:req.flash('error'),
-            admin:req.session.admin,
-            admins:admins
+        res.render('admin_showAll', {
+            title: "东东电台管理后台",
+            success: req.flash('success'),
+            error: req.flash('error'),
+            admin: req.session.admin,
+            admins: admins
         });
     });
 });
 
-router.get('/users/showAll', function(req, res){
-    User.getAll(function(err,users){
+router.get('/users/showAll', function (req, res) {
+    User.getAll(function (err, users) {
         console.log(users);
-        res.render('user_showAll',{
-            title:"东东电台管理后台",
-            success:req.flash('success'),
-            error:req.flash('error'),
-            admin:req.session.admin,
-            users:users
+        res.render('user_showAll', {
+            title: "东东电台管理后台",
+            success: req.flash('success'),
+            error: req.flash('error'),
+            admin: req.session.admin,
+            users: users
         });
     });
 });
 
-router.post("/changePassword", function(req, res){
+router.post("/changePassword", function (req, res) {
     var oldPassword = req.body.oldPassword,
         newPassword = req.body.newPassword,
         newPassword_re = req.body.newPassword_repeat;
 
-    if(newPassword != newPassword_re){
-        req.flash('error',"新密码不匹配！");
+    if (newPassword != newPassword_re) {
+        req.flash('error', "新密码不匹配！");
         return res.redirect('/admins/dashboard');
     }
 
-    Admin.getOne(req.session.admin.email, function(err, admin){
+    Admin.getOne(req.session.admin.email, function (err, admin) {
         var md5 = crypto.createHash('sha256');
         oldPassword = md5.update(oldPassword).digest('hex');
 
-        if(oldPassword != admin.password){
-            req.flash('error',"旧密码不匹配！");
+        if (oldPassword != admin.password) {
+            req.flash('error', "旧密码不匹配！");
             return res.redirect('/admins/dashboard');
         }
 
@@ -73,9 +74,9 @@ router.post("/changePassword", function(req, res){
 
         admin.password = newPassword;
 
-        Admin.update(admin,function(err){
-            if(err){
-                req.flash('error',"密码修改失败！\n"+err);
+        Admin.update(admin, function (err) {
+            if (err) {
+                req.flash('error', "密码修改失败！\n" + err);
             }
 
             res.redirect('/admins/dashboard');
@@ -83,10 +84,10 @@ router.post("/changePassword", function(req, res){
     });
 });
 
-router.get('/delete/:email', function(req, res){
-    Admin.delete(req.params.email, function(err){
-        if(err){
-            req.flash('error',err);
+router.get('/delete/:email', function (req, res) {
+    Admin.delete(req.params.email, function (err) {
+        if (err) {
+            req.flash('error', err);
         }
 
         req.flash('success', "管理员删除成功！");
@@ -94,45 +95,45 @@ router.get('/delete/:email', function(req, res){
     });
 });
 
-router.get('/dashboard',function(req, res){
+router.get('/dashboard', function (req, res) {
     res.render('dashboard', {
-        title:"东东电台管理后台",
-        success:req.flash('success'),
-        error:req.flash('error'),
-        admin:req.session.admin
+        title: "东东电台管理后台",
+        success: req.flash('success'),
+        error: req.flash('error'),
+        admin: req.session.admin
     });
 });
 
-router.post('/login',function(req, res){
+router.post('/login', function (req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
     var md5 = crypto.createHash('sha256'),
         password = md5.update(password).digest('hex');
 
-    Admin.getOne(email, function(err,admin){
-        if(err){
-            req.flash('error',"登录失败，此管理员不存在！");
+    Admin.getOne(email, function (err, admin) {
+        if (err) {
+            req.flash('error', "登录失败，此管理员不存在！");
             return res.redirect('/admins');
         }
 
-        if(!admin){
-            req.flash('error',"登录失败，此管理员不存在！");
+        if (!admin) {
+            req.flash('error', "登录失败，此管理员不存在！");
             return res.redirect('/admins');
         }
 
-        if(admin.password != password){
-            req.flash('error',"登录失败，密码不匹配！");
+        if (admin.password != password) {
+            req.flash('error', "登录失败，密码不匹配！");
             return res.redirect('/admins');
         }
 
         req.session.admin = admin;
-        req.flash('success',"登录成功！");
+        req.flash('success', "登录成功！");
         res.redirect('/admins/dashboard');
     });
 });
 
-router.post('/add', function(req,res){
+router.post('/add', function (req, res) {
     var name = req.body.name,
         email = req.body.email,
         password = req.body.password,
@@ -142,37 +143,37 @@ router.post('/add', function(req,res){
     password = md5.update(password).digest('hex');
 
     var nweAdmin = new Admin({
-        name:name,
-        email:email,
-        password:password,
-        isSuperAdmin:isSuperAdmin
+        name: name,
+        email: email,
+        password: password,
+        isSuperAdmin: isSuperAdmin
     });
 
-    Admin.getOne(email,function(err,admin){
-        if(err){
-            return res.json(400,err);
+    Admin.getOne(email, function (err, admin) {
+        if (err) {
+            return res.json(400, err);
         }
         // admin存在说明已有此管理员
-        if(admin){
-            return res.json(400,{error:"此管理员已存在！"});
+        if (admin) {
+            return res.json(400, {error: "此管理员已存在！"});
         }
 
-        nweAdmin.save(function(err,admin){
-            if(err){
-                return res.json(400,err);
+        nweAdmin.save(function (err, admin) {
+            if (err) {
+                return res.json(400, err);
             }
 
-            req.flash('success',"管理员添加成功！")
+            req.flash('success', "管理员添加成功！")
             res.redirect('/admins/showAll');
         });
     });
 });
 
-router.post('/resetAdmin', function(req, res){
+router.post('/resetAdmin', function (req, res) {
     var email = req.body.email;
 
-    Admin.getOne(email, function(err, admin){
-        if(err){
+    Admin.getOne(email, function (err, admin) {
+        if (err) {
             return res.json(400, err);
         }
 
@@ -180,23 +181,23 @@ router.post('/resetAdmin', function(req, res){
         var password = md5.update('ddicar1234').digest('hex');
         admin.password = password;
 
-        Admin.update(admin, function(err){
-            if(err){
-                return res.json(400,err);
+        Admin.update(admin, function (err) {
+            if (err) {
+                return res.json(400, err);
             }
 
-            res.json(200,{info:"重置成功！"});
+            res.json(200, {info: "重置成功！"});
         });
     });
 });
 
 router.post('/logout', checkLogin);
-router.post('/logout', function(req, res){
-    req.session.destroy(function(err){
-        if(err){
-            return res.json(400,{'info':'登出失败！'});
+router.post('/logout', function (req, res) {
+    req.session.destroy(function (err) {
+        if (err) {
+            return res.json(400, {'info': '登出失败！'});
         }
-        return res.json(200,{'info':'登出成功！'});
+        return res.json(200, {'info': '登出成功！'});
     });
 });
 
@@ -216,7 +217,7 @@ router.get('/daliyPaper/type/level2/delete/:id', DaliyPaperType.level2_delete);
 
 router.post('/daliyPaper/type/level2/update', multipartMiddleware, DaliyPaperType.level2_update);
 
-router.get('/daliyPaper/content/showAll', DaliyPaper.showAll);
+router.get('/daliyPaper/content/showAll/:pageindex', DaliyPaper.showAll);
 
 router.post('/daliyPaper/content/add', multipartMiddleware, DaliyPaper.add);
 
@@ -247,17 +248,17 @@ router.post('/OBDErrorCode/add', ODBErrorCode.add);
 router.get('/OBDErrorCode/delete/:id', ODBErrorCode.delete);
 
 
-function checkLogin(req, res, next){
-    if(!req.session.admin){
-        return res.json(400,{error:"用户已登录！"});
+function checkLogin(req, res, next) {
+    if (!req.session.admin) {
+        return res.json(400, {error: "用户已登录！"});
     }
 
     next();
 }
 
-function checkNotLogin(req, res, next){
-    if(req.session.admin){
-        return res.json(400, {error:"用户未登录！"});
+function checkNotLogin(req, res, next) {
+    if (req.session.admin) {
+        return res.json(400, {error: "用户未登录！"});
     }
 
     next();
