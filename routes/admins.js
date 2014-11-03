@@ -21,7 +21,6 @@ router.get('/', function (req, res) {
 });
 
 router.get('/showAll', function (req, res) {
-
     Admin.getAll(function (err, admins) {
         if (err) {
             req.flash('error', err);

@@ -13,21 +13,21 @@ var hxMiddleWare = require('./hxMiddleWare');
 var CarInfo = require('./CarInfo');
 
 /* GET home page. */
-router.get('/', function (req, res) {
-    res.render('index', {
-        title: "大东车慧"
-    });
-});
-router.get('/PC', function (req, res) {
-    res.render('ddicar', {
-        title: "大东车慧"
-    });
-});
-router.get('/Mobile', function (req, res) {
-    res.render('ddicar_mobile', {
-        title: "大东车慧"
-    });
-});
+//router.get('/', function (req, res) {
+//    res.render('index', {
+//        title: "大东车慧"
+//    });
+//});
+//router.get('/PC', function (req, res) {
+//    res.render('ddicar', {
+//        title: "大东车慧"
+//    });
+//});
+//router.get('/Mobile', function (req, res) {
+//    res.render('ddicar_mobile', {
+//        title: "大东车慧"
+//    });
+//});
 
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.checkNotLogin, User.login);// 用户登录

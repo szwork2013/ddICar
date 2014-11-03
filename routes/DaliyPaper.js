@@ -94,7 +94,7 @@ exports.update = function (req, res) {
 
         var content;
         switch (daliyPaper.contentType) {
-            case "音频":
+            case "audio":
                 switch (req.files["audio"].type) {
                     case "audio/mpeg":
                     case "audio/mp3":
@@ -103,7 +103,7 @@ exports.update = function (req, res) {
                 }
                 content = audio;
                 break;
-            case "文字":
+            case "text":
                 content = req.body.txt;
                 break;
         }
