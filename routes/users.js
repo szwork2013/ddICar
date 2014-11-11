@@ -67,7 +67,7 @@ exports.reg = function (req, res) {
                         }
 
                         // 注册环信用户
-                        HX.register();
+                        HX.register(user);
 
                         // 保存设备与用户关系
                         var newUserLogin = new SingleLogin({
