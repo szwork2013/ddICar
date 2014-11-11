@@ -80,7 +80,8 @@ exports.reg = function (req, res) {
                                 return res.json({flag: "fail", content: 1001}); //sysErr
                             }
 
-                            res.json({flag: "success", content: user});
+//                            res.json({flag: "success", content: user});
+                            res.json(Common.success(user, null));
                         });
                     });
                 });
