@@ -4,22 +4,38 @@
 var settings = require('../settings');
 var request = require('request');
 
-exports.getToken = function (req, res, next) {
-    if (req.session.access_token) {
-        next();
-    }
+exports.getToken = function (callback) {
+    var currentDate = new Date();
+    var expiresDate = new Date().setDate(settings["expiresDate"]);
 
-    request(
-        { method: 'POST',
-            uri: settings.hxURI + '/token',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({"grant_type": "client_credentials", "client_id": "YXA6feANIDc0EeSaK6PzQWBvmA", "client_secret": "YXA6LijimVeXvLvRAghrCAv8zIm9EUw"})
-        }
-        , function (error, response, body) {
-            req.session.access_token = JSON.parse(body).access_token;
-            next();
-        }
-    );
+    // 比较是否过期，没过期直接返回token
+    if (currentDate >= expiresDate) {
+        request(
+            { method: 'POST',
+                uri: settings.hxURI + '/token',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({"grant_type": "client_credentials", "client_id": "YXA6feANIDc0EeSaK6PzQWBvmA", "client_secret": "YXA6LijimVeXvLvRAghrCAv8zIm9EUw"})
+            }
+            , function (error, response, body) {
+                // 记录token值
+                settings["HX_access_token"] = JSON.parse(body).access_token;
+                // 记录下一次过期时间点
+                settings["expiresDate"] = new Date().getMilliseconds() + JSON.parse(body).expires_in;
+//                req.session.access_token = JSON.parse(body).access_token;
+//                next();
+
+                return callback(settings["HX_access_token"]);
+            }
+        );
+    } else {
+        return callback(settings["HX_access_token"]);
+    }
+//
+//    if (req.session.access_token) {
+//        next();
+//    }
+//
+
 };
 
 exports.getAccessToken = function (next) {
@@ -59,7 +75,7 @@ exports.sendMessage = function (token, contact, msg) {
     );
 };
 
-exports.register = function(user){
+exports.register = function (user) {
     // 注册环信用户
     request(
         { method: 'POST',

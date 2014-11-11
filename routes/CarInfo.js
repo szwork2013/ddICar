@@ -79,13 +79,15 @@ exports.sendStatus = function (req, res) {
                     return res.json({flag: "fail", content: 1001});
                 }
 
-                var msg = {type: "carStatus",
-                    content: obdErrorCode.mean,
-                    audio: yourVoices[0].audioFileId,
-                    audioType: yourVoices[0].type
-                };
+                HX.getToken(function (token) {
+                    var msg = {type: "carStatus",
+                        content: obdErrorCode.mean,
+                        audio: yourVoices[0].audioFileId,
+                        audioType: yourVoices[0].type
+                    };
 
-                HX.sendMessage(req.session.access_token, user.info.phone, msg);
+                    HX.sendMessage(token, user.info.phone, msg);
+                });
 
                 res.json({flag: 'success', content: "success"});
             })
@@ -102,7 +104,9 @@ exports.sendDrivingBehavior = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        HX.sendMessage(req.session.access_token, user.info.phone, {type: "DrivingBehavior", content: DrivingBehavior});
+        HX.getToken(function (token) {
+            HX.sendMessage(token, user.info.phone, {type: "DrivingBehavior", content: DrivingBehavior});
+        });
 
         res.json({flag: 'success', content: "success"});
     })

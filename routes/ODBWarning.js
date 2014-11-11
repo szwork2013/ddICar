@@ -14,7 +14,10 @@ exports.sendWarning = function (req, res) {
 
     User.getBydeviceSN(deviceSN, function (err, user) {
         ODBErrorCode.getOneByCode(faultcodelist, function (err, odbErrorCode) {
-            HX.sendMessage(req.session.access_token, user.info.phone, {type: "warning", content: odbErrorCode.mean});
+            HX.getToken(function(token){
+                HX.sendMessage(token, user.info.phone, {type: "warning", content: odbErrorCode.mean});
+            });
+
 
             getWarningById(warning_Id, function (err, warning) {
                 if (err) {

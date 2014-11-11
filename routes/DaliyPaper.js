@@ -77,7 +77,7 @@ exports.update = function (req, res) {
     var typeId = req.body.daliyPaperSubType;
     var audio;
 
-    if (req.files["pic"]) {
+    if (req.files["pic"].name != "") {
         switch (req.files["pic"].type) {
             case "image/png":
                 pic = uuid.v1() + ".png";
@@ -111,7 +111,7 @@ exports.update = function (req, res) {
         daliyPaper.title = title;
         daliyPaper.author = author;
         daliyPaper.typeId = typeId;
-        if (req.files["pic"])
+        if (req.files["pic"].name != "")
             daliyPaper.pic = pic;
         daliyPaper.content = content;
 

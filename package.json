@@ -23,6 +23,12 @@
         "connect-flash": "*",
         "connect-multiparty": "1.1.0",
         "gridform": "*",
-        "node-native-zip": "*"
+        "node-native-zip": "*",
+        "passport": "latest",
+        "passport-oauth": "latest",
+        "passport-sina": "latest",
+        "passport-tqq": "latest",
+        "passport-local": "latest",
+        "thenjs": "latest"
     }
 }

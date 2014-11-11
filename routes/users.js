@@ -112,8 +112,8 @@ exports.login = function (req, res) {
 
         req.session.user = user;
         console.log(user);
-//        res.json(Common.success(user, null));
-        res.json({flag: "success", content: user});
+        res.json(Common.success(user, null));
+//        res.json({flag: "success", content: user});
     });
 };
 

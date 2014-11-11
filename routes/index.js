@@ -9,7 +9,6 @@ var DaliyPaperType = require('./DaliyPaperType');
 var YourVoice = require('./YourVoice');
 var YourVoiceType = require('./YourVoiceType');
 var ODBWarning = require('./ODBWarning');
-var hxMiddleWare = require('./hxMiddleWare');
 var CarInfo = require('./CarInfo');
 
 /* GET home page. */
@@ -67,9 +66,9 @@ router.post('/yourVoice/uploadMyVoice', User.checkLogin, multipartMiddleware, Yo
 router.get('/yourVoice/:type/download', User.checkLogin, YourVoice.download);
 
 /* 车机功能 */
-router.post('/users/sendWarning', hxMiddleWare.getToken, ODBWarning.sendWarning);
-router.post('/users/sendCarStatus', hxMiddleWare.getToken, CarInfo.sendStatus);
-router.post('/users/sendDrivingBehavior', hxMiddleWare.getToken, CarInfo.sendDrivingBehavior);
+router.post('/users/sendWarning', ODBWarning.sendWarning);
+router.post('/users/sendCarStatus', CarInfo.sendStatus);
+router.post('/users/sendDrivingBehavior', CarInfo.sendDrivingBehavior);
 
 router.get('/users/getWarnings/:id', ODBWarning.getWarningsList);
 router.get('/users/getCarStatus/:id', User.checkLogin, CarInfo.getStatus);
