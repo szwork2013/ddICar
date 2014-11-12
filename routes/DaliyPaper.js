@@ -22,6 +22,10 @@ exports.add = function (req, res) {
     switch (req.files["pic"].type) {
         case "image/png":
             pic = uuid.v1() + ".png";
+            break;
+        case "image/jpeg":
+            pic = uuid.v1() + ".jpg";
+            break;
     }
 
     var content;
@@ -82,6 +86,10 @@ exports.update = function (req, res) {
         switch (req.files["pic"].type) {
             case "image/png":
                 pic = uuid.v1() + ".png";
+                break;
+            case "image/jpeg":
+                pic = uuid.v1() + ".jpg";
+                break;
         }
     }
 
