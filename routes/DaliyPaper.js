@@ -158,9 +158,10 @@ exports.showAll = function (req, res) {
     DaliyPaperType.getAll(function (err, daliyPaperTypes) {
         DaliyPaperSubType.getAll(function (err, daliyPaperSubTypes) {
             DaliyPaper.getAll(pageIndex, function (err, daliyPapers) {
-                console.log(daliyPapers);
-                var nextPageIndex = pageIndex++;
-                var lastPageIndex = pageIndex--;
+//                console.log(daliyPapers);
+
+                var nextPageIndex = parseInt(pageIndex) + 1;
+                var lastPageIndex = parseInt(pageIndex) - 1;
                 res.render('daliyPaper_content_showAll', {
                     title: "东东电台管理后台",
                     success: req.flash('success'),
