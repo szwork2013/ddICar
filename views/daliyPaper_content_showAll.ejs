@@ -163,21 +163,8 @@
 
                         <div class="col-sm-7">
                             <select name="daliyPaperType" id="daliyPaperType">
-                                <% daliyPaperSubTypes.forEach(function(t){ %>
-                                <% if(t._id == e.typeId) { %>
-                                <% daliyPaperTypes.forEach(function(_t){ %>
-                                <% if(t.parentTypeId == _t._id) { %>
-                                <option value="<%= _t._id %>" selected><%= _t.name %></option>
-                                <% }else{ %>
-                                <option value="<%= _t._id %>"><%= _t.name %></option>
-                                <% } %>
-                                <% }) %>
-                                <% } %>
-                                <% }) %>
-                            </select>
-                            <select name="daliyPaperSubType" id="daliyPaperSubType">
-                                <% if(daliyPaperSubTypes){ %>
-                                <% daliyPaperSubTypes.forEach(function(t){ %>
+                                <% if(daliyPaperTypes){ %>
+                                <% daliyPaperTypes.forEach(function(t){ %>
                                 <% if(e.typeId == t._id){ %>
                                 <option value="<%= t._id %>" selected><%= t.name %></option>
                                 <% }else{ %>
