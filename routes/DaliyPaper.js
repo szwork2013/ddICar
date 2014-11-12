@@ -13,7 +13,7 @@ exports.add = function (req, res) {
     var title = req.body.title;
     var author = req.body.author;
     var pic = req.files["pic"].name;
-    var typeId = req.body.daliyPaperSubType;
+    var typeId = req.body.daliyPaperType;
     var contentType = req.body.contentType;
     var audio = req.files["audio"].name;
     var txt = req.body.txt;
@@ -74,7 +74,7 @@ exports.update = function (req, res) {
     var title = req.body.title;
     var author = req.body.author;
     var pic = req.files["pic"].name;
-    var typeId = req.body.daliyPaperSubType;
+    var typeId = req.body.daliyPaperType;
     var audio;
 
     if (req.files["pic"].name != "") {
