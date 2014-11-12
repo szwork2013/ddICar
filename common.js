@@ -36,7 +36,9 @@ var commonEnum = {
     SYSTEM_ERROR:1001,
     USER_NOT_EXISTS:2000,
     WRONG_PASSWORD:2008,
-    USER_IS_EXISTS:2001
+    USER_IS_EXISTS:2001,
+    USER_NOT_LOGIN:2006,
+    USER_IS_LOGIN:2005
 };
 
 exports.success = success;

@@ -99,7 +99,7 @@ exports.login = function (req, res) {
     // 查询是否有此用户
     User.getByPhone(phone, function (err, user) {
         if (err) {
-            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+            return rs.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         if (!user) {
@@ -514,7 +514,7 @@ exports.getYourVoiceSettings = function (req, res) {
 
 exports.checkLogin = function (req, res, next) {
     if (!req.session.user) {
-        return res.json({flag: "fail", content: 2006});//您未登录
+        return res.json(Common.fail(Common.commonEnum.USER_NOT_LOGIN, '您未登录'));//
     }
 
     next();
@@ -522,7 +522,7 @@ exports.checkLogin = function (req, res, next) {
 
 exports.checkNotLogin = function (req, res, next) {
     if (req.session.user) {
-        return res.json({flag: "fail", content: 2005});//您已登录
+        return res.json(Common.fail(Common.commonEnum.USER_IS_LOGIN, '您已登录'));//
     }
 
     next();
