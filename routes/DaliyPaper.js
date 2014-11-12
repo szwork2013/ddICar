@@ -176,12 +176,12 @@ exports.delete = function (req, res) {
         DaliyPaper.delete(id, function (err) {
             if (err) {
                 req.flash('error', "删除该类型失败！");
-                return res.redirect('/admins/daliyPaper/content/showAll');
+                return res.redirect('/admins/daliyPaper/content/showAll/1');
             }
 
             fs.unlink('./public/images/' + daliyPaper.pic, function (err) {
                 req.flash('success', "删除该类型成功！");
-                res.redirect('/admins/daliyPaper/content/showAll');
+                res.redirect('/admins/daliyPaper/content/showAll/1');
             });
         });
     });
