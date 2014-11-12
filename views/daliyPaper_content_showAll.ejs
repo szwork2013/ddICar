@@ -27,23 +27,15 @@
             <% n++; %>
             <tr>
                 <td><%= n %></td>
-                <td><img src="/images/<%= e.pic %>" alt="<%= e.title %>"/></td>
+                <td><a href="#" class="thumbnail"><img data-src="holder.js/100%x180" src="/images/<%= e.pic %>"
+                                                       alt="<%= e.title %>"/></a></td>
                 <td><%= e.title %></td>
                 <td><%= e.author %></td>
                 <td>
-                    <% if(daliyPaperSubTypes){ %>
-                    <% daliyPaperSubTypes.forEach(function(t){ %>
-                    <% if(e.typeId == t._id){ %>
                     <% if(daliyPaperTypes){ %>
                     <% daliyPaperTypes.forEach(function(_t){ %>
-                    <% if(t.parentTypeId == _t._id){ %>
-                    <%= _t.name %> <%= t.name %>
-                    <% } %>
-                    <% }) %>
-                    <% } %>
-                    <% } %>
-                    <% }) %>
-                    <% } %>
+                    <%= _t.name %>
+                    <% })} %>
                 </td>
                 <td>
                     <% if(e.contentType == "audio"){ %>
