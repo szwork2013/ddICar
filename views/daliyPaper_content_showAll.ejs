@@ -35,9 +35,9 @@
                 <td>
                     <% if(daliyPaperTypes){ %>
                     <% daliyPaperTypes.forEach(function(_t){ %>
-                    <% if(e.typeId == _t._id) %>
+                    <% if(e.typeId == _t._id){ %>
                     <%= _t.name %>
-                    <% })} %>
+                    <% }})} %>
                 </td>
                 <td>
                     <% if(e.contentType == "audio"){ %>
