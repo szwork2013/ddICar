@@ -8,6 +8,7 @@ var fs = require('fs');
 var uuid = require('node-uuid');
 var Common = require('../common');
 var Zan = require('../models/Zan');
+var backpage = '/admins/daliyPaper/content/showAll/1';
 
 exports.add = function (req, res) {
     var title = req.body.title;
@@ -25,7 +26,7 @@ exports.add = function (req, res) {
 
     var content;
     switch (contentType) {
-        case "音频":
+        case "audio":
             switch (req.files["audio"].type) {
                 case "audio/mpeg":
                 case "audio/mp3":
@@ -34,7 +35,7 @@ exports.add = function (req, res) {
             }
             content = audio;
             break;
-        case "文字":
+        case "text":
             content = txt;
             break;
     }
@@ -51,7 +52,7 @@ exports.add = function (req, res) {
     newDaliyPaper.save(function (err, daliyPaper) {
         if (err) {
             req.flash('error', "添加该日报失败！");
-            return res.redirect('/admins/daliyPaper/content/showAll');
+            return res.redirect(backpage);
         }
 
         var pic_target_path = './public/images/' + pic;
@@ -65,7 +66,7 @@ exports.add = function (req, res) {
         }
 
         req.flash('success', "添加该日报成功！");
-        res.redirect('/admins/daliyPaper/content/showAll');
+        res.redirect(backpage);
     });
 };
 
@@ -123,7 +124,7 @@ exports.update = function (req, res) {
                     DaliyPaper.update(daliyPaper, function (err) {
                         if (err) {
                             req.flash("error", err);
-                            return res.redirect("/admins/daliyPaper/content/showAll");
+                            return res.redirect(backpage);
                         }
 
                         fs.renameSync(req.files["pic"].path, './public/images/' + daliyPaper.pic);
@@ -135,7 +136,7 @@ exports.update = function (req, res) {
                         }
 
                         req.flash("success", "修改成功！");
-                        res.redirect("/admins/daliyPaper/content/showAll");
+                        res.redirect(backpage);
                     });
                 }
             });
@@ -176,12 +177,12 @@ exports.delete = function (req, res) {
         DaliyPaper.delete(id, function (err) {
             if (err) {
                 req.flash('error', "删除该类型失败！");
-                return res.redirect('/admins/daliyPaper/content/showAll/1');
+                return res.redirect(backpage);
             }
 
             fs.unlink('./public/images/' + daliyPaper.pic, function (err) {
                 req.flash('success', "删除该类型成功！");
-                res.redirect('/admins/daliyPaper/content/showAll/1');
+                res.redirect(backpage);
             });
         });
     });
