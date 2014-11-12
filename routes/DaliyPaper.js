@@ -165,6 +165,8 @@ exports.showAll = function (req, res) {
                     error: req.flash('error'),
                     admin: req.session.admin,
                     pageIndex: pageIndex,
+                    nextPageIndex: pageIndex++,
+                    lastPageIndex: pageIndex--,
                     daliyPapers: daliyPapers,
                     daliyPaperTypes: daliyPaperTypes,
                     daliyPaperSubTypes: daliyPaperSubTypes
