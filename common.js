@@ -33,7 +33,10 @@ var commonEnum = {
     OTHER_ERROR_CODE: -10000, // 其他错误
     NOT_FOUND: 'NOT FOUND',
     PAGE_NUM: 12,
-    SYSTEM_ERROR:1001
+    SYSTEM_ERROR:1001,
+    USER_NOT_EXISTS:2000,
+    WRONG_PASSWORD:2008,
+    USER_IS_EXISTS:2001
 };
 
 exports.success = success;

@@ -28,17 +28,17 @@ exports.reg = function (req, res) {
     // 检验是否重复注册
     User.getByPhone(phone, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         if (user) {
-            return res.json({flag: "fail", content: 2001});//用户已存在
+            return res.json(Common.fail(Common.commonEnum.USER_IS_EXISTS, '用户已存在'));//用户已存在
         }
 
         // 校验完成，该用户没有注册过。完成注册
         newUser.save(function (err, user) {
             if (err) {
-                return res.json({flag: "fail", content: 1001}); //sysErr
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障')); //sysErr
             }
 
             // 保存session信息
@@ -48,13 +48,13 @@ exports.reg = function (req, res) {
             // 设置用户信息默认值 第一步设置你的声音默认值
             YourVoice.cloneToMyVoice("nanshen", user._id.toString(), function (err, ids) {
                 if (err) {
-                    return res.json({flag: "fail", content: 1001});
+                    return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                 }
 
                 // 设置定制日报一级类型默认值
                 DaliyPaperTypeBLL.getDaliyPeperDefaultSettings(function (err, defaultSettings) {
                     if (err) {
-                        return res.json({flag: "fail", content: 1001});
+                        return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                     }
 
                     user.your_voice = {type: "MyVoice", ids: ids};
@@ -63,7 +63,7 @@ exports.reg = function (req, res) {
                     // 执行保存操作
                     User.update(user, function (err) {
                         if (err) {
-                            return res.json({flag: "fail", content: 1001});
+                            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                         }
 
                         // 注册环信用户
@@ -77,11 +77,11 @@ exports.reg = function (req, res) {
 
                         newUserLogin.save(function (err) {
                             if (err) {
-                                return res.json({flag: "fail", content: 1001}); //sysErr
+                                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障')); //sysErr
                             }
 
 //                            res.json({flag: "success", content: user});
-                            res.json(Common.success(user, null));
+                            res.json(Common.success(user._id, null));
                         });
                     });
                 });
@@ -99,21 +99,21 @@ exports.login = function (req, res) {
     // 查询是否有此用户
     User.getByPhone(phone, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         if (!user) {
-            return res.json({flag: "fail", content: 2000});//用户不存在
+            return res.json(Common.fail(Common.commonEnum.USER_NOT_EXISTS, '用户不存在'));
         }
 
         // 检查密码是否一致
         if (user.info.password != password) {
-            return res.json({flag: "fail", content: 2008});//密码错误
+            return res.json(Common.fail(Common.commonEnum.WRONG_PASSWORD, '密码错误'));//
         }
 
         req.session.user = user;
         console.log(user);
-        res.json(Common.success(user, null));
+        res.json(Common.success(user._id, null));
 //        res.json({flag: "success", content: user});
     });
 };
