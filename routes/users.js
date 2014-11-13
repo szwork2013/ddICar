@@ -266,15 +266,15 @@ exports.setDaliyPaperSettings = function (req, res) {
             return res.json({flag: "fail", content: 1001});
         }
 
-        var daliy_papers = [];
-        DaliyPaperSettings.forEach(function (e) {
-            var t = JSON.parse(e);
-            daliy_papers.push(t);
-        });
+//        var daliy_papers = [];
+//        DaliyPaperSettings.forEach(function (e) {
+//            var t = JSON.parse(e);
+//            daliy_papers.push(t);
+//        });
 
-        if (user.daliy_paper) {
-            user.daliy_paper = daliy_papers;
-        }
+//        if (user.daliy_paper) {
+        user.daliy_paper = DaliyPaperSettings;
+//        }
 
         User.update(user, function (err) {
             if (err) {
