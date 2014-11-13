@@ -313,7 +313,7 @@ exports.getDaliyPaperSettings = function (req, res) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            var result;
+            var result = [];
             daliyPaperTypes.forEach(function (e) {
                 var item = {
                     "_id": e._id,
