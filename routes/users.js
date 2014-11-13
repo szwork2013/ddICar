@@ -51,40 +51,40 @@ exports.reg = function (req, res) {
                     return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                 }
 
-                // 设置定制日报一级类型默认值
-                DaliyPaperTypeBLL.getDaliyPeperDefaultSettings(function (err, defaultSettings) {
+//                // 设置定制日报一级类型默认值
+//                DaliyPaperTypeBLL.getDaliyPeperDefaultSettings(function (err, defaultSettings) {
+//                    if (err) {
+//                        return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+//                    }
+
+                user.your_voice = {type: "MyVoice", ids: ids};
+//                    user.daliy_paper = defaultSettings;
+
+                // 执行保存操作
+                User.update(user, function (err) {
                     if (err) {
                         return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                     }
 
-                    user.your_voice = {type: "MyVoice", ids: ids};
-                    user.daliy_paper = defaultSettings;
+                    // 注册环信用户
+                    HX.register(user);
 
-                    // 执行保存操作
-                    User.update(user, function (err) {
+                    // 保存设备与用户关系
+                    var newUserLogin = new SingleLogin({
+                        userID: user._id,
+                        sessionID: req.sessionID
+                    });
+
+                    newUserLogin.save(function (err) {
                         if (err) {
-                            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+                            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障')); //sysErr
                         }
 
-                        // 注册环信用户
-                        HX.register(user);
-
-                        // 保存设备与用户关系
-                        var newUserLogin = new SingleLogin({
-                            userID: user._id,
-                            sessionID: req.sessionID
-                        });
-
-                        newUserLogin.save(function (err) {
-                            if (err) {
-                                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障')); //sysErr
-                            }
-
 //                            res.json({flag: "success", content: user});
-                            res.json(Common.success(user._id, null));
-                        });
+                        res.json(Common.success(user._id, null));
                     });
                 });
+//                });
             });
         });
     });
@@ -292,25 +292,59 @@ exports.getDaliyPaperSettings = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-        var ids = [];
+//        var ids = [];
+//
+//        if (user.daliy_paper.length != 0) {
+//            user.daliy_paper.forEach(function (e) {
+//                var _t = {
+//                    id: e.id,
+//                    percent: e.percent
+//                };
+//                ids.push(_t);
+//            });
+//        }
 
-        if (user.daliy_paper.length != 0) {
-            user.daliy_paper.forEach(function (e) {
-                var _t = {
-                    id: e.id,
-                    percent: e.percent
+        DaliyPaperType.getAll(function (err, daliyPaperTypes) {
+            if (err) {
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+            }
+
+            var result;
+            daliyPaperTypes.forEach(function (e) {
+                var item = {
+                    "_id": _e._id,
+                    "name": _e.name,
+                    "pic": _e.pic,
+                    "selected": false
                 };
-                ids.push(_t);
+//                if (e) {
+                for (var i = 0; i < user.daliy_paper.length; i++) {
+
+                    if (e._id == user.daliy_paper[i]) {
+                        item = {
+                            "_id": _e._id,
+                            "name": _e.name,
+                            "pic": _e.pic,
+                            "selected": true
+                        };
+                        break;
+                    }
+                }
+//                }
+                result.push(item);
             });
-        }
+
+            res.json(Common.success(result, null));
+        });
 
         DaliyPaperType.geSome(ids, function (err, result) {
             if (err) {
                 return res.json({flag: "fail", content: 1001});
             }
+
 
             res.json({flag: "success", content: result});
         });

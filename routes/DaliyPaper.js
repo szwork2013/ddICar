@@ -157,8 +157,10 @@ exports.showAll = function (req, res) {
 
     DaliyPaperType.getAll(function (err, daliyPaperTypes) {
         DaliyPaperSubType.getAll(function (err, daliyPaperSubTypes) {
-            DaliyPaper.getAll(pageIndex, function (err, daliyPapers) {
+            DaliyPaper.getAll(pageIndex, function (err, daliyPapers, total) {
 //                console.log(daliyPapers);
+                daliyPapers.totalPage = parseInt(total / 10) + 1;
+                console.log(daliyPapers.totalPage);
 
                 var nextPageIndex = parseInt(pageIndex) + 1;
                 var lastPageIndex = parseInt(pageIndex) - 1;
@@ -205,10 +207,12 @@ exports.getAll = function (req, res) {
     var user_id = req.params["id"];
     var pageindex = req.params["pageindex"];
 
-    DaliyPaper.getAll(pageindex, function (err, daliyPapers) {
+    DaliyPaper.getAll(pageindex, function (err, daliyPapers, total) {
         if (err) {
             return res.json({flag: "fail", content: 1001});
         }
+
+        daliyPapers.totalPage = parseInt(total / 10) + 1;
 
         res.json({flag: "success", content: daliyPapers});
     });
