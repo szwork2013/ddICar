@@ -316,9 +316,9 @@ exports.getDaliyPaperSettings = function (req, res) {
             var result;
             daliyPaperTypes.forEach(function (e) {
                 var item = {
-                    "_id": _e._id,
-                    "name": _e.name,
-                    "pic": _e.pic,
+                    "_id": e._id,
+                    "name": e.name,
+                    "pic": e.pic,
                     "selected": false
                 };
 //                if (e) {
@@ -326,9 +326,9 @@ exports.getDaliyPaperSettings = function (req, res) {
 
                     if (e._id == user.daliy_paper[i]) {
                         item = {
-                            "_id": _e._id,
-                            "name": _e.name,
-                            "pic": _e.pic,
+                            "_id": e._id,
+                            "name": e.name,
+                            "pic": e.pic,
                             "selected": true
                         };
                         break;
