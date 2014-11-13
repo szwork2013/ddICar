@@ -306,6 +306,7 @@ exports.getDaliyPaperSettings = function (req, res) {
 //                ids.push(_t);
 //            });
 //        }
+        
 
         DaliyPaperType.getAll(function (err, daliyPaperTypes) {
             if (err) {
