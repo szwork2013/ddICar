@@ -35,7 +35,7 @@ router.get('/users/logout', User.checkLogin, User.logout);// 用户登出
 router.get('/users/getUser/:id', User.checkLogin, User.getUser);// 获取用户信息
 router.post('/users/putUser', User.checkLogin, User.putUser);// 保存用户信息
 router.post('/users/postPic', User.checkLogin, multipartMiddleware, User.postPic);// 保存用户头像
-router.post('/users/resetPassword', User.checkLogin, User.resetPassword);// 用户重置密码
+router.post('/users/resetPassword', User.resetPassword);// 用户重置密码
 router.post('/users/getFriends', User.checkLogin, User.getFriends); // 得到用户好友
 
 router.post('/users/setDaliyPaperSettings', User.checkLogin, User.setDaliyPaperSettings); // 保存一级日报设置
