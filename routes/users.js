@@ -313,12 +313,12 @@ exports.getDaliyPaperSettings = function (req, res) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            var result;
+            var result = [];
             daliyPaperTypes.forEach(function (e) {
                 var item = {
-                    "_id": _e._id,
-                    "name": _e.name,
-                    "pic": _e.pic,
+                    "_id": e._id,
+                    "name": e.name,
+                    "pic": e.pic,
                     "selected": false
                 };
 //                if (e) {
@@ -326,9 +326,9 @@ exports.getDaliyPaperSettings = function (req, res) {
 
                     if (e._id == user.daliy_paper[i]) {
                         item = {
-                            "_id": _e._id,
-                            "name": _e.name,
-                            "pic": _e.pic,
+                            "_id": e._id,
+                            "name": e.name,
+                            "pic": e.pic,
                             "selected": true
                         };
                         break;
@@ -341,6 +341,7 @@ exports.getDaliyPaperSettings = function (req, res) {
             res.json(Common.success(result, null));
         });
 
+<<<<<<< HEAD
 //        DaliyPaperType.geSome(ids, function (err, result) {
 //            if (err) {
 //                return res.json({flag: "fail", content: 1001});
@@ -349,6 +350,16 @@ exports.getDaliyPaperSettings = function (req, res) {
 //
 //            res.json({flag: "success", content: result});
 //        });
+=======
+        //DaliyPaperType.geSome(ids, function (err, result) {
+        //    if (err) {
+        //         return res.json({flag: "fail", content: 1001});
+        //     }
+
+
+        //     res.json({flag: "success", content: result});
+        // });
+>>>>>>> FETCH_HEAD
     });
 };
 
