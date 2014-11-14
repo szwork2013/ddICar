@@ -82,7 +82,6 @@ DaliyPaper.getAll = function (pageindex, query, callback) {
                     skip: (pageindex - 1) * 10,
                     limit: 10
                 }).sort({
-                    time: -1
                 }).toArray(function (err, docs) {
                     mongodbPool.release(db);
                     if (err) {
