@@ -5,6 +5,7 @@ var SingleLogin = require('../models/SingleLogin.js');
 var uuid = require('node-uuid');
 var DaliyPaperType = require('../models/DaliyPaperType');
 var DaliyPaperSubType = require('../models/DaliyPaperSubType');
+var DaliyPaper = require('../models/DaliyPaper');
 var YourVoice = require('./YourVoice');
 var DaliyPaperTypeBLL = require('./DaliyPaperType');
 var HX = require('./hxMiddleWare');
@@ -341,7 +342,6 @@ exports.getDaliyPaperSettings = function (req, res) {
             res.json(Common.success(result, null));
         });
 
-<<<<<<< HEAD
 //        DaliyPaperType.geSome(ids, function (err, result) {
 //            if (err) {
 //                return res.json({flag: "fail", content: 1001});
@@ -350,16 +350,28 @@ exports.getDaliyPaperSettings = function (req, res) {
 //
 //            res.json({flag: "success", content: result});
 //        });
-=======
-        //DaliyPaperType.geSome(ids, function (err, result) {
-        //    if (err) {
-        //         return res.json({flag: "fail", content: 1001});
-        //     }
+    });
+};
 
+exports.getDaliyPaperAll = function (req, res) {
+    var user_id = req.params["id"];
+    var pageindex = req.params["pageindex"];
 
-        //     res.json({flag: "success", content: result});
-        // });
->>>>>>> FETCH_HEAD
+    User.getOne(user_id, function (err, user) {
+        if (err) {
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+        }
+
+        var query = {_id: {'$in': user.daliy_paper}};
+        DaliyPaper.getAll(pageindex, query, function (err, daliyPapers, total) {
+            if (err) {
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+            }
+
+            daliyPapers.totalPage = parseInt(total / 10) + 1;
+
+            res.json(Common.success(daliyPapers, null));
+        });
     });
 };
 

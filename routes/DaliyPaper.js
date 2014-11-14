@@ -207,6 +207,8 @@ exports.getAll = function (req, res) {
     var user_id = req.params["id"];
     var pageindex = req.params["pageindex"];
 
+
+
     DaliyPaper.getAll(pageindex, function (err, daliyPapers, total) {
         if (err) {
             return res.json({flag: "fail", content: 1001});

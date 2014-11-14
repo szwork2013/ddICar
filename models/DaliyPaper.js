@@ -51,7 +51,7 @@ DaliyPaper.prototype.save = function (callback) {
     });
 };
 
-DaliyPaper.getAll = function (pageindex, callback) {
+DaliyPaper.getAll = function (pageindex, query, callback) {
     mongodbPool.acquire(function (err, db) {
         if (err) {
             return callback(err);
@@ -62,7 +62,7 @@ DaliyPaper.getAll = function (pageindex, callback) {
                 mongodbPool.release(db);
                 return callback(err);
             }
-            var query = {};
+//            var query = {};
 
 //            collection.find(query, {
 //                skip: (pageindex - 1) * 10,
@@ -79,7 +79,7 @@ DaliyPaper.getAll = function (pageindex, callback) {
             collection.count(query, function (err, total) {
                 //根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
                 collection.find(query, {
-                    skip: (pageindex - 1)*10,
+                    skip: (pageindex - 1) * 10,
                     limit: 10
                 }).sort({
                     time: -1
