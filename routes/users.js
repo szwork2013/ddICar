@@ -208,24 +208,16 @@ exports.postPic = function (req, res) {
 
 /* 重置用户密码 */
 exports.resetPassword = function (req, res) {
-    var oldPassword = req.body.oldpassword;
     var newPassword = req.body.newpassword;
     var phone = req.body.phone;
 
-    var md5 = crypto.createHash('sha256'),
-        oldPassword = md5.update(oldPassword).digest('hex');
-
     User.getByPhone(phone, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001})
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'))
         }
 
         if (!user) {
-            return res.json({flag: "fail", content: 2000});//用户不存在
-        }
-
-        if (user.info.password != oldPassword) {
-            return res.json({flag: "fail", content: 2008});//旧密码输入错误
+            return res.json(Common.fail(Common.commonEnum.USER_NOT_EXISTS, '用户不存在'));//
         }
 
         var _md5 = crypto.createHash('sha256');
@@ -235,10 +227,10 @@ exports.resetPassword = function (req, res) {
 
         User.update(user, function (err) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            return res.json({flag: "success", content: 3001});//修改成功
+            return res.json(Common.success("修改成功", null));//
         });
     });
 };
