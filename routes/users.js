@@ -341,14 +341,14 @@ exports.getDaliyPaperSettings = function (req, res) {
             res.json(Common.success(result, null));
         });
 
-        DaliyPaperType.geSome(ids, function (err, result) {
-            if (err) {
-                return res.json({flag: "fail", content: 1001});
-            }
-
-
-            res.json({flag: "success", content: result});
-        });
+//        DaliyPaperType.geSome(ids, function (err, result) {
+//            if (err) {
+//                return res.json({flag: "fail", content: 1001});
+//            }
+//
+//
+//            res.json({flag: "success", content: result});
+//        });
     });
 };
 
