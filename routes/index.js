@@ -53,7 +53,7 @@ router.get('/users/favorite/showAll/:id', User.checkLogin, Favorite.getAll);// �
 router.post('/users/favorite', User.checkLogin, Favorite.favorite); // 收藏
 router.post('/users/unfavorite', User.checkLogin, Favorite.unfavorite);// 取消收藏
 
-router.get('/users/daliyPaper/showAll/:id/:pageindex', User.checkLogin, DaliyPaper.getAll);// 获取日报
+router.get('/users/daliyPaper/showAll/:id/:pageindex', User.checkLogin, User.getDaliyPaperAll);// 获取日报
 router.get('/users/daliyPaper/showAllNum/:id', User.checkLogin, DaliyPaper.getAllNum); // 获取最新日报更新总数
 router.post('/users/daliyPaper/zan', User.checkLogin, DaliyPaper.setZan);
 

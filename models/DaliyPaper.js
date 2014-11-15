@@ -52,6 +52,7 @@ DaliyPaper.prototype.save = function (callback) {
 };
 
 DaliyPaper.getAll = function (pageindex, query, callback) {
+    console.log("query:" + query);
     mongodbPool.acquire(function (err, db) {
         if (err) {
             return callback(err);
@@ -77,20 +78,26 @@ DaliyPaper.getAll = function (pageindex, query, callback) {
 //            });
 
             //根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
-            collection.find(query, {
-                skip: (pageindex - 1) * 10,
-                limit: 10
-            }).sort().toArray(function (err, docs) {
-                mongodbPool.release(db);
+//
+//            console.log("query:"+query);
+
+            collection.count(query, function (err, total) {
                 if (err) {
                     return callback(err);
                 }
+                
+                collection.find(query, {
+                    skip: (pageindex - 1) * 10,
+                    limit: 10
+                }).sort().toArray(function (err, docs) {
+                    mongodbPool.release(db);
+                    if (err) {
+                        return callback(err);
+                    }
 
-                callback(null, docs);
+                    callback(null, docs, total);
+                });
             });
-//            collection.count(query, function (err, total) {
-//
-//            });
         });
     });
 };

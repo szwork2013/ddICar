@@ -354,14 +354,15 @@ exports.getDaliyPaperAll = function (req, res) {
             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-        var query = {_id: {'$in': user.daliy_paper}};
+        var query = {typeId: {'$in': user.daliy_paper}};
+        console.log(user.daliy_paper);
         DaliyPaper.getAll(pageindex, query, function (err, daliyPapers, total) {
             if (err) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
             daliyPapers.totalPage = parseInt(total / 10) + 1;
-
+            console.log(daliyPapers);
             res.json(Common.success(daliyPapers, null));
         });
     });
