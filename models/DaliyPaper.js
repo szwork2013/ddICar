@@ -76,20 +76,21 @@ DaliyPaper.getAll = function (pageindex, query, callback) {
 //                callback(null, docs);
 //            });
 
-            collection.count(query, function (err, total) {
-                //根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
-                collection.find(query, {
-                    skip: (pageindex - 1) * 10,
-                    limit: 10
-                }).toArray(function (err, docs) {
-                    mongodbPool.release(db);
-                    if (err) {
-                        return callback(err);
-                    }
+            //根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
+            collection.find(query, {
+                skip: (pageindex - 1) * 10,
+                limit: 10
+            }).sort().toArray(function (err, docs) {
+                mongodbPool.release(db);
+                if (err) {
+                    return callback(err);
+                }
 
-                    callback(null, docs, total);
-                });
+                callback(null, docs);
             });
+//            collection.count(query, function (err, total) {
+//
+//            });
         });
     });
 };
