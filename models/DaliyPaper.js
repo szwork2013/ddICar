@@ -52,7 +52,6 @@ DaliyPaper.prototype.save = function (callback) {
 };
 
 DaliyPaper.getAll = function (pageindex, query, callback) {
-    console.log("query:" + query);
     mongodbPool.acquire(function (err, db) {
         if (err) {
             return callback(err);
@@ -78,11 +77,10 @@ DaliyPaper.getAll = function (pageindex, query, callback) {
 //            });
 
             //根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
-//
-//            console.log("query:"+query);
 
             collection.count(query, function (err, total) {
                 if (err) {
+                    console.log(1);
                     return callback(err);
                 }
                 
@@ -92,6 +90,7 @@ DaliyPaper.getAll = function (pageindex, query, callback) {
                 }).sort().toArray(function (err, docs) {
                     mongodbPool.release(db);
                     if (err) {
+                        console.log(2);
                         return callback(err);
                     }
 

@@ -3,7 +3,7 @@
 
 <div class="col-sm-offset-1 col-sm-7">
     <div class="well">
-        <h5>管理员：<%=admin.name%></h5>
+        <h5>管理员：<%= admin.name %></h5>
         <hr/>
         <% if(error){ %>
         <%= error %>
@@ -14,22 +14,25 @@
         <table class="table table-hover">
             <tr>
                 <td>#No.</td>
-                <td>#封图</td>
+                <td>#Id</td>
                 <td>#定制日报一级栏目名称</td>
                 <td>#操作</td>
             </tr>
             <% if(daliyPaperTypes){ %>
-            <% var n=0 %>
-            <% daliyPaperTypes.forEach(function(e){%>
-            <%n++;%>
+            <% var n = 0 %>
+            <% daliyPaperTypes.forEach(function(e){ %>
+            <% n++; %>
             <tr>
-                <td><%=n%></td>
-                <td><img src="/images/<%=e.pic%>" alt="<%=e.name%>"/></td>
-                <td><%=e.name%></td>
-                <td><a href="/admins/daliyPaper/type/level1/delete/<%=e._id%>">删除</a> <a data-toggle="modal" data-target="#<%=e._id%>">修改</a></td>
+                <td><%= n %></td>
+                <td><%= e._id %></td>
+                <!--<img src="/images/<%= e.pic %>" alt="<%= e.name %>"/>-->
+                <td><%= e.name %></td>
+                <td><a href="/admins/daliyPaper/type/level1/delete/<%= e._id %>">删除</a> <a data-toggle="modal"
+                                                                                           data-target="#<%= e._id %>">修改</a>
+                </td>
             </tr>
-            <%});%>
-            <%}%>
+            <% }); %>
+            <% } %>
         </table>
         <button type="button" class="btn btn-default " data-toggle="modal" data-target="#add">添加</button>
 
@@ -44,15 +47,19 @@
             </div>
             <div class="modal-body">
                 <p class="lead">信息录入</p>
-                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level1/add" enctype="multipart/form-data">
+
+                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level1/add"
+                      enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="daliyPaperType" class="col-sm-4 control-label">定制日报一级栏目</label>
+
                         <div class="col-sm-7">
                             <input type="text" name="name" id="name" class="form-control" placeholder="一级栏目名称"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for=“pic” class="col-sm-4 control-label">封图</label>
+
                         <div class="col-sm-7">
                             <input name="pic" type="file" class="form-control" id="pic">
                         </div>
@@ -68,9 +75,10 @@
     </div>
 </div>
 
-<%if(daliyPaperTypes){%>
-<%daliyPaperTypes.forEach(function(e){%>
-<div class="modal fade" id="<%=e._id%>" tabindex="-1" role="dialog" aria-labelledby="starModalLabel" aria-hidden="true">
+<% if(daliyPaperTypes){ %>
+<% daliyPaperTypes.forEach(function(e){ %>
+<div class="modal fade" id="<%= e._id %>" tabindex="-1" role="dialog" aria-labelledby="starModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -78,23 +86,26 @@
                 <h4 class="modal-title" id="myModalLabel">日报子栏目类型</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level1/update" enctype="multipart/form-data">
+                <form class="form-horizontal" role="form" method="POST" action="/admins/daliyPaper/type/level1/update"
+                      enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="daliyPaperType" class="col-sm-4 control-label">定制日报一级栏目</label>
+
                         <div class="col-sm-7">
-                            <input type="text" name="name" id="name" class="form-control" value="<%=e.name%>"/>
+                            <input type="text" name="name" id="name" class="form-control" value="<%= e.name %>"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for=“pic” class="col-sm-4 control-label">封图</label>
+
                         <div class="col-sm-7">
-                            <img src="/images/<%=e.pic%>" alt="<%=e.name%>"/>
+                            <img src="/images/<%= e.pic %>" alt="<%= e.name %>"/>
                             <input name="pic" type="file" class="form-control" id="pic">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-3">
-                            <input type="hidden" name="id" value="<%=e._id%>"/>
+                            <input type="hidden" name="id" value="<%= e._id %>"/>
                             <button type="submit" class="btn btn-default">修改</button>
                         </div>
                     </div>
@@ -103,7 +114,6 @@
         </div>
     </div>
 </div>
-<%});%>
-<%}%>
-
+<% }); %>
+<% } %>
 <%- include footer %>

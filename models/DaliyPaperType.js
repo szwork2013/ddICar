@@ -6,15 +6,15 @@ var ObjectId = require('mongodb').ObjectID;
 
 function DaliyPaperType(daliyPaperType) {
     this.name = daliyPaperType.name;
-    this.pic = daliyPaperType.pic;
+//    this.pic = daliyPaperType.pic;
 }
 
 module.exports = DaliyPaperType;
 
 DaliyPaperType.prototype.save = function (callback) {
     var DaliyPaperType = {
-        name: this.name,
-        pic: this.pic
+        name: this.name
+//        pic: this.pic
     };
 
     mongodbPool.acquire(function (err, db) {
@@ -158,18 +158,18 @@ DaliyPaperType.geSome = function (ids, callback) {
                 daliyPaperTypes.forEach(function (e) {
                     var _t = {
                         "_id": e._id,
-                        "name": e.name,
-                        "pic": e.pic,
-                        "percent": "0"
+                        "name": e.name
+//                        "pic": e.pic,
+//                        "percent": "0"
                     };
                     ids.forEach(function (_e) {
                         if (_e) {
                             if (e._id == _e.id) {
                                 _t = {
                                     "_id": e._id,
-                                    "name": e.name,
-                                    "pic": e.pic,
-                                    "percent": _e.percent
+                                    "name": e.name
+//                                    "pic": e.pic,
+//                                    "percent": _e.percent
                                 }
 
                             }

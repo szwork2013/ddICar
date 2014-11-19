@@ -113,9 +113,7 @@ exports.login = function (req, res) {
         }
 
         req.session.user = user;
-        console.log(user);
         res.json(Common.success(user._id, null));
-//        res.json({flag: "success", content: user});
     });
 };
 
@@ -288,19 +286,6 @@ exports.getDaliyPaperSettings = function (req, res) {
             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-//        var ids = [];
-//
-//        if (user.daliy_paper.length != 0) {
-//            user.daliy_paper.forEach(function (e) {
-//                var _t = {
-//                    id: e.id,
-//                    percent: e.percent
-//                };
-//                ids.push(_t);
-//            });
-//        }
-
-
         DaliyPaperType.getAll(function (err, daliyPaperTypes) {
             if (err) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
@@ -311,7 +296,7 @@ exports.getDaliyPaperSettings = function (req, res) {
                 var item = {
                     "_id": e._id,
                     "name": e.name,
-                    "pic": e.pic,
+//                    "pic": e.pic,
                     "selected": false
                 };
 //                if (e) {
@@ -321,7 +306,7 @@ exports.getDaliyPaperSettings = function (req, res) {
                         item = {
                             "_id": e._id,
                             "name": e.name,
-                            "pic": e.pic,
+//                            "pic": e.pic,
                             "selected": true
                         };
                         break;
@@ -348,6 +333,7 @@ exports.getDaliyPaperSettings = function (req, res) {
 exports.getDaliyPaperAll = function (req, res) {
     var user_id = req.params["id"];
     var pageindex = req.params["pageindex"];
+    console.log(req.params);
 
     User.getOne(user_id, function (err, user) {
         if (err) {
@@ -355,7 +341,7 @@ exports.getDaliyPaperAll = function (req, res) {
         }
 
         var query = {typeId: {'$in': user.daliy_paper}};
-        console.log(user.daliy_paper);
+        console.log("query:" + query);
         DaliyPaper.getAll(pageindex, query, function (err, daliyPapers, total) {
             if (err) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));

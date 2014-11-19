@@ -10,6 +10,7 @@ var YourVoice = require('./YourVoice');
 var YourVoiceType = require('./YourVoiceType');
 var ODBWarning = require('./ODBWarning');
 var CarInfo = require('./CarInfo');
+var Auth = require('./auth');
 
 /* GET home page. */
 //router.get('/', function (req, res) {
@@ -31,6 +32,7 @@ var CarInfo = require('./CarInfo');
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
 router.get('/users/logout', User.checkLogin, User.logout);// 用户登出
+router.get('/users/wxauth/:wxCode',Auth.wxAuth);
 
 router.get('/users/getUser/:id', User.checkLogin, User.getUser);// 获取用户信息
 router.post('/users/putUser', User.checkLogin, User.putUser);// 保存用户信息
