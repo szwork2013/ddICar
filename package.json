@@ -29,6 +29,7 @@
         "passport-sina": "latest",
         "passport-tqq": "latest",
         "passport-local": "latest",
-        "thenjs": "latest"
+        "thenjs": "latest",
+        "connect-mongostore": "latest"
     }
 }

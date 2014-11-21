@@ -157,7 +157,8 @@ exports.showAll = function (req, res) {
 
     DaliyPaperType.getAll(function (err, daliyPaperTypes) {
         DaliyPaperSubType.getAll(function (err, daliyPaperSubTypes) {
-            DaliyPaper.getAll(pageIndex, function (err, daliyPapers, total) {
+            var query = {};
+            DaliyPaper.getAll(pageIndex, query, function (err, daliyPapers, total) {
 //                console.log(daliyPapers);
                 daliyPapers.totalPage = parseInt(total / 10) + 1;
                 console.log(daliyPapers.totalPage);
@@ -206,7 +207,6 @@ exports.delete = function (req, res) {
 exports.getAll = function (req, res) {
     var user_id = req.params["id"];
     var pageindex = req.params["pageindex"];
-
 
 
     DaliyPaper.getAll(pageindex, function (err, daliyPapers, total) {
