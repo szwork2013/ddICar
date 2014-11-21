@@ -59,9 +59,11 @@ exports.add = function (req, res) {
             return res.redirect(backpage);
         }
 
-        var pic_target_path = './public/images/' + pic;
-        // 使用同步方式重命名一个文件
-        fs.renameSync(req.files["pic"].path, pic_target_path);
+        if (req.files["pic"].name) {
+            var pic_target_path = './public/images/' + pic;
+            // 使用同步方式重命名一个文件
+            fs.renameSync(req.files["pic"].path, pic_target_path);
+        }
 
         if (req.files["audio"].name) {
             var audio_target_path = './public/audio/daliyPaper/' + audio;
