@@ -13,20 +13,20 @@ var backpage = '/admins/daliyPaper/content/showAll/1';
 exports.add = function (req, res) {
     var title = req.body.title;
     var author = req.body.author;
-    var pic = req.files["pic"].name;
+//    var pic = req.files["pic"].name;
     var typeId = req.body.daliyPaperType;
     var contentType = req.body.contentType;
     var audio = req.files["audio"].name;
     var txt = req.body.txt;
 
-    switch (req.files["pic"].type) {
-        case "image/png":
-            pic = uuid.v1() + ".png";
-            break;
-        case "image/jpeg":
-            pic = uuid.v1() + ".jpg";
-            break;
-    }
+//    switch (req.files["pic"].type) {
+//        case "image/png":
+//            pic = uuid.v1() + ".png";
+//            break;
+//        case "image/jpeg":
+//            pic = uuid.v1() + ".jpg";
+//            break;
+//    }
 
     var content;
     switch (contentType) {
@@ -44,10 +44,19 @@ exports.add = function (req, res) {
             break;
     }
 
+//    var newDaliyPaper = new DaliyPaper({
+//        title: title,
+//        author: author,
+//        pic: pic,
+//        typeId: typeId,
+//        contentType: contentType,
+//        content: content
+//    });
+
     var newDaliyPaper = new DaliyPaper({
         title: title,
         author: author,
-        pic: pic,
+        pic: "",
         typeId: typeId,
         contentType: contentType,
         content: content
@@ -59,11 +68,11 @@ exports.add = function (req, res) {
             return res.redirect(backpage);
         }
 
-        if (req.files["pic"].name) {
-            var pic_target_path = './public/images/' + pic;
-            // 使用同步方式重命名一个文件
-            fs.renameSync(req.files["pic"].path, pic_target_path);
-        }
+//        if (req.files["pic"].name) {
+//            var pic_target_path = './public/images/' + pic;
+//            // 使用同步方式重命名一个文件
+//            fs.renameSync(req.files["pic"].path, pic_target_path);
+//        }
 
         if (req.files["audio"].name) {
             var audio_target_path = './public/audio/daliyPaper/' + audio;
