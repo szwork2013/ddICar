@@ -220,9 +220,11 @@ router.get('/daliyPaper/content/showAll/:pageindex', DaliyPaper.showAll);
 
 router.post('/daliyPaper/content/add', multipartMiddleware, DaliyPaper.add);
 
+router.post('/daliyPaper/content/addByRoot', multipartMiddleware, DaliyPaper.addByRoot);
+
 router.post('/daliyPaper/content/update', multipartMiddleware, DaliyPaper.update);
 
-router.get('/daliyPaper/content/delete/:id', DaliyPaper.delete);
+router.get('/daliyPaper/content/delete/:id/:pageindex', DaliyPaper.delete);
 
 router.get('/yourVoice/type/showAll', YourVoiceType.showAll);
 

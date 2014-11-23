@@ -46,8 +46,9 @@
                     <%= e.content %>
                     <% } %>
                 </td>
-                <td><a href="/admins/daliyPaper/content/delete/<%= e._id %>">删除</a> <a data-toggle="modal"
-                                                                                       data-target="#<%= e._id %>">修改</a>
+                <td><a href="/admins/daliyPaper/content/delete/<%= e._id %>/<%= e.pageIndex %>">删除</a> <a
+                            data-toggle="modal"
+                            data-target="#<%= e._id %>">修改</a>
                 </td>
             </tr>
             <% }); %>
