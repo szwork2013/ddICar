@@ -222,6 +222,8 @@ router.post('/daliyPaper/content/add', multipartMiddleware, DaliyPaper.add);
 
 router.post('/daliyPaper/content/addByRoot', multipartMiddleware, DaliyPaper.addByRoot);
 
+router.post('/daliyPaper/content/addByClawer', multipartMiddleware, DaliyPaper.addByClawer);
+
 router.post('/daliyPaper/content/update', multipartMiddleware, DaliyPaper.update);
 
 router.get('/daliyPaper/content/delete/:id/:pageindex', DaliyPaper.delete);
