@@ -162,6 +162,73 @@ exports.addByRoot = function (req, res) {
     });
 };
 
+exports.addByClawer = function (req, res) {
+    console.log(req.body);
+    var title = req.body.title;
+    var author = req.body.author;
+    var pic = req.files["pic"].name;
+    var typeId = req.body.daliyPaperType;
+    var contentType = req.body.contentType;
+    var audio = req.files["audio"].name;
+    var txt = req.body.txt;
+
+    switch (req.files["pic"].type) {
+        case "image/png":
+            pic = uuid.v1() + ".png";
+            break;
+        case "image/jpeg":
+            pic = uuid.v1() + ".jpg";
+            break;
+    }
+
+    var content;
+    switch (contentType) {
+        case "audio":
+            switch (req.files["audio"].type) {
+                case "audio/mpeg":
+                case "audio/mp3":
+                    audio = uuid.v1() + ".mp3";
+                    break;
+            }
+            content = audio;
+            break;
+        case "text":
+            content = txt;
+            break;
+    }
+
+    var newDaliyPaper = new DaliyPaper({
+        title: title,
+        author: author,
+        pic: pic,
+        typeId: typeId,
+        contentType: contentType,
+        content: content
+    });
+
+    newDaliyPaper.save(function (err, daliyPaper) {
+        if (err) {
+//            req.flash('error', "添加该日报失败！");
+            return res.json({falg: 'fail'});
+        }
+
+        if (req.files["pic"].name) {
+            var pic_target_path = './public/images/' + pic;
+            // 使用同步方式重命名一个文件
+            fs.renameSync(req.files["pic"].path, pic_target_path);
+        }
+
+        if (req.files["audio"].name) {
+            var audio_target_path = './public/audio/daliyPaper/' + audio;
+            // 使用同步方式重命名一个文件
+            fs.renameSync(req.files["audio"].path, audio_target_path);
+        }
+
+//        req.flash('success', "添加该日报成功！");
+        res.json({falg: 'success'});
+    });
+};
+
 exports.update = function (req, res) {
     var id = req.body.id;
     var title = req.body.title;
