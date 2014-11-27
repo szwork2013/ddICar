@@ -38,6 +38,8 @@ exports.wxAuth = function (req, res) {
 
         wxresJSON = JSON.parse(wxres.body);
 
+        console.log(wxresJSON);
+
         if (wxresJSON.errcode) {
             return res.json(fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         } else {

@@ -4,8 +4,8 @@ var pkg = require('./package.json'),
 
 config = {
     wx: {
-        appKey: '2114675498',
-        appSecret: 'e9f661eb7844cff78f31e1871f9f48e7',
+        appKey: 'wxfac56e93388fd4a0',
+        appSecret: 'c9c1a7662202fcd9183fa5774ac1eaa6',
         tokenUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?',
         userInfoUrl: 'https://api.weixin.qq.com/sns/userinfo?'
     }
