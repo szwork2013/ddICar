@@ -29,6 +29,12 @@ var Auth = require('./auth');
 //    });
 //});
 
+router.get('/right',function(req,res){
+    res.render('Right',{
+        
+    });
+});
+
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
 router.get('/users/logout', User.checkLogin, User.logout);// 用户登出
