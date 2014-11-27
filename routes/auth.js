@@ -84,7 +84,7 @@ exports.wxAuth = function (req, res) {
             });
         }
     }).then(function (defer, userDoc) {
-        req.session.uid = userDoc._id;
+        req.session.user = userDoc;
 //        res.header('uid', userDoc._id);
 //        res.header('secret', userDoc.secret);
         res.json(success(null, userDoc._id));
