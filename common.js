@@ -21,6 +21,11 @@ var fail = function (code, str) {
     };
 };
 
+var platform = {
+    wx: 'wx',
+    phone: 'phone'
+}
+
 var commonEnum = {
     AUTH_ERROR_CODE: -90000, // 授权出错
     AUTH_PLATFORM_ERROR_CODE: -90001, // 授权出错,未知平台
@@ -33,12 +38,12 @@ var commonEnum = {
     OTHER_ERROR_CODE: -10000, // 其他错误
     NOT_FOUND: 'NOT FOUND',
     PAGE_NUM: 12,
-    SYSTEM_ERROR:1001,
-    USER_NOT_EXISTS:2000,
-    WRONG_PASSWORD:2008,
-    USER_IS_EXISTS:2001,
-    USER_NOT_LOGIN:2006,
-    USER_IS_LOGIN:2005
+    SYSTEM_ERROR: 1001,
+    USER_NOT_EXISTS: 2000,
+    WRONG_PASSWORD: 2008,
+    USER_IS_EXISTS: 2001,
+    USER_NOT_LOGIN: 2006,
+    USER_IS_LOGIN: 2005
 };
 
 exports.success = success;

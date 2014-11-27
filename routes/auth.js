@@ -5,6 +5,8 @@ var Common = require('../common'),
     fail = Common.fail,
     request = require('request'),
     then = require('thenjs'),
+    crypto = require('crypto'),
+    uuid = require('node-uuid'),
     User = require('../models/users');
 
 /**
@@ -35,11 +37,8 @@ exports.wxAuth = function (req, res) {
             defer
         );
     }).then(function (defer, wxres) {
-
         wxresJSON = JSON.parse(wxres.body);
-
         console.log(wxresJSON);
-
         if (wxresJSON.errcode) {
             return res.json(fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         } else {
@@ -48,17 +47,15 @@ exports.wxAuth = function (req, res) {
             wxRefreshToken = wxresJSON.refresh_token;
             wxOpenid = wxresJSON.openid;
 
-            userDao.findOneByOption({'wx.openid': wxOpenid}, defer);
+
+            User.getQuery({'wx.openid': wxOpenid}, defer);
         }
     }).then(function (defer, userDoc) {
-
-        if (userDoc) { // 存在该用户,允许登录
-
+        console.log(userDoc);
+        if (userDoc[0]) { // 存在该用户,允许登录
 
         } else { // 不存在该用户,创建新用户 并登录
-
             then(function (defer1) { // 根据 openid access_token获得用户信息
-
                 request.get(
                     config.wx.userInfoUrl,
                     {
@@ -70,14 +67,17 @@ exports.wxAuth = function (req, res) {
                     defer1
                 );
             }).then(function (defer1, usrInfoRes) { // 创建新用户
-
                 wxUsrInfoJSON = JSON.parse(usrInfoRes.body);
-
+                var info = {
+                    phone: '',
+                    password: crypto.createHash('sha256').update(uuid.v4()).digest('hex'),
+                    name: wxUsrInfoJSON.nick_name,
+                    wx: wxUsrInfoJSON
+                };
                 // todo save
-                var newUser = new User(null, wxUsrInfoJSON);
+                var newUser = new User(Common.platform.wx, wxUsrInfoJSON);
                 newUser.save(defer1);
             }).then(function (defer1, user) {
-
                 defer(null, user);
             }).fail(function (defer1, err) {
                 defer(err);
@@ -85,12 +85,11 @@ exports.wxAuth = function (req, res) {
         }
     }).then(function (defer, userDoc) {
         req.session.uid = userDoc._id;
-
-        res.header('uid', userDoc._id);
-        res.header('secret', userDoc.secret);
-        res.json(success(null));
+//        res.header('uid', userDoc._id);
+//        res.header('secret', userDoc.secret);
+        res.json(success(null, userDoc._id));
     }).fail(function (defer, err) {
-
+        console.log(err);
         res.json(fail(err.errCode, '服务器异常'));
     });
 };

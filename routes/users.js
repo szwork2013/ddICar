@@ -21,12 +21,22 @@ exports.reg = function (req, res) {
 
     // 新建用户
     var newUser = new User({
-        name: phone.replace(new RegExp(phone.substr(3, 4)), '****'),
-        phone: phone,
-        password: password
-    });
+            name: phone.replace(new RegExp(phone.substr(3, 4)), '****'),
+            phone: phone,
+            password: password,
+            wx: {"openid": '',
+                "nickname": '',
+                "sex": '',
+                "province": '',
+                "city": '',
+                "country": '',
+                "headimgurl": '',
+                "privilege": '',
+                "unionid": ''}
+        }
+    );
 
-    // 检验是否重复注册
+// 检验是否重复注册
     User.getByPhone(phone, function (err, user) {
         if (err) {
             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
@@ -37,7 +47,7 @@ exports.reg = function (req, res) {
         }
 
         // 校验完成，该用户没有注册过。完成注册
-        newUser.save(function (err, user) {
+        newUser.save(Common.platform.phone, function (err, user) {
             if (err) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障')); //sysErr
             }
@@ -89,7 +99,8 @@ exports.reg = function (req, res) {
             });
         });
     });
-};
+}
+;
 
 /* 登录 */
 exports.login = function (req, res) {

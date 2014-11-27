@@ -2,26 +2,27 @@ var mongodbPool = require('./db');
 var ObjectId = require('mongodb').ObjectID;
 var YourVoice = require('./YourVoice');
 
-function User(user, wx) {
+function User(platform, info) {
     this.info = {
-        phone: user.phone,
-        password: user.password,
-        name: user.name,
+        phone: info.phone,
+        password: info.password,
+        name: info.name,
         pic: "None",
         sex: "None",
         intro: "这个人还没有写简介，懒死了",
-        deviceSN: ""
+        platform: platform,
+        deviceSN: "",
+        wx: {
+            "openid": info.wx.openid,
+            "nickname": info.wx.nickname,
+            "sex": info.wx.sex,
+            "province": info.wx.province,
+            "city": info.wx.city,
+            "country": info.wx.country,
+            "headimgurl": info.wx.headimgurl,
+            "privilege": info.wx.privilege,
+            "unionid": info.wx.unionid}
     };
-    this.wx = {
-        "openid": wx.openid,
-        "nickname": wx.nickname,
-        "sex": wx.sex,
-        "province": wx.province,
-        "city": wx.city,
-        "country": wx.country,
-        "headimgurl": wx.headimgurl,
-        "privilege": wx.privilege,
-        "unionid": wx.unionid};
     this.daliy_paper = [];
     this.your_voice = {
         type: "",
