@@ -24,7 +24,7 @@ var fail = function (code, str) {
 var platform = {
     wx: 'wx',
     phone: 'phone'
-}
+};
 
 var commonEnum = {
     AUTH_ERROR_CODE: -90000, // 授权出错
@@ -49,3 +49,4 @@ var commonEnum = {
 exports.success = success;
 exports.fail = fail;
 exports.commonEnum = commonEnum;
+exports.platform = platform;
