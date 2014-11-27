@@ -75,7 +75,7 @@ exports.wxAuth = function (req, res) {
                     wx: wxUsrInfoJSON
                 };
                 // todo save
-                var newUser = new User(Common.platform.wx, wxUsrInfoJSON);
+                var newUser = new User(Common.platform.wx, info);
                 newUser.save(defer1);
             }).then(function (defer1, user) {
                 defer(null, user);
