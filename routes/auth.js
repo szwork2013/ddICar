@@ -53,7 +53,7 @@ exports.wxAuth = function (req, res) {
     }).then(function (defer, userDoc) {
         console.log(userDoc);
         if (userDoc[0]) { // 存在该用户,允许登录
-            deref(null,userDoc);
+            defer(null,userDoc);
         } else { // 不存在该用户,创建新用户 并登录
             then(function (defer1) { // 根据 openid access_token获得用户信息
                 request.get(
