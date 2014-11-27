@@ -51,9 +51,9 @@ exports.wxAuth = function (req, res) {
             User.getQuery({'info.wx.openid': wxOpenid}, defer);
         }
     }).then(function (defer, userDoc) {
-        console.log(userDoc);
+//        console.log(userDoc);
         if (userDoc[0]) { // 存在该用户,允许登录
-            defer(null,userDoc);
+            defer(null,userDoc[0]);
         } else { // 不存在该用户,创建新用户 并登录
             then(function (defer1) { // 根据 openid access_token获得用户信息
                 request.get(
