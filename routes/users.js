@@ -10,6 +10,7 @@ var YourVoice = require('./YourVoice');
 var DaliyPaperTypeBLL = require('./DaliyPaperType');
 var HX = require('./hxMiddleWare');
 var Common = require('../common');
+var settings = require('../settings');
 
 /* 注册 */
 exports.reg = function (req, res) {
@@ -24,7 +25,7 @@ exports.reg = function (req, res) {
             name: phone.replace(new RegExp(phone.substr(3, 4)), '****'),
             phone: phone,
             sex: -1,
-            pic: "",
+            pic: 'http://182.92.160.208:3000/public/default_pic.png',
             platform: Common.platform.phone,
             password: password,
             wx: {"openid": '',
