@@ -68,7 +68,7 @@ exports.wxAuth = function (req, res) {
                 var info = {
                     phone: '',
                     password: crypto.createHash('sha256').update(uuid.v4()).digest('hex'),
-                    name: wxUserInfoJSON.nick_name,
+                    name: wxUserInfoJSON.nickname,
                     pic: wxUserInfoJSON.headimgurl,
                     sex: wxUserInfoJSON.sex,
                     platform: Common.platform.wx,
