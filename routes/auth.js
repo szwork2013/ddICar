@@ -23,7 +23,6 @@ exports.wxAuth = function (req, res) {
     }
 
     then(function (defer) { // 通过code获取 openid access_token
-
         request.get(
             config.wx.tokenUrl,
             {
@@ -38,21 +37,18 @@ exports.wxAuth = function (req, res) {
         );
     }).then(function (defer, wxres) {
         wxresJSON = JSON.parse(wxres.body);
-        console.log(wxresJSON);
         if (wxresJSON.errcode) {
             return res.json(fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         } else {
-
             wxAccessToken = wxresJSON.access_token;
             wxRefreshToken = wxresJSON.refresh_token;
             wxOpenid = wxresJSON.openid;
 
-
             User.getQuery({'info.wx.openid': wxOpenid}, defer);
         }
     }).then(function (defer, userDoc) {
-//        console.log(userDoc);
         if (userDoc[0]) { // 存在该用户,允许登录
+            console.log(userDoc[0]);
             defer(null,userDoc[0]);
         } else { // 不存在该用户,创建新用户 并登录
             then(function (defer1) { // 根据 openid access_token获得用户信息
