@@ -2,15 +2,15 @@ var mongodbPool = require('./db');
 var ObjectId = require('mongodb').ObjectID;
 var YourVoice = require('./YourVoice');
 
-function User(platform, info) {
+function User(info) {
     this.info = {
         phone: info.phone,
         password: info.password,
         name: info.name,
-        pic: "None",
-        sex: "None",
+        pic: info.pic,
+        sex: info.sex,
         intro: "这个人还没有写简介，懒死了",
-        platform: platform,
+        platform: info.platform,
         deviceSN: "",
         wx: {
             "openid": info.wx.openid,

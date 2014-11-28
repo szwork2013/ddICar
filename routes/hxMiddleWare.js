@@ -81,7 +81,7 @@ exports.register = function (user) {
         { method: 'POST',
             uri: settings.hxURI + '/users',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({"username": user.info.phone, "password": "123456"}
+            body: JSON.stringify({"username": user._id, "password": "123456"}
             )
         }
         , function (error, response, body) {

@@ -7,7 +7,8 @@ var Common = require('../common'),
     then = require('thenjs'),
     crypto = require('crypto'),
     uuid = require('node-uuid'),
-    User = require('../models/users');
+    User = require('../models/users'),
+    HX = require('./hxMiddleWare');
 
 /**
  * 微信授权
@@ -16,7 +17,7 @@ var Common = require('../common'),
 exports.wxAuth = function (req, res) {
 
     var wxCode = req.params["wxCode"],
-        wxresJSON, wxUsrInfoJSON, wxAccessToken, wxRefreshToken, wxOpenid;
+        wxresJSON, wxUserInfoJSON, wxAccessToken, wxRefreshToken, wxOpenid;
 
     if (!wxCode) {
         return res.json(fail('code', 'msg'));
@@ -49,9 +50,9 @@ exports.wxAuth = function (req, res) {
     }).then(function (defer, userDoc) {
         if (userDoc[0]) { // 存在该用户,允许登录
             console.log(userDoc[0]);
-            defer(null,userDoc[0]);
+            defer(null, userDoc[0]);
         } else { // 不存在该用户,创建新用户 并登录
-            then(function (defer1) { // 根据 openid access_token获得用户信息
+            then(function (_defer) { // 根据 openid access_token获得用户信息
                 request.get(
                     config.wx.userInfoUrl,
                     {
@@ -60,20 +61,24 @@ exports.wxAuth = function (req, res) {
                             openid: wxOpenid
                         }
                     },
-                    defer1
+                    _defer
                 );
-            }).then(function (defer1, usrInfoRes) { // 创建新用户
-                wxUsrInfoJSON = JSON.parse(usrInfoRes.body);
+            }).then(function (_defer, userInfoRes) { // 创建新用户
+                wxUserInfoJSON = JSON.parse(userInfoRes.body);
                 var info = {
                     phone: '',
                     password: crypto.createHash('sha256').update(uuid.v4()).digest('hex'),
-                    name: wxUsrInfoJSON.nick_name,
-                    wx: wxUsrInfoJSON
+                    name: wxUserInfoJSON.nick_name,
+                    pic: wxUserInfoJSON.headimgurl,
+                    sex: wxUserInfoJSON.sex,
+                    wx: wxUserInfoJSON
                 };
                 // todo save
                 var newUser = new User(Common.platform.wx, info);
-                newUser.save(defer1);
-            }).then(function (defer1, user) {
+                newUser.save(_defer);
+            }).then(function (_defer, user) {
+                // 注册环信用户
+                HX.register(user);
                 defer(null, user);
             }).fail(function (defer1, err) {
                 defer(err);
@@ -81,11 +86,10 @@ exports.wxAuth = function (req, res) {
         }
     }).then(function (defer, userDoc) {
         req.session.user = userDoc;
-//        res.header('uid', userDoc._id);
-//        res.header('secret', userDoc.secret);
-        res.json(success(null, userDoc._id));
+        req.session.user_id = userDoc._id;
+        res.json(success(userDoc._id, null));
     }).fail(function (defer, err) {
-        console.log(err);
+//        console.log(err);
         res.json(fail(err.errCode, '服务器异常'));
     });
 };

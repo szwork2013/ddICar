@@ -23,6 +23,9 @@ exports.reg = function (req, res) {
     var newUser = new User({
             name: phone.replace(new RegExp(phone.substr(3, 4)), '****'),
             phone: phone,
+            sex: -1,
+            pic: "",
+            platform: Common.platform.phone,
             password: password,
             wx: {"openid": '',
                 "nickname": '',
@@ -47,7 +50,7 @@ exports.reg = function (req, res) {
         }
 
         // 校验完成，该用户没有注册过。完成注册
-        newUser.save(Common.platform.phone, function (err, user) {
+        newUser.save(function (err, user) {
             if (err) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障')); //sysErr
             }
