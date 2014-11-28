@@ -71,16 +71,17 @@ exports.wxAuth = function (req, res) {
                     name: wxUserInfoJSON.nick_name,
                     pic: wxUserInfoJSON.headimgurl,
                     sex: wxUserInfoJSON.sex,
+                    platform: Common.platform.wx,
                     wx: wxUserInfoJSON
                 };
                 // todo save
-                var newUser = new User(Common.platform.wx, info);
+                var newUser = new User(info);
                 newUser.save(_defer);
             }).then(function (_defer, user) {
                 // 注册环信用户
                 HX.register(user);
                 defer(null, user);
-            }).fail(function (defer1, err) {
+            }).fail(function (_defer, err) {
                 defer(err);
             });
         }
@@ -89,7 +90,7 @@ exports.wxAuth = function (req, res) {
         req.session.user_id = userDoc._id;
         res.json(success(userDoc._id, null));
     }).fail(function (defer, err) {
-//        console.log(err);
+        console.log(err);
         res.json(fail(err.errCode, '服务器异常'));
     });
 };
