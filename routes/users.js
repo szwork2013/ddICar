@@ -25,7 +25,7 @@ exports.reg = function (req, res) {
             name: phone.replace(new RegExp(phone.substr(3, 4)), '****'),
             phone: phone,
             sex: -1,
-            pic: 'http://182.92.160.208:3000/public/default_pic.png',
+            pic: 'http://182.92.160.208:3000/default_pic.png',
             platform: Common.platform.phone,
             password: password,
             wx: {"openid": '',
