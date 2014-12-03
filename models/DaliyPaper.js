@@ -62,19 +62,6 @@ DaliyPaper.getAll = function (pageindex, query, callback) {
                 mongodbPool.release(db);
                 return callback(err);
             }
-//            var query = {};
-
-//            collection.find(query, {
-//                skip: (pageindex - 1) * 10,
-//                limit: 10
-//            }).sort().toArray(function (err, docs) {
-//                mongodbPool.release(db);
-//                if (err) {
-//                    return callback(err);
-//                }
-//
-//                callback(null, docs);
-//            });
 
             //根据 query 对象查询，并跳过前 (page-1)*10 个结果，返回之后的 10 个结果
 
@@ -83,11 +70,11 @@ DaliyPaper.getAll = function (pageindex, query, callback) {
                     console.log(1);
                     return callback(err);
                 }
-                
+
                 collection.find(query, {
                     skip: (pageindex - 1) * 10,
                     limit: 10
-                }).sort().toArray(function (err, docs) {
+                }).sort({_id: -1}).toArray(function (err, docs) {
                     mongodbPool.release(db);
                     if (err) {
                         console.log(2);
