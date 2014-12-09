@@ -19,11 +19,13 @@ exports.uploadSysVoice = function (req, res) {
         return res.json(301, {"error": "没有图片文件！"});
     }
 
+    console.log(req.files["audio"].type);
+
     switch (req.files["audio"].type) {
         case "audio/x-m4a":
             audioFileId = uuid.v1() + ".m4a";
             break;
-        case "audio/mp3":
+        case "audio/mpeg":
             audioFileId = uuid.v1() + ".mp3";
             break;
     }
