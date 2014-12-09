@@ -29,16 +29,16 @@ var Auth = require('./auth');
 //    });
 //});
 
-router.get('/right',function(req,res){
-    res.render('Right',{
-        
+router.get('/right', function (req, res) {
+    res.render('Right', {
+
     });
 });
 
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
 router.get('/users/logout', User.checkLogin, User.logout);// 用户登出
-router.get('/users/wxauth/:wxCode',Auth.wxAuth);
+router.get('/users/wxauth/:wxCode', Auth.wxAuth);
 
 router.get('/users/getUser/:id', User.checkLogin, User.getUser);// 获取用户信息
 router.post('/users/putUser', User.checkLogin, User.putUser);// 保存用户信息
@@ -71,7 +71,7 @@ router.get('/daliyPaper/getLevel2Type/:type', User.checkLogin, DaliyPaperType.le
 router.get('/yourVoice/getByType/:type', User.checkLogin, YourVoice.getByType);  // 获取你的声音列表
 router.get('/yourVoice/getType', User.checkLogin, YourVoiceType.getType);  // 获取你的声音类型
 router.post('/yourVoice/uploadMyVoice', User.checkLogin, multipartMiddleware, YourVoice.uploadMyVoice); // 上传我的定制声音
-router.get('/yourVoice/:type/download', User.checkLogin, YourVoice.download);
+router.get('/yourVoice/:type/download', YourVoice.download);
 
 /* 车机功能 */
 router.post('/users/sendWarning', ODBWarning.sendWarning);
