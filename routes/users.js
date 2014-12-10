@@ -204,7 +204,7 @@ exports.postPic = function (req, res) {
         }
 
 
-        user.info.pic = "182.92.160.208:3000/images/" + pic;
+        user.info.pic = "http://182.92.160.208:3000/images/" + pic;
 
         console.log(user.info.pic);
         User.update(user, function (err) {
