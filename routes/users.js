@@ -203,8 +203,10 @@ exports.postPic = function (req, res) {
             return res.json({flag: "fail", content: 2010});//没有图片文件
         }
 
-        user.info.pic = pic;
 
+        user.info.pic = "182.92.160.208:3000/images/" + pic;
+
+        console.log(user.info.pic);
         User.update(user, function (err) {
             if (err) {
                 return res.json({flag: "fail", content: 1001});
