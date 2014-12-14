@@ -203,7 +203,6 @@ exports.postPic = function (req, res) {
             return res.json({flag: "fail", content: 2010});//没有图片文件
         }
 
-
         user.info.pic = "http://182.92.160.208:3000/images/" + pic;
 
         console.log(user.info.pic);
