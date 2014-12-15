@@ -25,7 +25,8 @@ DaliyPaper.prototype.save = function (callback) {
         pic: this.pic,
         typeId: this.typeId,
         contentType: this.contentType,
-        content: this.content
+        content: this.content,
+        favorites:0
     };
 
     mongodbPool.acquire(function (err, db) {
