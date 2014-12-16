@@ -194,6 +194,8 @@ exports.postPic = function (req, res) {
     switch (req.files["pic"].type) {
         case "image/png":
             pic = uuid.v1() + ".png";
+        case "image/jpg":
+            pic = uuid.v1() + ".jpg";
     }
 
     User.getOne(user_id, function (err, user) {
