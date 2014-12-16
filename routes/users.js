@@ -189,6 +189,8 @@ exports.postPic = function (req, res) {
     var user_id = req.body.user_id;
     var pic = req.files["pic"].name;
 
+    console.log(req.files);
+
     switch (req.files["pic"].type) {
         case "image/png":
             pic = uuid.v1() + ".png";
