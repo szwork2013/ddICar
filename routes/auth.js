@@ -8,7 +8,8 @@ var Common = require('../common'),
     crypto = require('crypto'),
     uuid = require('node-uuid'),
     User = require('../models/users'),
-    HX = require('./hxMiddleWare');
+    HX = require('./hxMiddleWare'),
+    YourVoice = require('./YourVoice');
 
 /**
  * 微信授权
@@ -78,8 +79,12 @@ exports.wxAuth = function (req, res) {
                 var newUser = new User(info);
                 newUser.save(_defer);
             }).then(function (_defer, user) {
+
                 // 注册环信用户
                 HX.register(user);
+                _defer(null,user);
+            }).then(function (_defer,user) {
+                YourVoice.cloneToMyVoice("nanshen", user._id.toString(), _defer);
                 defer(null, user);
             }).fail(function (_defer, err) {
                 defer(err);
