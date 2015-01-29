@@ -120,8 +120,12 @@ exports.login = function (req, res) {
 
         req.session.user = user;
         req.session.user_id = user._id;
-        var userInfo =  user.info;
+        var userInfo ={};
         userInfo._id = user._id;
+        userInfo.phone = user.info.name;
+        userInfo.pic = user.info.pic;
+        userInfo.deviceSN = user.info.deviceSN;
+
         res.json(Common.success(userInfo));
     });
 };
