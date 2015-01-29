@@ -106,7 +106,7 @@ exports.login = function (req, res) {
     // 查询是否有此用户
     User.getByPhone(phone, function (err, user) {
         if (err) {
-            return rs.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         if (!user) {
@@ -115,11 +115,14 @@ exports.login = function (req, res) {
 
         // 检查密码是否一致
         if (user.info.password != password) {
-            return res.json(Common.fail(Common.commonEnum.WRONG_PASSWORD, '密码错误'));//
+            return res.json(Common.fail(Common.commonEnum.WRONG_PASSWORD, '密码错误'));
         }
 
         req.session.user = user;
-        res.json(Common.success(user._id, null));
+        req.session.user_id = user._id;
+        var userInfo =  user.info;
+        userInfo._id = user._id;
+        res.json(Common.success(userInfo));
     });
 };
 
@@ -142,8 +145,9 @@ exports.getUser = function (req, res) {
         if (err) {
             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
-
-        res.json(Common.success(user.info));
+        var userInfo =  user.info;
+        userInfo._id = user._id;
+        res.json(Common.success(userInfo));
     });
 };
 
