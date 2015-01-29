@@ -122,7 +122,8 @@ exports.login = function (req, res) {
         req.session.user_id = user._id;
         var userInfo ={};
         userInfo._id = user._id;
-        userInfo.phone = user.info.name;
+        userInfo.phone = user.info.phone;
+        userInfo.name = user.info.name;
         userInfo.pic = user.info.pic;
         userInfo.deviceSN = user.info.deviceSN;
 

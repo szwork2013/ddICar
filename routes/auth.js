@@ -95,7 +95,8 @@ exports.wxAuth = function (req, res) {
         req.session.user_id = userDoc._id;
         var userInfo ={};
         userInfo._id = userDoc._id;
-        userInfo.phone = userDoc.info.name;
+        userInfo.phone = userDoc.info.phone;
+        userInfo.name = userDoc.info.name;
         userInfo.pic = userDoc.info.pic;
         userInfo.deviceSN = userDoc.info.deviceSN;
         res.json(success(userInfo));
