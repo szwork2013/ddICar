@@ -4,11 +4,12 @@
 var Favorite = require('../models/favorite');
 var DaliyPaper = require('../models/DaliyPaper');
 var ObjectId = require('mongodb').ObjectID;
+var Common = require('../common');
 
 exports.getAll = function(req, res){
     Favorite.getAll(req.params['id'], function(err, favorites){
         if(err){
-            return res.json({flag:"fail",content:1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         var post_ids = [];
@@ -19,9 +20,9 @@ exports.getAll = function(req, res){
         DaliyPaper.getSome(post_ids, function(err, daliyPapers){
 
             if(err){
-                return res.json({flag:"fail",content:1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
-            return res.json({flag:"success",content:daliyPapers});
+            return res.json(Common.success(daliyPapers));
         });
     });
 };
@@ -39,19 +40,19 @@ exports.favorite = function(req, res){
 
             newFavorite.save(function(err, favorite){
                 if(err){
-                    return res.json({flag:"fail",content:1001});
+                    return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                 }
 
                 DaliyPaper.setFavorite(post_id, function(err){
                     if(err){
-                        return res.json({flag:"fail",content:1001});
+                        return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                     }
 
-                    res.json({flag:"success",content:3001});
+                    res.json(Common.success());
                 });
             });
         }else{
-            res.json({flag:"success",content:3001});
+            res.json(Common.success());
         }
     });
 };
@@ -62,15 +63,15 @@ exports.unfavorite = function(req, res){
 
     Favorite.delete(user_id,post_id,function(err){
         if(err){
-            return res.json({flag:"fail",content:1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         DaliyPaper.setUnFavorite(post_id, function(err){
             if(err){
-                return res.json({flag:"fail",content:1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            res.json({flag:"success",content:"取消收藏"});
+            res.json(Common.success());
         });
     });
 };

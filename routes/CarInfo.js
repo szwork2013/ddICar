@@ -6,6 +6,7 @@ var User = require('../models/users');
 var OBDErrorCode = require('../models/odbErrorCode');
 var YourVoice = require('./YourVoice');
 var HX = require('./hxMiddleWare');
+var Common = require('../common');
 
 function getCarStatus(deviceSN, callback) {
     mysql.getConnection(function (err, connection) {
@@ -55,7 +56,7 @@ exports.getStatus = function (req, res) {
     User.getOne(user_id, function (err, user) {
         getCarStatus(user.info.deviceSN, function (err, status) {
             console.log(status);
-            res.json(status);
+            res.json(Common.success(status));
         })
     })
 };
@@ -67,7 +68,7 @@ exports.sendStatus = function (req, res) {
     User.getBydeviceSN(deviceSN, function (err, user) {
         OBDErrorCode.getOneByCode(carStatus, function (err, obdErrorCode) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器错误'));
             }
 
             var query = {type: user.your_voice.type, content: obdErrorCode.mean};
@@ -76,7 +77,7 @@ exports.sendStatus = function (req, res) {
             }
             YourVoice.getQuery(query, function (err, yourVoices) {
                 if (err) {
-                    return res.json({flag: "fail", content: 1001});
+                    return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器错误'));
                 }
 
                 HX.getToken(function (token) {
@@ -89,7 +90,7 @@ exports.sendStatus = function (req, res) {
                     HX.sendMessage(token, user.info.phone, msg);
                 });
 
-                res.json({flag: 'success', content: "success"});
+                res.json(Common.success());
             })
         });
     })
@@ -101,13 +102,13 @@ exports.sendDrivingBehavior = function (req, res) {
 
     User.getBydeviceSN(deviceSN, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器错误'));
         }
 
         HX.getToken(function (token) {
             HX.sendMessage(token, user.info.phone, {type: "DrivingBehavior", content: DrivingBehavior});
         });
 
-        res.json({flag: 'success', content: "success"});
+        res.json(Common.success());
     })
 };

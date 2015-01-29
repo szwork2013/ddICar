@@ -6,6 +6,7 @@ var User = require('../models/users');
 var ODBErrorCode = require('../models/odbErrorCode');
 var ODBErrorRecord = require('../models/odbErrorRecord');
 var HX = require('./hxMiddleWare');
+var Common = require('../common');
 
 exports.sendWarning = function (req, res) {
     var deviceSN = req.body.deviceSN;
@@ -21,7 +22,7 @@ exports.sendWarning = function (req, res) {
 
             getWarningById(warning_Id, function (err, warning) {
                 if (err) {
-                    return res.json({flag: 'fail', content: 1001});
+                    return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器错误'));
                 }
 
                 var query = {
@@ -41,7 +42,7 @@ exports.sendWarning = function (req, res) {
                         });
                     }
 
-                    res.json({flag: 'success', content: 3001});
+                    res.json(Common.success());
                 });
             });
         });
@@ -51,7 +52,7 @@ exports.sendWarning = function (req, res) {
 exports.getWarningsList = function (req, res) {
     User.getOne(req.params['id'], function (err, user) {
         if (err) {
-            return res.json({flag: 'fail', content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器错误'));
         }
 
         ODBErrorRecord.getQuery({deviceSN: user.info.deviceSN}, function (err, records) {
@@ -62,7 +63,7 @@ exports.getWarningsList = function (req, res) {
             ODBErrorCode.getOneByCodes(codes, function (err, odbErrorCodes) {
                 getWarningsBySN(user.info.deviceSN, function (err, rows) {
                     if (err) {
-                        return res.json({flag: 'fail', content: 1001});
+                        return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器错误'));
                     }
 
                     var result = [];
@@ -95,7 +96,7 @@ exports.getWarningsList = function (req, res) {
                         result.push(item);
                     });
 
-                    res.json({flag: 'success', content: result});
+                    res.json(Common.success(result));
                 });
             });
         });
@@ -105,15 +106,15 @@ exports.getWarningsList = function (req, res) {
 exports.getWarningCount = function (req, res) {
     User.getOne(req.param['id'], function (err, user) {
         if (err) {
-            return res.json({flag: 'fail', content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器错误'));
         }
 
         getWarningCountBySN(user.info.deviceSN, function (err, result) {
             if (err) {
-                return res.json({flag: 'fail', content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器错误'));
             }
 
-            return res.json({flag: 'success', content: result});
+            return res.json(Common.success(result));
         })
     })
 };

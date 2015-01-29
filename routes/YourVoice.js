@@ -8,6 +8,7 @@ var YourVoiceType = require('../models/YourVoiceType');
 var userYourVoice = require('../models/userYourVoice');
 var backpage = "/admins/yourVoice/content/showAll";
 var zip = require("node-native-zip");
+var Common = require('../common');
 
 exports.uploadSysVoice = function (req, res) {
     console.log(req.files);
@@ -89,10 +90,10 @@ exports.getByType = function (req, res) {
 
     YourVoice.getByType(type, function (err, yourVoices) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-        res.json({flag: "success", content: yourVoices});
+        res.json(Common.success(yourVoices));
     });
 };
 
@@ -119,7 +120,7 @@ exports.uploadMyVoice = function (req, res) {
     // 获取定制声音
     YourVoice.getOne(voice_id, function (err, youVoice) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         var target_path = './public/audio/yourVoice/' + audio;
@@ -131,10 +132,10 @@ exports.uploadMyVoice = function (req, res) {
 
         YourVoice.update(youVoice, function (err) {
             if (err) {
-                return json({flag: "fail", content: 1001});
+                return json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            res.json({flag: "success", content: youVoice});
+            res.json(Common.success(youVoice));
         });
     });
 };
@@ -211,7 +212,7 @@ exports.download = function (req, res) {
 
                 fs.writeFile("./public/audio/yourVoice/" + type + ".zip", buff, function (err) {
                     console.log("Finished");
-                    res.json({flag: "success", content: "http://182.92.160.208:3000/audio/yourVoice/" + type + ".zip"});
+                    res.json(Common.success("http://182.92.160.208:3000/audio/yourVoice/" + type + ".zip"));
                 });
             }
         )

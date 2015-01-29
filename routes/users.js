@@ -66,14 +66,7 @@ exports.reg = function (req, res) {
                     return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                 }
 
-//                // 设置定制日报一级类型默认值
-//                DaliyPaperTypeBLL.getDaliyPeperDefaultSettings(function (err, defaultSettings) {
-//                    if (err) {
-//                        return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
-//                    }
-
                 user.your_voice = {type: "MyVoice", ids: ids};
-//                    user.daliy_paper = defaultSettings;
 
                 // 执行保存操作
                 User.update(user, function (err) {
@@ -95,11 +88,9 @@ exports.reg = function (req, res) {
                             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障')); //sysErr
                         }
 
-//                            res.json({flag: "success", content: user});
                         res.json(Common.success(user._id, null));
                     });
                 });
-//                });
             });
         });
     });
@@ -136,10 +127,10 @@ exports.login = function (req, res) {
 exports.logout = function (req, res) {
     req.session.destroy(function (err) {
         if (err) {
-            return res.json({flag: "fail", content: 2004});//登出失败
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));//登出失败
         }
 
-        res.json({flag: "success", content: 3002});//登出成功
+        res.json(Common.success());//登出成功
     });
 };
 
@@ -149,10 +140,10 @@ exports.getUser = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-        res.json({flag: "success", content: user});
+        res.json(Common.success(user.info));
     });
 };
 
@@ -166,7 +157,7 @@ exports.putUser = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         user.info.name = name;
@@ -176,10 +167,10 @@ exports.putUser = function (req, res) {
 
         User.update(user, function (err) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            res.json({flag: "success", content: 3001});
+            res.json(Common.success());
         });
     });
 };
@@ -200,11 +191,11 @@ exports.postPic = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         if (!req.files) {
-            return res.json({flag: "fail", content: 2010});//没有图片文件
+            return res.json(Common.fail(Common.commonEnum.NO_PIC, '没有图片文件'));
         }
 
         user.info.pic = "http://182.92.160.208:3000/images/" + pic;
@@ -212,14 +203,14 @@ exports.postPic = function (req, res) {
         console.log(user.info.pic);
         User.update(user, function (err) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
             var target_path = './public/images/' + pic;
             // 使用同步方式重命名一个文件
             fs.renameSync(req.files["pic"].path, target_path);
 
-            res.json({flag: "success", content: 3003});
+            res.json(Common.success());
         });
     });
 };
@@ -248,7 +239,7 @@ exports.resetPassword = function (req, res) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            return res.json(Common.success("修改成功", null));//
+            return res.json(Common.success());//
         });
     });
 };
@@ -260,10 +251,10 @@ exports.getFriends = function (req, res) {
     var query = {"info.phone": {'$in': friendlist}};
     User.getQuery(query, function (err, users) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-        return res.json({flag: "success", content: users});
+        return res.json(Common.success(users));
     })
 };
 
@@ -274,25 +265,17 @@ exports.setDaliyPaperSettings = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-//        var daliy_papers = [];
-//        DaliyPaperSettings.forEach(function (e) {
-//            var t = JSON.parse(e);
-//            daliy_papers.push(t);
-//        });
-
-//        if (user.daliy_paper) {
         user.daliy_paper = DaliyPaperSettings;
-//        }
 
         User.update(user, function (err) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            res.json({flag: "success", content: 3001});//修改成功
+            res.json(Common.success());//修改成功
         });
     });
 };
@@ -316,37 +299,25 @@ exports.getDaliyPaperSettings = function (req, res) {
                 var item = {
                     "_id": e._id,
                     "name": e.name,
-//                    "pic": e.pic,
                     "selected": false
                 };
-//                if (e) {
                 for (var i = 0; i < user.daliy_paper.length; i++) {
 
                     if (e._id == user.daliy_paper[i]) {
                         item = {
                             "_id": e._id,
                             "name": e.name,
-//                            "pic": e.pic,
                             "selected": true
                         };
                         break;
                     }
                 }
-//                }
+
                 result.push(item);
             });
 
-            res.json(Common.success(result, null));
+            res.json(Common.success(result));
         });
-
-//        DaliyPaperType.geSome(ids, function (err, result) {
-//            if (err) {
-//                return res.json({flag: "fail", content: 1001});
-//            }
-//
-//
-//            res.json({flag: "success", content: result});
-//        });
     });
 };
 
@@ -369,7 +340,7 @@ exports.getDaliyPaperAll = function (req, res) {
 
             daliyPapers.totalPage = parseInt(total / 10) + 1;
             console.log(daliyPapers);
-            res.json(Common.success(daliyPapers, null));
+            res.json(Common.success(daliyPapers));
         });
     });
 };
@@ -380,7 +351,7 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         // 这个判断在加入默认值后可删除
@@ -391,7 +362,7 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
                     var result = [];
                     DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
                         if (err) {
-                            return res.json({flag: "fail", content: 1001});
+                            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                         }
 
                         daliyPaperSubTypes.forEach(function (_e) {
@@ -417,7 +388,7 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
                             result.push(item);
                         });
 
-                        res.json({flag: "success", content: result});
+                        res.json(Common.success(result));
                     })
                 }
             });
@@ -425,7 +396,7 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
             var result = [];
             DaliyPaperSubType.getIdByParentTypeId(type_id, function (err, daliyPaperSubTypes) {
                 if (err) {
-                    return res.json({flag: "fail", content: 1001});
+                    return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                 }
 
                 console.log(daliyPaperSubTypes);
@@ -441,7 +412,7 @@ exports.getDaliyPaperSubTypeSettings = function (req, res) {
                     result.push(item);
                 });
 
-                res.json({flag: "success", content: result});
+                res.json(Common.success(result));
             })
         }
     })
@@ -455,7 +426,7 @@ exports.setDaliyPaperSubTypeSettings = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         if (user.daliy_paper) {
@@ -469,10 +440,10 @@ exports.setDaliyPaperSubTypeSettings = function (req, res) {
 
         User.update(user, function (err) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            res.json({flag: "success", content: 3001});//修改成功
+            res.json(Common.success());//修改成功
         });
     });
 };
@@ -483,7 +454,7 @@ exports.setAppSettings = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         if (user.settings) {
@@ -492,10 +463,10 @@ exports.setAppSettings = function (req, res) {
 
         User.update(user, function (err) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
-            res.json({flag: "success", content: 3001});//修改成功
+            res.json(Common.success());//修改成功
         });
     });
 };
@@ -505,10 +476,10 @@ exports.getAppSettings = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-        res.json({flag: "success", content: user.settings});
+        res.json(Common.success(user.settings));
     });
 };
 
@@ -517,10 +488,10 @@ exports.getYourVoiceChooseType = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-        res.json({flag: "success", content: user.your_voice.type});
+        res.json(Common.success(user.your_voice.type));
     });
 };
 
@@ -531,17 +502,17 @@ exports.setYourVoiceSettings = function (req, res) {
     YourVoice.getIdsByType(type, user_id, function (err, ids) {
         User.getOne(user_id, function (err, user) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
             user.your_voice = {type: type, ids: ids};
 
             User.update(user, function (err) {
                 if (err) {
-                    return res.json({flag: "fail", content: 1001});
+                    return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                 }
 
-                res.json({flag: "success", content: 3001});//修改成功
+                res.json(Common.success());//修改成功
             });
         });
     });
@@ -552,19 +523,19 @@ exports.getYourVoiceSettings = function (req, res) {
 
     User.getOne(user_id, function (err, user) {
         if (err) {
-            return res.json({flag: "fail", content: 1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
         var query = {_id: {'$in': user.your_voice.ids}};
 
         YourVoice.getQuery(query, function (err, youVoices) {
             if (err) {
-                return res.json({flag: "fail", content: 1001});
+                return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
 
             console.log(youVoices);
 
-            res.json({flag: "success", content: youVoices});
+            res.json(Common.success(youVoices));
         });
     });
 };

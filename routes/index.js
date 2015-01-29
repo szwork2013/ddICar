@@ -12,29 +12,6 @@ var ODBWarning = require('./ODBWarning');
 var CarInfo = require('./CarInfo');
 var Auth = require('./auth');
 
-/* GET home page. */
-//router.get('/', function (req, res) {
-//    res.render('index', {
-//        title: "大东车慧"
-//    });
-//});
-//router.get('/PC', function (req, res) {
-//    res.render('ddicar', {
-//        title: "大东车慧"
-//    });
-//});
-//router.get('/Mobile', function (req, res) {
-//    res.render('ddicar_mobile', {
-//        title: "大东车慧"
-//    });
-//});
-
-router.get('/right', function (req, res) {
-    res.render('Right', {
-
-    });
-});
-
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
 router.get('/users/logout', User.checkLogin, User.logout);// 用户登出
@@ -43,13 +20,13 @@ router.get('/users/wxauth/:wxCode', Auth.wxAuth);
 router.get('/users/getUser/:id', User.checkLogin, User.getUser);// 获取用户信息
 router.post('/users/putUser', User.checkLogin, User.putUser);// 保存用户信息
 router.post('/users/postPic', User.checkLogin, multipartMiddleware, User.postPic);// 保存用户头像
-router.post('/users/resetPassword', User.resetPassword);// 用户重置密码
-router.post('/users/getFriends', User.checkLogin, User.getFriends); // 得到用户好友
+router.post('/users/resetPassword', User.checkLogin, User.resetPassword);// 用户重置密码
+//router.post('/users/getFriends', User.checkLogin, User.getFriends); // 得到用户好友
 
-router.post('/users/setDaliyPaperSettings', User.checkLogin, User.setDaliyPaperSettings); // 保存一级日报设置
-router.get('/users/getDaliyPaperSettings/:id', User.checkLogin, User.getDaliyPaperSettings); // 获取一级日报设置
+//router.post('/users/setDaliyPaperSettings', User.checkLogin, User.setDaliyPaperSettings); // 保存一级日报设置
+//router.get('/users/getDaliyPaperSettings/:id', User.checkLogin, User.getDaliyPaperSettings); // 获取一级日报设置
 router.post('/users/setDaliyPaperSubTypeSettings', User.setDaliyPaperSubTypeSettings); // 保存一级日报设置
-router.get('/users/getDaliyPaperSubTypeSettings/:user_id/:type_id', User.getDaliyPaperSubTypeSettings); // 获取一级日报设置
+//router.get('/users/getDaliyPaperSubTypeSettings/:user_id/:type_id', User.getDaliyPaperSubTypeSettings); // 获取一级日报设置
 
 router.post('/users/setYourVoiceSettings', User.checkLogin, User.setYourVoiceSettings); // 保存你的声音设置
 router.get('/users/getYourVoiceSettings/:id', User.checkLogin, User.getYourVoiceSettings); // 获取你的声音设置
@@ -63,7 +40,7 @@ router.post('/users/unfavorite', User.checkLogin, Favorite.unfavorite);// 取消
 
 router.get('/users/daliyPaper/showAll/:id/:pageindex', User.checkLogin, User.getDaliyPaperAll);// 获取日报
 router.get('/users/daliyPaper/showAllNum/:id', User.checkLogin, DaliyPaper.getAllNum); // 获取最新日报更新总数
-router.post('/users/daliyPaper/zan', User.checkLogin, DaliyPaper.setZan);
+//router.post('/users/daliyPaper/zan', User.checkLogin, DaliyPaper.setZan);
 
 router.get('/daliyPaper/getLevel1Type', User.checkLogin, DaliyPaperType.level1_type);  // 获取日报一级类型
 router.get('/daliyPaper/getLevel2Type/:type', User.checkLogin, DaliyPaperType.level2_type);  // 获取日报二级类型

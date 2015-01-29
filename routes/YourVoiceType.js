@@ -2,7 +2,7 @@
  * Created by amberglasses on 14-8-19.
  */
 var YourVoiceType = require('../models/YourVoiceType');
-
+var Common = require('../common');
 var backpage = '/admins/yourVoice/type/showAll';
 
 exports.add = function(req, res){
@@ -17,7 +17,7 @@ exports.add = function(req, res){
     newYourVoiceType.save(function(err, yourVoiceType){
         if(err){
             req.flash('error', "添加该类型失败！");
-            return res.redirect(level1_backpage);
+            return res.redirect(backpage);
         }
 
         req.flash('success', "添加该类型成功！");
@@ -46,7 +46,7 @@ exports.update = function(req, res){
     YourVoiceType.getOne(id, function(err, yourVoiceType){
         if(err){
             req.flash('error', "此类型不存在！");
-            return res.redirect(level1_backpage);
+            return res.redirect(backpage);
         }
 
         yourVoiceType.name = name;
@@ -79,10 +79,10 @@ exports.showAll = function(req, res){
 exports.getType = function(req, res){
     YourVoiceType.getAll(function(err, youVoiceTypes){
         if(err){
-            return res.json({flag:'fail',content:1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
-        res.json({flag:'success',content:youVoiceTypes});
+        res.json(Common.success(youVoiceTypes));
     })
 };
 

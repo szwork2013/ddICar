@@ -43,7 +43,8 @@ var commonEnum = {
     WRONG_PASSWORD: 2008,
     USER_IS_EXISTS: 2001,
     USER_NOT_LOGIN: 2006,
-    USER_IS_LOGIN: 2005
+    USER_IS_LOGIN: 2005,
+    NO_PIC: 2010
 };
 
 exports.success = success;

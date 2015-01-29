@@ -5,7 +5,7 @@ var DaliyPaperType = require('../models/DaliyPaperType');
 var DaliyPaperSubType = require('../models/DaliyPaperSubType');
 var uuid = require('node-uuid');
 var fs = require('fs');
-
+var Common = require('../common');
 var level1_backpage = '/admins/daliyPaper/type/level1/showAll';
 var level2_backpage = '/admins/daliyPaper/type/level2/showAll';
 
@@ -239,9 +239,9 @@ exports.level2_showAll = function(req, res){
 exports.level1_type = function(req, res){
     DaliyPaperType.getAll(function(err, daliyPaperTypes){
         if(err){
-            return res.json({flag:"fail",content:1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
-        res.json({flag:"success",content:daliyPaperTypes});
+        res.json(Common.success(daliyPaperTypes));
     });
 };
 
@@ -249,34 +249,12 @@ exports.level2_type = function(req, res){
     var level1_type = req.params["type"];
     DaliyPaperSubType.getIdByParentTypeId(level1_type, function(err, daliyPaperSubTypes){
         if(err){
-            return res.json({flag:"fail",content:1001});
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
         if(daliyPaperSubTypes){
-            res.json({flag:"success",content:daliyPaperSubTypes});
+            res.json(Common.success(daliyPaperSubTypes));
         }else{
-            res.json({flag:"empty"});
+            res.json(Common.success("empty"));
         }
-    });
-};
-
-
-
-exports.getDaliyPeperDefaultSettings = function(callback){
-    DaliyPaperType.getAll(function (err, daliyPaperTypes) {
-        if (err) {
-            return callback(err);
-        }
-
-        var ids = [];
-        daliyPaperTypes.forEach(function (e) {
-            var item = {
-                id: e._id,
-                percent:"0",
-                child:[]
-            };
-            ids.push(item);
-        });
-
-        callback(err, ids);
     });
 };
