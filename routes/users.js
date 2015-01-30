@@ -88,14 +88,13 @@ exports.reg = function (req, res) {
                             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障')); //sysErr
                         }
 
-                        res.json(Common.success(user._id, null));
+                        res.json(Common.success(Common.returnUserInfo(user)));
                     });
                 });
             });
         });
     });
-}
-;
+};
 
 /* 登录 */
 exports.login = function (req, res) {
@@ -120,14 +119,8 @@ exports.login = function (req, res) {
 
         req.session.user = user;
         req.session.user_id = user._id;
-        var userInfo ={};
-        userInfo._id = user._id;
-        userInfo.phone = user.info.phone;
-        userInfo.name = user.info.name;
-        userInfo.pic = user.info.pic;
-        userInfo.deviceSN = user.info.deviceSN;
 
-        res.json(Common.success(userInfo));
+        res.json(Common.success(Common.returnUserInfo(user)));
     });
 };
 

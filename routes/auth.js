@@ -93,13 +93,8 @@ exports.wxAuth = function (req, res) {
     }).then(function (defer, userDoc) {
         req.session.user = userDoc;
         req.session.user_id = userDoc._id;
-        var userInfo ={};
-        userInfo._id = userDoc._id;
-        userInfo.phone = userDoc.info.phone;
-        userInfo.name = userDoc.info.name;
-        userInfo.pic = userDoc.info.pic;
-        userInfo.deviceSN = userDoc.info.deviceSN;
-        res.json(success(userInfo));
+
+        res.json(success(Common.returnUserInfo(userInfo)));
     }).fail(function (defer, err) {
         console.log(err);
         res.json(fail(err.errCode, '服务器异常'));

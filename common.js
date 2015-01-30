@@ -47,7 +47,18 @@ var commonEnum = {
     NO_PIC: 2010
 };
 
+var returnUserInfo = function (user) {
+    var userInfo = {};
+    userInfo._id = user._id;
+    userInfo.phone = user.info.phone;
+    userInfo.name = user.info.name;
+    userInfo.pic = user.info.pic;
+    userInfo.deviceSN = user.info.deviceSN;
+    return userInfo;
+};
+
 exports.success = success;
 exports.fail = fail;
 exports.commonEnum = commonEnum;
 exports.platform = platform;
+exports.returnUserInfo = returnUserInfo;
