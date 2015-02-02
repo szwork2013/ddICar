@@ -94,7 +94,7 @@ exports.wxAuth = function (req, res) {
         req.session.user = userDoc;
         req.session.user_id = userDoc._id;
 
-        res.json(success(Common.returnUserInfo(userInfo)));
+        res.json(success(Common.returnUserInfo(userDoc)));
     }).fail(function (defer, err) {
         console.log(err);
         res.json(fail(err.errCode, '服务器异常'));
