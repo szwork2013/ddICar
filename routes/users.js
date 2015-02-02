@@ -143,9 +143,8 @@ exports.getUser = function (req, res) {
         if (err) {
             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
-        var userInfo =  user.info;
-        userInfo._id = user._id;
-        res.json(Common.success(userInfo));
+
+        res.json(Common.success(Common.returnUserInfo(user)));
     });
 };
 
