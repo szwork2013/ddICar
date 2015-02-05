@@ -18,7 +18,8 @@ var Common = require('../common'),
 exports.wxAuth = function (req, res) {
 
     var wxAccessToken = req.params["wxAccessToken"],
-        wxresJSON, wxUserInfoJSON, wxRefreshToken, wxOpenid;
+        wxOpenId = req.params["wxOpenId"];
+//        wxresJSON, wxUserInfoJSON, wxRefreshToken, wxOpenid;
 //    var wxCode = req.params["wxCode"],
 //        wxresJSON, wxUserInfoJSON, wxAccessToken, wxRefreshToken, wxOpenid;
 
