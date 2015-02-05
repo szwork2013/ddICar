@@ -33,7 +33,7 @@ exports.wxAuth = function (req, res) {
             {
                 qs: {
                     access_token: wxAccessToken,
-                    openid: wxOpenid
+                    openid: wxOpenId
                 }
             },
             _defer
