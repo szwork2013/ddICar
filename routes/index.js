@@ -15,7 +15,7 @@ var Auth = require('./auth');
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
 router.get('/users/logout', User.checkLogin, User.logout);// 用户登出
-router.get('/users/wxauth/:wxAccessToken/:openId', Auth.wxAuth);
+router.get('/users/wxauth/:wxAccessToken/:wxOpenId', Auth.wxAuth);
 
 router.get('/users/getUser/:id', User.checkLogin, User.getUser);// 获取用户信息
 router.post('/users/putUser', User.checkLogin, User.putUser);// 保存用户信息
