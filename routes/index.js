@@ -11,6 +11,7 @@ var YourVoiceType = require('./YourVoiceType');
 var ODBWarning = require('./ODBWarning');
 var CarInfo = require('./CarInfo');
 var Auth = require('./auth');
+var Room = require('./room');
 
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
@@ -58,5 +59,9 @@ router.post('/users/sendDrivingBehavior', CarInfo.sendDrivingBehavior);
 router.get('/users/getWarnings/:id', ODBWarning.getWarningsList);
 router.get('/users/getCarStatus/:id', User.checkLogin, CarInfo.getStatus);
 router.get('/users/getWarningCount/:id', User.checkLogin, ODBWarning.getWarningCount); // 获取故障总数
+
+router.get('/room/save',Room.save);
+router.get('/room/getByName/:roomname',Room.getRoomByName);
+router.get('/room/getList',Room.getRoomList);
 
 module.exports = router;

@@ -57,9 +57,6 @@ exports.wxAuth = function (req, res) {
         // 注册环信用户
         HX.register(user);
         _defer(null, user);
-    }).then(function (_defer, user) {
-        YourVoice.cloneToMyVoice("nanshen", user._id.toString());
-        _defer(null, user);
     }).then(function (_defer, userDoc) {
         req.session.user = userDoc;
         req.session.user_id = userDoc._id;
