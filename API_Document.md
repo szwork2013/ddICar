@@ -444,3 +444,69 @@ response: 成功, {
         		}}
 ```
 ######Note:
+##获取所有房间的列表
+```
+GET /room/getList
+```
+######JSON Format:
+```
+request: None
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
+        		data: [rooms]
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
+##创建聊天室
+```
+GET /room/save
+```
+######JSON Format:
+```
+request: None
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
+        		data: null
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
+##获取故障列表(这个接口要重新实现)
+```
+GET /room/getByName/:roomname
+```
+######JSON Format:
+```
+request: None
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
+        		data: [warnings]
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
