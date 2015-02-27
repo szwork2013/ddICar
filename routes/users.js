@@ -11,6 +11,7 @@ var DaliyPaperTypeBLL = require('./DaliyPaperType');
 var HX = require('./hxMiddleWare');
 var Common = require('../common');
 var settings = require('../settings');
+var feedBack = require('../models/FeedBack');
 
 /* 注册 */
 exports.reg = function (req, res) {
@@ -539,6 +540,21 @@ exports.getYourVoiceSettings = function (req, res) {
             res.json(Common.success(youVoices));
         });
     });
+};
+
+exports.feedBack = function (req, res) {
+    var user_id = req.body.user_id;
+    var content = req.body.content;
+
+    var newFeedBack = new feedBack({user_id: user_id, content: content});
+
+    newFeedBack.save(function(err,feedback){
+        if(err){
+            return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+        }
+
+        res.json(Common.success());
+    })
 };
 
 exports.checkLogin = function (req, res, next) {

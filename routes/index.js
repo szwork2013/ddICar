@@ -12,6 +12,7 @@ var ODBWarning = require('./ODBWarning');
 var CarInfo = require('./CarInfo');
 var Auth = require('./auth');
 var Room = require('./room');
+var sign = require('./signs');
 
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
@@ -64,5 +65,9 @@ router.get('/users/getWarningCount/:id', User.checkLogin, ODBWarning.getWarningC
 router.post('/room/save',Room.save);
 router.get('/room/getByName/:roomname',Room.getRoomByName);
 router.get('/room/getList',Room.getRoomList);
+
+router.post('/users/feedback',User.feedBack);
+router.post('/sign/save',sign.save);
+router.post('/sign/getByPosition',sign.getByPosition);
 
 module.exports = router;
