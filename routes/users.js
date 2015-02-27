@@ -11,7 +11,7 @@ var DaliyPaperTypeBLL = require('./DaliyPaperType');
 var HX = require('./hxMiddleWare');
 var Common = require('../common');
 var settings = require('../settings');
-var feedBack = require('../models/FeedBack');
+var feedBack = require('../models/feedBack');
 
 /* 注册 */
 exports.reg = function (req, res) {
