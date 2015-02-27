@@ -1,5 +1,14 @@
 #冬瓜电台 RESTful API Doc
 
+##API路径
+```
+http://182.92.160.208:3000/
+```
+##图片路径
+```
+http://182.92.160.208:3000/images
+```
+
 -------
 ##错误码
 ```
@@ -468,7 +477,7 @@ response: 成功, {
 ######Note:
 ##创建聊天室
 ```
-GET /room/save
+POST /room/save
 ```
 ######JSON Format:
 ```

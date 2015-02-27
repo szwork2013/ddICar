@@ -6,7 +6,7 @@ var Room = require('../models/room'),
     Common = require('../common');
 
 exports.save = function (req, res) {
-    var roomname = req.params['roomname'];
+    var roomname = req.body.roomname;
 
     then(function (defer) {
         var newRoom = new Room({name: roomname});
