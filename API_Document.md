@@ -235,8 +235,8 @@ POST /users/resetPassword
 ```
 ######JSON Format:
 ```
-request: {'user_id':'xxxxx',
-			'DaliyPaperSettings':{DaliyPaperSettings object}
+request: {'newPassword':'xxxxx',
+			'phone':‘xxxxx’}
 response: 成功, {
 				state:{
             		success: true,
@@ -481,7 +481,7 @@ POST /room/save
 ```
 ######JSON Format:
 ```
-request: None
+request: {'roomname':'xxxxx'}
 response: 成功, {
 				state:{
             		success: true,

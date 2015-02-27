@@ -16,6 +16,7 @@ var Room = require('./room');
 router.post('/users/reg', User.reg); // 用户注册
 router.post('/users/login', User.login);// 用户登录
 router.get('/users/logout', User.checkLogin, User.logout);// 用户登出
+router.get('/users/resetPassword', User.resetPassword);// 用户登出
 router.get('/users/wxauth/:wxAccessToken/:wxOpenId', Auth.wxAuth);
 
 router.get('/users/getUser/:id', User.checkLogin, User.getUser);// 获取用户信息
