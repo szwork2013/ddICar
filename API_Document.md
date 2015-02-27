@@ -229,7 +229,7 @@ response:成功, {
         		}}
 ```
 ######Note:
-##用户重置密码（这个方法有问题呢待更新）
+##用户重置密码
 ```
 POST /users/resetPassword
 ```

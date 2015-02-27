@@ -10,7 +10,7 @@ describe('聊天室', function () {
 //                password = 'admin';
         var newRoom = new Room({name: roomname});
         newRoom.save(function (err, result) {
-            console.log(result);
+            console.log("save result:"+result._id);
             done(assert(roomname == result.name));
         });
     });
@@ -19,7 +19,7 @@ describe('聊天室', function () {
         var roomname = '111';
         var query = {name: { $regex: roomname, $options: 'i' } };
         Room.getQuery(query, function (err, result) {
-            console.log(result);
+            console.log("get result:"+result);
             done(assert(result.length >= 0));
         });
     });

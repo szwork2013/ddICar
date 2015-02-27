@@ -12,7 +12,7 @@ exports.save = function (req, res) {
         var newRoom = new Room({name: roomname});
         newRoom.save(defer);
     }).then(function (defer, result) {
-        res.json(Common.success());
+        res.json(Common.success({roomId: result._id}));
     }).fail(function (defer, err) {
         res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, "系统错误"))
     })
