@@ -5,7 +5,8 @@ var mongodbPool = require('./db');
 var ObjectId = require('mongodb').ObjectID;
 
 function Room(room) {
-    this.name = room.name
+    this.name = room.name;
+    this.roomId = room.roomId
 }
 
 module.exports = Room;
