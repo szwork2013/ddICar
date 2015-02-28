@@ -17,7 +17,7 @@ FeedBack.prototype.save = function (callback) {
         content: this.content
     };
 
-    
+
     mongodbPool.acquire(function (err, db) {
         if (err) {
             return callback(err);

@@ -121,6 +121,8 @@ exports.login = function (req, res) {
         req.session.user = user;
         req.session.user_id = user._id;
 
+        console.log(req.session.user);
+
         res.json(Common.success(Common.returnUserInfo(user)));
     });
 };
