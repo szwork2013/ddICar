@@ -12,6 +12,7 @@ var HX = require('./hxMiddleWare');
 var Common = require('../common');
 var settings = require('../settings');
 var feedBack = require('../models/feedBack');
+var Favorite = require('../models/favorite');
 
 /* 注册 */
 exports.reg = function (req, res) {
@@ -341,10 +342,31 @@ exports.getDaliyPaperAll = function (req, res) {
             if (err) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
+            Favorite.getAll(user_id,function(err,post_ids){
+                if (err) {
+                    return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
+                }
 
-            daliyPapers.totalPage = parseInt(total / 10) + 1;
-            console.log(daliyPapers);
-            res.json(Common.success(daliyPapers));
+                var newDaliyPapers = [];
+                for(var i=0;i<daliyPapers.length;i++){
+                    var newDaliyPaper = daliyPapers[i];
+                    newDaliyPaper.favorited = false;
+
+                    for(var j=0;j<post_ids.length;j++){
+                        if(newDaliyPaper._id == post_ids[i]){
+                            newDaliyPaper.favorited = true;
+                            break;
+                        }
+                    }
+
+                    newDaliyPapers.push(newDaliyPaper);
+                }
+
+                newDaliyPapers.totalPage = parseInt(total / 10) + 1;
+                console.log(newDaliyPapers);
+
+                res.json(Common.success(newDaliyPapers));
+            });
         });
     });
 };
