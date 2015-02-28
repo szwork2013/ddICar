@@ -58,7 +58,7 @@ router.post('/users/sendWarning', ODBWarning.sendWarning);
 router.post('/users/sendCarStatus', CarInfo.sendStatus);
 router.post('/users/sendDrivingBehavior', CarInfo.sendDrivingBehavior);
 
-router.get('/users/getWarnings/:id', ODBWarning.getWarningsList);
+router.get('/users/getWarnings/:id', ODBWarning.getWarningsList); // 获取车辆故障历史信息
 router.get('/users/getCarStatus/:id', User.checkLogin, CarInfo.getStatus);
 router.get('/users/getWarningCount/:id', User.checkLogin, ODBWarning.getWarningCount); // 获取故障总数
 

@@ -497,7 +497,8 @@ response: 成功, {
         		}}
 ```
 ######Note:
-##获取故障列表(这个接口要重新实现)
+
+##按聊天室名称模糊搜索
 ```
 GET /room/getByName/:roomname
 ```
@@ -510,7 +511,122 @@ response: 成功, {
 	            	code: 1,
             		msg: str
         		},
+        		data: null
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
+
+##获取所有房间信息
+```
+GET /room/getList
+```
+######JSON Format:
+```
+request: None
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
+        		data: [rooms]
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
+
+##获取故障列表
+```
+GET /users/getWarnings/:id
+```
+######JSON Format:
+```
+request: None
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
         		data: [warnings]
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
+
+##用户反馈
+```
+POST /users/feedback
+```
+######JSON Format:
+```
+request: {user_id:'xxxxx',content:'xxxxx'}
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
+        		data: null
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
+
+### 保存标记
+```
+POST /sign/save
+```
+######JSON Format:
+```
+request: {user_id:'xxxxx',longitude:'xxxxx',latitude:'xxxxx',type:'xxxxx'}
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
+        		data: null
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
+
+### 基于地理位置获取周围标记
+```
+POST /sign/getByPosition
+```
+######JSON Format:
+```
+request: {user_id:'xxxxx',longitude:'xxxxx',latitude:'xxxxx'}
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
+        		data: [signs]
         		}
           失败, {state:{
             		success: false,

@@ -6,12 +6,13 @@ var sign = require('../models/signs'),
     Common = require('../common');
 
 exports.save = function (req, res) {
+    var user_id = req.body.user_id;
     var longitude = req.body.longitude;
     var latitude = req.body.latitude;
     var type = req.body.type;
 
     then(function (defer) {
-        var newSign = new sign({longitude: longitude, latitude: latitude, type: type});
+        var newSign = new sign({user_id:user_id,longitude: longitude, latitude: latitude, type: type});
         newSign.save(defer);
     }).then(function (defer, result) {
         res.json(Common.success());
@@ -21,6 +22,7 @@ exports.save = function (req, res) {
 };
 
 exports.getByPosition = function (req, res) {
+    var user_id = req.body.user_id;
     var longitude = req.body.longitude;
     var latitude = req.body.latitude;
 

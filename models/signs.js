@@ -5,6 +5,7 @@ var mongodbPool = require('./db');
 var ObjectId = require('mongodb').ObjectID;
 
 function Sign(sign) {
+    this.user_id = sign.user_id;
     this.longitude = sign.longitude;
     this.latitude = sign.latitude;
     this.type = sign.type;
@@ -12,6 +13,7 @@ function Sign(sign) {
 
 Sign.prototype.save = function (callback) {
     var sign = {
+        user_id: this.user_id,
         longitude: this.longitude,
         latitude: this.latitude,
         type: this.type
