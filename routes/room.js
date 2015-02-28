@@ -11,11 +11,10 @@ exports.save = function (req, res) {
     var roomname = req.body.roomname;
     // 接口请求实例
     // https://voichannel.aichat.com.cn:8443/respApi/room?method=createRoom&appKey=123&type=0&devAccount=123&devPwd=123
+    console.log(settings.qjtx_URI + '/room?method=createRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&type=0&devAccount=ops@ddicar.com&devPwd=ly19900415');
+    
     request(settings.qjtx_URI + '/room?method=createRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&type=0&devAccount=ops@ddicar.com&devPwd=ly19900415', function (error, response, body) {
-        if (body) {
-            console.log("环信：" + body);
-        }
-
+        console.log("环信：" + body);
         then(function (defer) {
             var newRoom = new Room({name: roomname, roomId: body.roomId});
             newRoom.save(defer);
