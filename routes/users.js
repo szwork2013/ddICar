@@ -550,8 +550,8 @@ exports.feedBack = function (req, res) {
 
     var newFeedBack = new feedBack({user_id: user_id, content: content});
 
-    newFeedBack.save(function(err,feedback){
-        if(err){
+    newFeedBack.save(function (err, feedback) {
+        if (err) {
             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
         }
 
@@ -560,6 +560,7 @@ exports.feedBack = function (req, res) {
 };
 
 exports.checkLogin = function (req, res, next) {
+    console.log("session.user:" + req.session.user);
     if (!req.session.user) {
         return res.json(Common.fail(Common.commonEnum.USER_NOT_LOGIN, '您未登录'));//
     }
