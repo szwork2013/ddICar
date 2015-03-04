@@ -39,13 +39,6 @@ app.use(flash());
 app.use('/', routes);
 app.use('/admins', admins);
 
-/*var i = 0;
-setInterval(function(){
-    HX.getAccessToken();
-    OBDWarning.sendWarning();
-    console.log(i++);
-},10000);*/
-
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
