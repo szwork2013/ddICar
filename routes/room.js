@@ -17,11 +17,11 @@ exports.save = function (req, res) {
         uri: settings.qjtx_URI + '/room?method=createRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&type=0&devAccount=ops@ddicar.com&devPwd=ly19900415',
         method: 'POST', port: 443
     }, function (error, response, body) {
-        console.log("body：" + body);
+        console.log("body：" + JSON.parse(body).roomId);
         console.log("response：" + response);
         console.log("error：" + error);
         then(function (defer) {
-            var newRoom = new Room({name: roomname, roomId: body.roomId});
+            var newRoom = new Room({name: roomname, roomId: JSON.parse(body).roomId});
             newRoom.save(defer);
         }).then(function (defer, result) {
             res.json(Common.success({roomId: result.roomId}));

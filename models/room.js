@@ -13,7 +13,8 @@ module.exports = Room;
 
 Room.prototype.save = function (callback) {
     var room = {
-        name: this.name
+        name: this.name,
+        roomId:this.roomId
     };
 
     mongodbPool.acquire(function (err, db) {

@@ -2,6 +2,8 @@
 var debug = require('debug')('ddicar');
 var app = require('../app');
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function() {
