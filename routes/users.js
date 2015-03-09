@@ -354,6 +354,7 @@ exports.getDaliyPaperAll = function (req, res) {
 
                     for(var j=0;j<post_ids.length;j++){
                         if(newDaliyPaper._id == post_ids[j]){
+                            console.log("------------------------------ "+newDaliyPaper.favorited+"  --------------------------------")
                             newDaliyPaper.favorited = true;
                             break;
                         }
