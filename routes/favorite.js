@@ -22,7 +22,16 @@ exports.getAll = function(req, res){
             if(err){
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
-            return res.json(Common.success(daliyPapers));
+
+            var newDaliyPapers = [];
+            for (var i = 0; i < daliyPapers.length; i++) {
+                var newDaliyPaper = daliyPapers[i];
+                newDaliyPaper.favorited = true;
+
+                newDaliyPapers.push(newDaliyPaper);
+            }
+
+            return res.json(Common.success(newDaliyPapers));
         });
     });
 };
