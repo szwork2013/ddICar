@@ -32,7 +32,7 @@ exports.save = function (req, res) {
 };
 
 exports.delete = function (req, res) {
-    var roomId = req.param["roomId"];
+    var roomId = req.params["roomId"];
     // 接口请求实例
     // https://voichannel.aichat.com.cn:8443/respApi/room?method=createRoom&appKey=123&type=0&devAccount=123&devPwd=123
     console.log(roomId);
