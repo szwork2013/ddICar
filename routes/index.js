@@ -63,6 +63,7 @@ router.get('/users/getCarStatus/:id', User.checkLogin, CarInfo.getStatus);
 router.get('/users/getWarningCount/:id', User.checkLogin, ODBWarning.getWarningCount); // 获取故障总数
 
 router.post('/room/save',Room.save);
+router.post('/room/delete/:roomId',Room.delete);
 router.get('/room/getByName/:roomname',Room.getRoomByName);
 router.get('/room/getList',Room.getRoomList);
 

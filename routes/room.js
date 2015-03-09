@@ -11,10 +11,10 @@ exports.save = function (req, res) {
     var roomname = req.body.roomname;
     // 接口请求实例
     // https://voichannel.aichat.com.cn:8443/respApi/room?method=createRoom&appKey=123&type=0&devAccount=123&devPwd=123
-    console.log(settings.qjtx_URI + '/room?method=createRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&type=0&devAccount=ops@ddicar.com&devPwd=ly19900415');
+    console.log(settings.qjtx_URI + '/room?method=createRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&type=1&devAccount=ops@ddicar.com&devPwd=ly19900415');
 
     request({
-        uri: settings.qjtx_URI + '/room?method=createRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&type=0&devAccount=ops@ddicar.com&devPwd=ly19900415',
+        uri: settings.qjtx_URI + '/room?method=createRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&type=1&devAccount=ops@ddicar.com&devPwd=ly19900415',
         method: 'POST', port: 443
     }, function (error, response, body) {
         console.log("body：" + JSON.parse(body).roomId);
@@ -25,6 +25,28 @@ exports.save = function (req, res) {
             newRoom.save(defer);
         }).then(function (defer, result) {
             res.json(Common.success({roomId: result.roomId}));
+        }).fail(function (defer, err) {
+            res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, "系统错误"))
+        })
+    })
+};
+
+exports.delete = function (req, res) {
+    var roomId = req.body.roomId;
+    // 接口请求实例
+    // https://voichannel.aichat.com.cn:8443/respApi/room?method=createRoom&appKey=123&type=0&devAccount=123&devPwd=123
+
+    request({
+        uri: settings.qjtx_URI + '/room?method=delRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&roomId=' + roomId + '&devAccount=ops@ddicar.com&devPwd=ly19900415',
+        method: 'POST', port: 443
+    }, function (error, response, body) {
+        console.log("body：" + JSON.parse(body).roomId);
+        console.log("response：" + response);
+        console.log("error：" + error);
+        then(function (defer) {
+            Room.delete(roomId,defer);
+        }).then(function (defer, result) {
+            res.json(Common.success());
         }).fail(function (defer, err) {
             res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, "系统错误"))
         })

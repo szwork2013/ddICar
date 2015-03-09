@@ -40,6 +40,29 @@ Room.prototype.save = function (callback) {
     });
 };
 
+Room.delete = function(roomId, callback){
+    mongodbPool.acquire(function(err, db){
+        if(err){
+            return callback(err);
+        }
+
+        db.collection('room', function(err, collection){
+            if(err){
+                mongodbPool.release(db);
+                return callback(err);
+            }
+
+            collection.remove({"roomId": roomId}, function(err){
+                mongodbPool.release(db);
+                if(err){
+                    return callback(err);
+                }
+                callback(null);
+            });
+        });
+    });
+};
+
 Room.getQuery = function (query, callback) {
     mongodbPool.acquire(function (err, db) {
         if (err) {

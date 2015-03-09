@@ -12,7 +12,7 @@ var pool = poolModule.Pool({
         });
     },
     destroy  : function(db) { db.close(); },
-    max      : 10,//根据应用的可能最高并发数设置
+    max      : 100,//根据应用的可能最高并发数设置
     idleTimeoutMillis : 30000,
     log : false 
 });
