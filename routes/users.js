@@ -353,7 +353,7 @@ exports.getDaliyPaperAll = function (req, res) {
                     newDaliyPaper.favorited = false;
 
                     for(var j=0;j<post_ids.length;j++){
-                        if(newDaliyPaper._id == post_ids[i]){
+                        if(newDaliyPaper._id == post_ids[j]){
                             newDaliyPaper.favorited = true;
                             break;
                         }
