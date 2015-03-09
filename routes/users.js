@@ -30,7 +30,8 @@ exports.reg = function (req, res) {
             pic: 'http://www.ddicar.com:3000/default_pic.png',
             platform: Common.platform.phone,
             password: password,
-            wx: {"openid": '',
+            wx: {
+                "openid": '',
                 "nickname": '',
                 "sex": '',
                 "province": '',
@@ -38,7 +39,8 @@ exports.reg = function (req, res) {
                 "country": '',
                 "headimgurl": '',
                 "privilege": '',
-                "unionid": ''}
+                "unionid": ''
+            }
         }
     );
 
@@ -329,7 +331,7 @@ exports.getDaliyPaperSettings = function (req, res) {
 exports.getDaliyPaperAll = function (req, res) {
     var user_id = req.params["id"];
     var pageindex = req.params["pageindex"];
-    console.log(req.params);
+    //console.log(req.params);
 
     User.getOne(user_id, function (err, user) {
         if (err) {
@@ -337,24 +339,28 @@ exports.getDaliyPaperAll = function (req, res) {
         }
 
         var query = {typeId: {'$in': user.daliy_paper}};
-        console.log("query:" + query);
+        //console.log("query:" + query);
         DaliyPaper.getAll(pageindex, query, function (err, daliyPapers, total) {
             if (err) {
                 return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
             }
-            Favorite.getAll(user_id,function(err,post_ids){
+            Favorite.getAll(user_id, function (err, post_ids) {
                 if (err) {
                     return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
                 }
 
                 var newDaliyPapers = [];
-                for(var i=0;i<daliyPapers.length;i++){
+                for (var i = 0; i < daliyPapers.length; i++) {
                     var newDaliyPaper = daliyPapers[i];
                     newDaliyPaper.favorited = false;
 
-                    for(var j=0;j<post_ids.length;j++){
-                        if(newDaliyPaper._id == post_ids[j]){
-                            console.log("------------------------------ "+newDaliyPaper.favorited+"  --------------------------------")
+                    console.log("post_ids" + post_ids);
+                    for (var j = 0; j < post_ids.length; j++) {
+                        console.log("newDaliyPaper._id" + newDaliyPaper._id);
+                        console.log("post_id" + post_ids[j]);
+
+                        if (newDaliyPaper._id == post_ids[j]) {
+                            console.log("------------------------------ " + newDaliyPaper.favorited + "  --------------------------------")
                             newDaliyPaper.favorited = true;
                             break;
                         }
