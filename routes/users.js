@@ -359,7 +359,7 @@ exports.getDaliyPaperAll = function (req, res) {
                         console.log("newDaliyPaper._id" + newDaliyPaper._id);
                         console.log("post_id" + post_ids[j]);
 
-                        if (newDaliyPaper._id == post_ids[j]) {
+                        if (newDaliyPaper._id == post_ids[j].post_id) {
                             console.log("------------------------------ " + newDaliyPaper.favorited + "  --------------------------------")
                             newDaliyPaper.favorited = true;
                             break;
