@@ -497,6 +497,28 @@ response: 成功, {
         		}}
 ```
 ######Note:
+##删除聊天室
+```
+GET /room/delete/:roomId
+```
+######JSON Format:
+```
+request: {'roomname':'xxxxx'}
+response: 成功, {
+				state:{
+            		success: true,
+	            	code: 1,
+            		msg: str
+        		},
+        		data: null
+        		}
+          失败, {state:{
+            		success: false,
+	            	code: errorCode,
+            		msg: str
+        		}}
+```
+######Note:
 
 ##按聊天室名称模糊搜索
 ```

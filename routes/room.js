@@ -35,7 +35,7 @@ exports.delete = function (req, res) {
     var roomId = req.param["roomId"];
     // 接口请求实例
     // https://voichannel.aichat.com.cn:8443/respApi/room?method=createRoom&appKey=123&type=0&devAccount=123&devPwd=123
-
+    console.log(roomId);
     request({
         uri: settings.qjtx_URI + '/room?method=delRoom&appKey=bcd28d42-eeb7-455f-b030-aa3805510f39&roomId=' + roomId + '&devAccount=ops@ddicar.com&devPwd=ly19900415',
         method: 'POST', port: 443
@@ -44,8 +44,9 @@ exports.delete = function (req, res) {
         console.log("response：" + response);
         console.log("error：" + error);
         then(function (defer) {
-            Room.delete(roomId,defer);
+            Room.delete(roomId, defer);
         }).then(function (defer, result) {
+            console.log(result);
             res.json(Common.success());
         }).fail(function (defer, err) {
             res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, "系统错误"))
