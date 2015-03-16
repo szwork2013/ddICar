@@ -27,7 +27,7 @@ router.post('/users/resetPassword', User.resetPassword);// 用户重置密码
 //router.post('/users/getFriends', User.checkLogin, User.getFriends); // 得到用户好友
 
 router.post('/users/setDaliyPaperSettings', User.checkLogin, User.setDaliyPaperSettings); // 保存一级日报设置
-//router.get('/users/getDaliyPaperSettings/:id', User.checkLogin, User.getDaliyPaperSettings); // 获取一级日报设置
+router.get('/users/getDaliyPaperSettings/:id', User.checkLogin, User.getDaliyPaperSettings); // 获取一级日报设置
 router.post('/users/setDaliyPaperSubTypeSettings', User.setDaliyPaperSubTypeSettings); // 保存一级日报设置
 //router.get('/users/getDaliyPaperSubTypeSettings/:user_id/:type_id', User.getDaliyPaperSubTypeSettings); // 获取一级日报设置
 

@@ -503,7 +503,7 @@ GET /room/delete/:roomId
 ```
 ######JSON Format:
 ```
-request: {'roomname':'xxxxx'}
+request: null
 response: 成功, {
 				state:{
             		success: true,
