@@ -11,6 +11,8 @@ function Sign(sign) {
     this.type = sign.type;
 }
 
+module.exports = Sign;
+
 Sign.prototype.save = function (callback) {
     var sign = {
         user_id: this.user_id,

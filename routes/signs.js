@@ -10,13 +10,20 @@ exports.save = function (req, res) {
     var longitude = req.body.longitude;
     var latitude = req.body.latitude;
     var type = req.body.type;
+    console.log(req.body);
 
     then(function (defer) {
+        console.log(1);
+
         var newSign = new sign({user_id:user_id,longitude: longitude, latitude: latitude, type: type});
+        console.log(2);
         newSign.save(defer);
     }).then(function (defer, result) {
+        console.log(3);
+
         res.json(Common.success());
     }).fail(function (defer, err) {
+        console.log(err);
         res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, "系统错误"))
     })
 };
