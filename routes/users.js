@@ -270,6 +270,8 @@ exports.setDaliyPaperSettings = function (req, res) {
     var user_id = req.body.user_id;
     var DaliyPaperSettings = req.body.DaliyPaperSettings;
 
+    console.log(req.body);
+
     User.getOne(user_id, function (err, user) {
         if (err) {
             return res.json(Common.fail(Common.commonEnum.SYSTEM_ERROR, '服务器故障'));
