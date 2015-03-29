@@ -226,6 +226,7 @@ exports.postPic = function (req, res) {
 exports.resetPassword = function (req, res) {
     var newPassword = req.body.newpassword;
     var phone = req.body.phone;
+    console.log(req.body);
 
     User.getByPhone(phone, function (err, user) {
         if (err) {
@@ -238,6 +239,8 @@ exports.resetPassword = function (req, res) {
 
         var _md5 = crypto.createHash('sha256');
         newPassword = _md5.update(newPassword).digest('hex');
+
+        console.log(newPassword);
 
         user.info.password = newPassword;
 
